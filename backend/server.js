@@ -1,41 +1,36 @@
+require('dotenv').config()  //imports config from .env file
 const express = require("express");
-const mysql = require("mysql");
-const cors = require("cors");
+const documentRoutes = require('./routes/routing')
+const mongoose = require('mongoose')
 
+
+//express app
 const app = express();
-app.use(cors());
 
-// Create a MySQL connection
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "470",
-});
 
-// Connect to MySQL
-db.connect((err) => {
-  if (err) {
-    console.error("Error connecting to MySQL:", err);
-    return;
-  }
-  console.log("Connected to MySQL");
-});
+// middleware - executes everytime a request is done
+app.use(express.json())     //looks if the request has any body, if yes, attaches it to req handler
+// will enable us to use req.body
+app.use((req, res, next) =>{
+    console.log(req.path, req.method)
+    next()
+})
 
-// Start the Express server
-app.listen(9000, () => {
-  console.log("Server is running on port 9000");
-});
 
-app.get("/", (req, res) => {
-  return res.json("Received a GET HTTP method");
-});
 
-app.get("/users", (req, res) => {
-  const sql = "SELECT * FROM signup_login_app_user";
-  db.query(sql, (err, result) => {
-    if (err) return res.json(err);
+// routes
+app.use('/api/documents', documentRoutes)  //when we fire a request to given route, use workoutRoutes
 
-    return res.json(result);
-  });
-});
+// connect to db
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        //when connection is established
+        // listen for requests only when connection is established
+        app.listen(process.env.PORT, () =>{     // PORT variable is in the .env file, accessed through process.env
+        console.log('connected to db and listening on port 4000!!!')
+})
+
+    })
+    .catch((error) =>{
+        console.log(error)
+    })
