@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 
-import DocumentDetails from'../components/DocumentDetails'
-import DocumentForm from'../components/DocumentForm'
+import DocumentDetails from'../components/DocumentDetails.jsx'
+import DocumentForm from'../components/DocumentForm.jsx'
 const Home = () =>{
     const [documents, setDocuments] = useState(null)
+    // useState: saves a value in documents, and through setDocuments, which is a function that we can name whatever we like, sets another value in documents
+    // used to reactively change values 
     useEffect(() => {
         const fetchDocuments = async() => {
             const response = await fetch('/api/documents')
