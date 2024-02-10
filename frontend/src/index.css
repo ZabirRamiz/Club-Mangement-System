@@ -1,8 +1,8 @@
 /* google font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&family=VT323&display=swap'); */
 
 /* layout */
-:root {
+/* :root {
   --primary: #1aac83;
   --error: #e7195a;
 }
@@ -33,7 +33,7 @@ header a {
 }
 
 /* homepage */
-.home {
+/* .home {
   display: grid;
   grid-template-columns: 3fr 1fr;
   gap: 100px;
@@ -95,4 +95,9 @@ div.error {
   color: var(--error);
   border-radius: 4px;
   margin: 20px 0;
-}
+}  */
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
