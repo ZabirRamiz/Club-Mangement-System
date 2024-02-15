@@ -1,24 +1,40 @@
 
 import { useState } from 'react';
-import { useNavigate  } from 'react-router-dom'; // Make sure to have react-router-dom installed
-
+import { useNavigate  } from 'react-router-dom';
 export default function Login() {
   
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  // const handleLogin = (e) => {
+  //   e.preventDefault();
+  //   navigate("/Dashboard")
+    
+  //   // if (password === 'your_password') {
+      
+  //   //   navigate('/dashboard');
+  //   // } else {
+      
+  //   //   alert('Incorrect password. Please try again.');
+  //   // }
+  // };
   const handleLogin = (e) => {
     e.preventDefault();
-    navigate("/Dashboard")
-    
-    // if (password === 'your_password') {
-      
-    //   navigate('/dashboard');
-    // } else {
-      
-    //   alert('Incorrect password. Please try again.');
-    // }
+
+    // Perform authentication logic and fetch user information
+    // For demonstration purposes, assuming userType is received after authentication
+    const userType = 'user'; // Replace this with actual user type from authentication response
+
+    // Update the navigation based on user type
+    if (userType === 'user') {
+      navigate('/UserDashboard');
+    } else if (userType === 'admin') {
+      navigate('/AdminDashboard');
+    } else {
+      // Handle other user types or show an error
+      alert('Invalid user type. Please try again.');
+    }
   };
 
   return (
@@ -39,7 +55,7 @@ export default function Login() {
         <div className="mt-4">
           <label className="block text-gray-700"><b>Student_ID</b></label>
           <input
-            type="number"
+            type="text"
             placeholder="Enter Student Id"
             value={studentId}
             onChange={(e) => setStudentId(e.target.value)}
