@@ -40,6 +40,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 //pages an components
 import Home from './pages/Home.jsx'
+import Members from './pages/Members.jsx'
 import Navbar from './components/Navbar.jsx'
 
 
@@ -50,10 +51,8 @@ function App() {
       <Navbar />
       <div className="pages">
           <Routes>
-            <Route
-              path = "/"
-              element = {<Home />}
-            />
+            <Route path = "/" element = {<Home />} />
+            <Route path = "members" element = {<Members/>} />
           </Routes>
         </div>
       </BrowserRouter>

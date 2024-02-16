@@ -10,7 +10,7 @@ const DocumentForm = () =>{
         e.preventDefault()
 
         const document = {title, id, age}
-        const response = await fetch('/api/documents', {
+        const response = await fetch('/api/documents/demo', {
             method: 'POST',
             body: JSON.stringify(document),
             headers: {

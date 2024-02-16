@@ -8,7 +8,7 @@ const Home = () =>{
     // used to reactively change values 
     useEffect(() => {
         const fetchDocuments = async() => {
-            const response = await fetch('/api/documents')
+            const response = await fetch('/api/documents/demo')
             const json = await response.json()      // will return a document object
 
             if ( response.ok ){
