@@ -1,6 +1,7 @@
 require('dotenv').config()  //imports config from .env file
 const express = require("express");
 const documentRoutes = require('./routes/routing')
+const MemberListRoutes = require('./routes/routingMemberList')
 const mongoose = require('mongoose')
 
 
@@ -19,8 +20,8 @@ app.use((req, res, next) =>{
 
 
 // routes
-app.use('/api/documents', documentRoutes)  //when we fire a request to given route, use workoutRoutes
-
+app.use('/api/documents/demo', documentRoutes)  //when we fire a request to given route, use workoutRoutes
+app.use('/api/members', MemberListRoutes)
 // connect to db
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
