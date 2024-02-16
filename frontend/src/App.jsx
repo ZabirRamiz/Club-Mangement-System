@@ -39,9 +39,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 //pages an components
-import Home from './pages/Home.jsx'
+// import Home from './pages/Home.jsx'
 import Members from './pages/Members.jsx'
 import Navbar from './components/Navbar.jsx'
+import Home from './components/Home.jsx';
 
 
 function App() {
