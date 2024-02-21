@@ -11,7 +11,29 @@ const getSpecificUser = async (req, res) => {
   const { specificUser } = req.params;
 
   const specific_user = await userModel.findOne({ username: specificUser });
+
   res.status(200).json(specific_user);
+};
+
+const editUser = async (req, res) => {
+  const { specificUser } = req.params;
+  const { email, password } = req.body;
+  const filter = { username: specificUser };
+  const updateDoc = {
+    $set: {
+      email: email,
+      password: password,
+    },
+  };
+  try {
+    const edit_user = await userModel.findOneAndUpdate(filter, updateDoc, {
+      new: true,
+    });
+    res.status(200).json({ message: "Update successful" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred during the update" });
+  }
 };
 // const User = new userModel(
 //   // {
@@ -50,4 +72,4 @@ const getSpecificUser = async (req, res) => {
 
 // User.save();
 
-module.exports = { getAllUser, getSpecificUser };
+module.exports = { getAllUser, getSpecificUser, editUser };
