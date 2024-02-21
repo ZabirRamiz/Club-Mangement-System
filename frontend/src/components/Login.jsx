@@ -53,7 +53,7 @@ export default function Login() {
 
          <form className="mt-6" onSubmit={handleLogin}>
         <div className="mt-4">
-          <label className="block text-gray-700"><b>Student_ID</b></label>
+          <label className="block text-gray-700"><b>User_Name</b></label>
           <input
             type="text"
             placeholder="Enter Student Id"
@@ -87,7 +87,7 @@ export default function Login() {
 
           <hr className="my-6 border-gray-300 w-full" />
 
-          <button
+          {/* <button
             type="button"
             className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300"
           >
@@ -127,7 +127,7 @@ export default function Login() {
                 Log in with Google
               </span>
             </div>
-          </button>
+          </button> */}
 
           <p className="mt-6">Wants to join? <a href="#" className="text-blue-500 hover:text-blue-700 font-semibold">Register Here</a></p>
 

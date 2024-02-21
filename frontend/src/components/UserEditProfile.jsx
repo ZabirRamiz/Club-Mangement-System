@@ -9,24 +9,30 @@
 // }
 
 // CheckoutForm.jsx
-
+import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const UserEditProfile= () => {
-    const navigate = useNavigate();
+const UserEditProfile = () => {
+  const navigate = useNavigate();
 
-    const handleEditSubmit=()=>{
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [contact, setContact] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
+  
 
-        navigate("/UserDashboard")
+  const handleEditSubmit = () => {
+    // Handle the submission logic here, including the new image.
+    navigate("/UserDashboard");
+  };
 
-    }
   return (
     <div className="container mx-auto p-4 md:p-10">
       <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-xl">
         <div className="md:flex">
           <div className="w-full px-3 py-8 md:p-8">
             <h2 className="text-2xl font-bold text-gray-800">Edit Profile</h2>
-            {/* <p className="mt-4 text-gray-600">Please fill out the form below to edit your profile.</p> */}
             <form className="mt-6">
               <div className="mb-6">
                 <label htmlFor="name" className="block text-gray-800 font-bold mb-2">
@@ -37,6 +43,8 @@ const UserEditProfile= () => {
                   type="text"
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="mb-6">
@@ -48,10 +56,12 @@ const UserEditProfile= () => {
                   type="email"
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="mb-6">
-                <label htmlFor="card_number" className="block text-gray-800 font-bold mb-2">
+                <label htmlFor="Address" className="block text-gray-800 font-bold mb-2">
                   Address
                 </label>
                 <input
@@ -59,10 +69,12 @@ const UserEditProfile= () => {
                   type="text"
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
               </div>
               <div className="mb-6">
-                <label htmlFor="expiration_date" className="block text-gray-800 font-bold mb-2">
+                <label htmlFor="number" className="block text-gray-800 font-bold mb-2">
                   Contact
                 </label>
                 <input
@@ -70,11 +82,26 @@ const UserEditProfile= () => {
                   type="number"
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={contact}
+                  onChange={(e) => setContact(e.target.value)}
                 />
               </div>
+              <div className="mb-6">
+                <label htmlFor="profileImage" className="block text-gray-800 font-bold mb-2">
+                  Profile Image
+                </label>
+                <input
+                  type="file"
+                  id="profileImage"
+                  onChange={(e) => setProfileImage(e.target.files[0])}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+              </div>
+              
               <button
-                className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button" onClick={handleEditSubmit}
+                className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                type="button"
+                onClick={handleEditSubmit}
               >
                 Submit
               </button>
