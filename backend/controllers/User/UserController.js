@@ -29,7 +29,9 @@ const editUser = async (req, res) => {
     const edit_user = await userModel.findOneAndUpdate(filter, updateDoc, {
       new: true,
     });
-    res.status(200).json({ message: "Update successful" });
+    res
+      .status(200)
+      .json({ message: "Update successful", user: edit_user, form: req.body });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "An error occurred during the update" });
