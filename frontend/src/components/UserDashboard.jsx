@@ -10,11 +10,23 @@
 
 
  import {useState} from "react";
- import { useNavigate } from "react-router-dom";
+ import { useLocation, useNavigate } from "react-router-dom";
+ import { useUser } from './UserContext';
  const Userdasboard = () => {
 
    const[isEditingProfile, setEditingProfile]=useState(false)
    const navigate=useNavigate();
+   const location = useLocation() // needed to fetch data sent from prev page
+   var { savedUser } = useUser()
+   var username = null
+   const loginStatus = localStorage.getItem('loginState')
+   if(loginStatus){
+    username = savedUser
+   }
+   else{
+    username = location.state.un
+    console.log(location.state)
+   }
 
    const handleEditProfile = () => {
     setEditingProfile(true);
@@ -34,6 +46,7 @@
         />
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">name</h5>
         <span className="text-sm text-gray-500 dark:text-gray-400">Email</span>
+        <span className="text-sm text-gray-500 dark:text-gray-400">{username}</span>
         <span className="text-sm text-gray-500 dark:text-gray-400">Id</span>
         <div className="flex mt-4 md:mt-6">
           <a
