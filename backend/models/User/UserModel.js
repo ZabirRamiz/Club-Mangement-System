@@ -3,7 +3,12 @@ const schema = mongoose.Schema;
 
 const allUserSchema = new schema(
   {
-    username: {
+    sid: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    name: {
       type: String,
       required: true,
     },
@@ -15,13 +20,12 @@ const allUserSchema = new schema(
       type: String,
       required: true,
     },
-    role: {
+    designation: {
       type: String,
       required: true,
     },
-    status: {
+    department: {
       type: String,
-      required: true,
     },
   },
   { timestamps: false }
