@@ -28,7 +28,7 @@
     console.log(location.state)
    }
 
-   const handleEditProfile = () => {
+  const handleEditProfile = () => {
     setEditingProfile(true);
     navigate("/UserEditProfile");
   };
@@ -69,4 +69,6 @@
 };
 
 export default Userdasboard;
+
+
 

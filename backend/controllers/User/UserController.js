@@ -8,19 +8,43 @@ const getAllUser = async (req, res) => {
 };
 
 const getSpecificUser = async (req, res) => {
-  const { specificUser } = req.params;
+  const { studentId } = req.params;
 
-  const specific_user = await userModel.findOne({ username: specificUser });
+  const specific_user = await userModel.findOne({ sid: studentId });
+
   res.status(200).json(specific_user);
+};
+
+const editUser = async (req, res) => {
+  const { studentId } = req.params;
+  const { email, password } = req.body;
+  const filter = { sid: studentId };
+  const updateDoc = {
+    $set: {
+      email: email,
+      password: password,
+    },
+  };
+  try {
+    const edit_user = await userModel.findOneAndUpdate(filter, updateDoc, {
+      new: true,
+    });
+    res
+      .status(200)
+      .json({ message: "Update successful", user: edit_user, form: req.body });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred during the update" });
+  }
 };
 // const User = new userModel(
 //   // {
-//   //   username: "gm_01",
+//   //   sid: "21201397",
+//   //   name: "admin_01",
 //   //   email: "zabir@gmail.com",
 //   //   password: "123",
-//   //   role: "gm",
-//   //   department: "None",
-//   //   status: false,
+//   //   designation: "admin",
+//   //   department: "All",
 //   // }
 //   // {
 //   //   username: "exec_01",
@@ -50,4 +74,4 @@ const getSpecificUser = async (req, res) => {
 
 // User.save();
 
-module.exports = { getAllUser, getSpecificUser };
+module.exports = { getAllUser, getSpecificUser, editUser };
