@@ -37,41 +37,41 @@ const editUser = async (req, res) => {
     res.status(500).json({ message: "An error occurred during the update" });
   }
 };
-const User = new userModel(
-  {
-    sid: "21201397",
-    name: "admin_01",
-    email: "zabir@gmail.com",
-    password: "123",
-    designation: "admin",
-    department: "All",
-  }
-  // {
-  //   username: "exec_01",
-  //   email: "zabir@gmail.com",
-  //   password: "123",
-  //   role: "exec",
-  //   department: "None",
-  //   status: false,
-  // }
-  // {
-  //   username: "dir_01",
-  //   email: "zabir@gmail.com",
-  //   password: "123",
-  //   role: "dir",
-  //   department: "None",
-  //   status: false,
-  // }
-  // {
-  //   username: "admin_01",
-  //   email: "zabir@gmail.com",
-  //   password: "123",
-  //   role: "admin",
-  //   department: "None",
-  //   status: false,
-  // }
-);
+// const User = new userModel(
+//   // {
+//   //   sid: "21201397",
+//   //   name: "admin_01",
+//   //   email: "zabir@gmail.com",
+//   //   password: "123",
+//   //   designation: "admin",
+//   //   department: "All",
+//   // }
+//   // {
+//   //   username: "exec_01",
+//   //   email: "zabir@gmail.com",
+//   //   password: "123",
+//   //   role: "exec",
+//   //   department: "None",
+//   //   status: false,
+//   // }
+//   // {
+//   //   username: "dir_01",
+//   //   email: "zabir@gmail.com",
+//   //   password: "123",
+//   //   role: "dir",
+//   //   department: "None",
+//   //   status: false,
+//   // }
+//   // {
+//   //   username: "admin_01",
+//   //   email: "zabir@gmail.com",
+//   //   password: "123",
+//   //   role: "admin",
+//   //   department: "None",
+//   //   status: false,
+//   // }
+// );
 
-User.save();
+// User.save();
 
 module.exports = { getAllUser, getSpecificUser, editUser };
