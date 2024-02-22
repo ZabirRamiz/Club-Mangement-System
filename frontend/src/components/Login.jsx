@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useUser } from './UserContext';
+
 
 export default function Login() {
   const navigate = useNavigate()
-  const [studentId, setstudentId] = useState("")
+  const [studentId, setStudentIdLogin] = useState("")
   const [password, setPassword] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
-  const { savedUser } = useUser()
+
   
 
   const handleLogin = async () => {
@@ -19,21 +19,23 @@ export default function Login() {
       const fetchedPassword = userData.password
       if (password !== "" && password === fetchedPassword) {
         console.log("Password matches")
-        localStorage.setItem("loginState", "true")
+        localStorage.setItem("State", "true")
+        localStorage.setItem('Id', studentId)
+        
         navigate("/UserDashboard", {state: {un: studentId}})
       } 
       else {
-        setErrorMessage("Wrong studentId or Password")
+        setErrorMessage("Wrong student Password")
         console.log("Password does not match")
-        window.location.reaload()
+        window.location.reload()
       }
       
     }
 
     else{
-      setErrorMessage("Wrong studentId or Password")
+      setErrorMessage("Wrong Student ID")
       console.log("No such user")
-      window.location.reaload()
+      window.location.reload()
       // throw new Error("Failed to fetch user data")
     }
     
@@ -63,7 +65,7 @@ export default function Login() {
                 type="text"
                 placeholder="Enter Student Id"
                 value={studentId}
-                onChange={(e) => setstudentId(e.target.value)}
+                onChange={(e) => setStudentIdLogin(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                 required
               />
