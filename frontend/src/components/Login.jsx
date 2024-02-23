@@ -12,7 +12,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     
-    const response = await fetch(`api/user/specificUser/${studentId}`)
+    const response = await fetch(`api/user/getSpecificUser/${studentId}`)
     const userData = await response.json()
     if (userData != null) {
       
