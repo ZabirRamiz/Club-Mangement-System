@@ -9,6 +9,6 @@ const {
 const router = express.Router();
 
 router.get("/getAllUser", getAllUser);
-router.get("/specificUser/:studentId", getSpecificUser);
+router.get("/getSpecificUser/:studentId", getSpecificUser);
 router.post("/editUser/:studentId", editUser);
 module.exports = router;
