@@ -1,24 +1,16 @@
 
-
-// export default function UserEditProfile() {
-//   return (
-//     <div>
-//       edit profile
-//     </div>
-//   )
-// }
-
-// CheckoutForm.jsx
 import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const UserEditProfile = () => {
   const navigate = useNavigate();
 
+  const [studentID, setStudentID]=useState("")
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [contact, setContact] = useState("");
+  const [password, setPassword] = useState("");
+  const [designation, setDesignation] = useState("");
+  const [department, setDepartment] =useState("")
   const [profileImage, setProfileImage] = useState(null);
   
 
@@ -34,7 +26,20 @@ const UserEditProfile = () => {
           <div className="w-full px-3 py-8 md:p-8">
             <h2 className="text-2xl font-bold text-gray-800">Edit Profile</h2>
             <form className="mt-6">
-              <div className="mb-6">
+            <div className="mb-6">
+                <label htmlFor="studentID" className="block text-gray-800 font-bold mb-2">
+                  Student_ID
+                </label>
+                <input
+                  id="studentID"
+                  type="number"
+                  placeholder=""
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={studentID}
+                  onChange={(e) => setStudentID(e.target.value)}
+                />
+              </div>
+            <div className="mb-6">
                 <label htmlFor="name" className="block text-gray-800 font-bold mb-2">
                   Name
                 </label>
@@ -47,6 +52,7 @@ const UserEditProfile = () => {
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
+              
               <div className="mb-6">
                 <label htmlFor="email" className="block text-gray-800 font-bold mb-2">
                   Email
@@ -61,29 +67,42 @@ const UserEditProfile = () => {
                 />
               </div>
               <div className="mb-6">
-                <label htmlFor="Address" className="block text-gray-800 font-bold mb-2">
-                  Address
+                <label htmlFor="password" className="block text-gray-800 font-bold mb-2">
+                  Password
                 </label>
                 <input
-                  id="Address"
+                  id="password"
                   type="text"
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <div className="mb-6">
-                <label htmlFor="number" className="block text-gray-800 font-bold mb-2">
-                  Contact
+                <label htmlFor="designation" className="block text-gray-800 font-bold mb-2">
+                  Designation
                 </label>
                 <input
-                  id="number"
-                  type="number"
+                  id="text"
+                  type="text"
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
+                  value={designation}
+                  onChange={(e) => setDesignation(e.target.value)}
+                />
+              </div>
+              <div className="mb-6">
+                <label htmlFor="department" className="block text-gray-800 font-bold mb-2">
+                  Club_Department
+                </label>
+                <input
+                  id="text"
+                  type="text"
+                  placeholder=""
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
                 />
               </div>
               <div className="mb-6">
