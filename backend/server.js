@@ -4,7 +4,7 @@ const documentRoutes = require("./routes/routing");
 const MemberListRoutes = require("./routes/routingMemberList");
 const mongoose = require("mongoose");
 const UserRoutes = require("./routes/User/UserRoute");
-
+const PostRoutes = require("./routes/Post/PostRoute");
 //express app
 const app = express();
 
@@ -35,3 +35,4 @@ mongoose
 app.use("/api/documents/demo", documentRoutes); //when we fire a request to given route, use workoutRoutes
 app.use("/api/members", MemberListRoutes);
 app.use("/api/user", UserRoutes);
+app.use("/api/posts", PostRoutes);
