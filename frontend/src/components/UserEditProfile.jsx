@@ -1,8 +1,8 @@
 
 import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const UserEditProfile = () => {
+  const localStudentId = localStorage.getItem("Id")
+  const UserEditProfile = () => {
   const navigate = useNavigate();
 
   const [studentID, setStudentID]=useState("")
@@ -13,11 +13,44 @@ const UserEditProfile = () => {
   const [department, setDepartment] =useState("")
   const [profileImage, setProfileImage] = useState(null);
   
+  // post request
+  const handleEditSubmit = async (e) => {
+    e.preventDefault()
+    const data = {};
+    if (name !== "") data.name = name;
+    if (email !== "") data.email = email;
+    if (password !== "") data.password = password;
+    if (designation !== "") data.designation = designation;
+    if (department !== "") data.department = department;
+    // Add more conditions for other fields if needed
+  
+    // Sending PATCH request if there are non-empty fields
+    
+    if (Object.keys(data).length > 0) {
+      console.log("ENTERED IF")
+      const response = await fetch(`http://localhost:5173/api/user/editUser/${localStudentId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      );
+      
+    const json = await response.json()
+    console.log(json)
+    if ( !response.ok ){
+      console.log(json.error)
+    }
+    else{
+      navigate("/UserDashboard");
+    }
+    }
+  }
 
-  const handleEditSubmit = () => {
-    // Handle the submission logic here, including the new image.
-    navigate("/UserDashboard");
-  };
+  
+    
+  
 
   return (
     <div className="container mx-auto p-4 md:p-10">
@@ -28,7 +61,7 @@ const UserEditProfile = () => {
             <form className="mt-6">
             <div className="mb-6">
                 <label htmlFor="studentID" className="block text-gray-800 font-bold mb-2">
-                  Student_ID
+                  Student ID
                 </label>
                 <input
                   id="studentID"
@@ -90,11 +123,12 @@ const UserEditProfile = () => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={designation}
                   onChange={(e) => setDesignation(e.target.value)}
+                  disabled
                 />
               </div>
               <div className="mb-6">
                 <label htmlFor="department" className="block text-gray-800 font-bold mb-2">
-                  Club_Department
+                  Department
                 </label>
                 <input
                   id="text"
@@ -103,6 +137,7 @@ const UserEditProfile = () => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
+                  disabled
                 />
               </div>
               <div className="mb-6">
@@ -130,6 +165,6 @@ const UserEditProfile = () => {
       </div>
     </div>
   );
-};
+}
 
 export default UserEditProfile;
