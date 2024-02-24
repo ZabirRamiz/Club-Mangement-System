@@ -15,10 +15,10 @@
  const Userdasboard = () => {
 
    const[isEditingProfile, setEditingProfile]=useState(false)
-   const navigate=useNavigate();
+   const navigate = useNavigate();
    const location = useLocation() // needed to fetch data sent from prev page
 
-   console.log()
+   console.log() 
    
    var studentIdFromLogin = null
    const loginStatus = localStorage.getItem('State')
