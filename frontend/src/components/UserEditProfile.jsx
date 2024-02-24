@@ -28,7 +28,7 @@ import { useNavigate } from "react-router-dom";
     
     if (Object.keys(data).length > 0) {
       console.log("ENTERED IF")
-      const response = await fetch(`http://localhost:5173/api/user/editUser/${localStudentId}`, {
+      const response = await fetch(`/api/user/editUser/${localStudentId}`, {
         method: 'PATCH',
         body: JSON.stringify(data),
         headers: {
