@@ -24,7 +24,7 @@ mongoose
     // listen for requests only when connection is established
     app.listen(process.env.PORT, () => {
       // PORT variable is in the .env file, accessed through process.env
-      console.log("connected to db and listening on port 4000!!!");
+      console.log(`connected to db and listening on port ${process.env.PORT}!!!`);
     });
   })
   .catch((error) => {
