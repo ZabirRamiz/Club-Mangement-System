@@ -1,11 +1,11 @@
 const express = require("express");
 // const { getSpecificUser } = require("../../controllers/User/UserController");
-// const AllUserModel = require("../../models/Post/PostModel");
-const { getAllPosts } = require("../../controllers/Post/PostController");
+const PostModel = require("../../models/Post/PostModel")
+const { getAllPosts, createPost } = require("../../controllers/Post/PostController");
 
 const router = express.Router();
 
-router.route("/").get(getAllPosts);
-// router.route("/:specificPost").get(getSpecificPost);
+router.get("/allPosts", getAllPosts)
+router.post("/makePost", createPost)
 
 module.exports = router;
