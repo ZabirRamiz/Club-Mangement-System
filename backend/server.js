@@ -4,7 +4,7 @@ const documentRoutes = require("./routes/routing");
 const MemberListRoutes = require("./routes/routingMemberList");
 const mongoose = require("mongoose");
 const UserRoutes = require("./routes/User/UserRoute");
-
+const PostRoutes = require("./routes/Post/PostRoute");
 //express app
 const app = express();
 
@@ -29,7 +29,7 @@ mongoose
     // listen for requests only when connection is established
     app.listen(process.env.PORT, () => {
       // PORT variable is in the .env file, accessed through process.env
-      console.log("connected to db and listening on port 4000!!!");
+      console.log(`connected to db and listening on port ${process.env.PORT}!!!`);
     });
   })
   .catch((error) => {
@@ -40,3 +40,4 @@ mongoose
 app.use("/api/documents/demo", documentRoutes); //when we fire a request to given route, use workoutRoutes
 app.use("/api/members", MemberListRoutes);
 app.use("/api/user", UserRoutes);
+app.use("/api/posts", PostRoutes);
