@@ -7,54 +7,20 @@
 //     </div>
 //   )
 // }
-// DropdownButton.js
-import { useState } from 'react';
-
-const DropdownButton = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleButtonClick = (buttonText) => {
-    alert('Button clicked: ' + buttonText);
-    // You can perform any other action here based on the clicked button
-  };
-
-  return (
-    <div className="relative inline-block text-left">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        type="button"
-        className="inline-flex justify-center w-40 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring focus:border-blue-300"
-      >
-        Dropdown Button
-      </button>
-      <div
-        className={`origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg ${
-          isOpen ? 'block' : 'hidden'
-        }`}
-      >
-        <div className="py-1 bg-white rounded-md shadow-xs">
-          <button
-            onClick={() => handleButtonClick('Button 1')}
-            className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          >
-            Button 1
-          </button>
-          <button
-            onClick={() => handleButtonClick('Button 2')}
-            className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          >
-            Button 2
-          </button>
-          <button
-            onClick={() => handleButtonClick('Button 3')}
-            className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          >
-            Button 3
+<div className=" flex mx-auto mt-2">
+      <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <a href="#">
+          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            Assigned Work
+          </h5>
+        </a>
+        {/* <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+          Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+        </p> */}
+        <div className="flex justify-between mt-4">
+          <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-300">
+            Work Completed
           </button>
         </div>
       </div>
-    </div>
-  );
-};
-
-export default DropdownButton;
+      </div>
