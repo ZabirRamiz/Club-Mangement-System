@@ -94,16 +94,14 @@ const Userdasboard = () => {
         </div>
 
         {/* Second Card */}
-        <div className="flex flex-col items-right mt-8 ml-1">
+        <div className="flex flex-col items-right mt-16 ml-1">
+          
           <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
             <a href="#">
               <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 Assigned Work
               </h5>
             </a>
-            {/* <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
-            </p> */}
             <div className="flex justify-between mt-4">
               <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-300">
                 Accept
@@ -116,8 +114,9 @@ const Userdasboard = () => {
         </div>
         
       </div>
-    </div>
+    {/* </div> */}
     {/* text box area  */}
+    
     <div className="flex flex-col items-center">
     <div className="flex justify-end mt-5">
       <form
@@ -154,7 +153,7 @@ const Userdasboard = () => {
             value={comment}
             onChange={handleCommentChange}
             className="w-full h-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-            placeholder="Write a comment..."
+            placeholder="Text..."
             required
           />
         </div>
@@ -170,8 +169,9 @@ const Userdasboard = () => {
    
     {/* 3rd card */}
     {/* Card container */}
-    <div className="flex mx-auto mt-[-180px] ml-96 mr-4 ">
-        <div className="w-96 p-8 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    
+    <div className="flex mx-64 mt-[-180px] " style={{ marginLeft: '700px', marginRight: '12px' }}>
+        <div style={{ width: '500px' }} className=" p-8 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
           <a href="#">
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
               Pending Works
@@ -186,7 +186,9 @@ const Userdasboard = () => {
       </div>
     </div>
      </div>
-    </div>
+     </div>
+  
+  
   );
 };
 
