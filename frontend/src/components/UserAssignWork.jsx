@@ -1,14 +1,18 @@
 import { useState } from 'react';
 
-const TailwindFlobiteTemple = () => {
+const AssignWork = () => {
   const [fromValue, setFromValue] = useState('');
   const [toValue, setToValue] = useState('');
   const [assigningDate, setAssigningDate] = useState('');
   const [deadline, setDeadline] = useState('');
   const [description, setDescription] = useState('');
+  const handleButtonClick = () => {
+    // Add your button click logic here
+    console.log('Button clicked!');
+  };
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded-md shadow-md h-96">
+    <div className="p-6 max-w-md mx-auto bg-white rounded-md shadow-md h-120">
       <div className="flex space-x-4">
         <div className="w-1/2">
           <label htmlFor="from" className="block text-sm font-medium text-gray-600">
@@ -88,8 +92,14 @@ const TailwindFlobiteTemple = () => {
           className="mt-5 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
         />
       </div>
+      <button
+        onClick={handleButtonClick}
+        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
+      >
+        Submit
+      </button>
     </div>
   );
 };
 
-export default TailwindFlobiteTemple;
+export default AssignWork;
