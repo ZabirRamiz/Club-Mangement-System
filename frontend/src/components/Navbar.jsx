@@ -39,6 +39,7 @@ const Navbar = () => {
         { label: 'Dashboard', path: '/UserDashboard' },
         { label: 'Post', path: '/UserPost' },
         { label: 'Event', path: '/UserEvent' },
+        { label: 'AssignWork', path: '/UserAssignWork'},
         { label: 'Logout', path: '/', onClick: handleLogout },
       ],
       admin: [
