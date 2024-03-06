@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const UserRoutes = require("./routes/User/UserRoute");
 const PostRoutes = require("./routes/Post/PostRoute");
 const EventRoutes = require("./routes/EventRoute");
+const WorkRoutes = require("./routes/WorkRoute");
 //express app
 const app = express();
 
@@ -43,3 +44,4 @@ app.use("/api/members", MemberListRoutes);
 app.use("/api/user", UserRoutes);
 app.use("/api/posts", PostRoutes);
 app.use("/api/events", EventRoutes)
+app.use("/api/works", WorkRoutes)
