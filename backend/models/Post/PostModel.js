@@ -10,10 +10,14 @@ const PostSchema = new schema({
     type: String,
     required: true,
   },
-  vote: {
+  upvote: {
     type: Number,
     default: 0,
   },
+  downvote:{
+    type: Number,
+    default: 0
+  }
 });
 
 module.exports = mongoose.model("Post", PostSchema);
