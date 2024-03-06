@@ -5,6 +5,7 @@ const AssignWork = () => {
   const [toValue, setToValue] = useState('');
   const [assigningDate, setAssigningDate] = useState('');
   const [deadline, setDeadline] = useState('');
+  const [number, setNumber] = useState('')
   const [description, setDescription] = useState('');
   const handleButtonClick = () => {
     // Add your button click logic here
@@ -12,7 +13,7 @@ const AssignWork = () => {
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded-md shadow-md h-120">
+    <div className="p-6 max-w-md mx-auto bg-white rounded-md shadow-md h-12">
       <div className="flex space-x-4">
         <div className="w-1/2">
           <label htmlFor="from" className="block text-sm font-medium text-gray-600">
@@ -74,6 +75,19 @@ const AssignWork = () => {
             name="deadline"
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
+            className="mt-5 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+          />
+        </div>
+        <div className="w-1/2">
+          <label htmlFor="Number" className="block text-sm font-medium text-gray-600">
+            Number
+          </label>
+          <input
+            type="number"
+            id="number"
+            name="number"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
             className="mt-5 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
           />
         </div>
