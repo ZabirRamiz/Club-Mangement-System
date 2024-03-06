@@ -1,3 +1,4 @@
+const PostModel = require("../../models/Post/PostModel");
 const postModel = require("../../models/Post/PostModel");
 const mongoose = require("mongoose");
 
@@ -9,10 +10,10 @@ const getAllPosts = async (req, res) => {
 };
 
 const createPost = async(req, res) =>{
-  const {postUserId, body, vote} = req.body
+  const {postUserId, body, upvote, downvote} = req.body
   
   try{
-    const newPost = await postModel.create({postUserId, body, vote})
+    const newPost = await postModel.create({postUserId, body, upvote, downvote})
     res.status(200).json(newPost)
   }
   catch(error){
@@ -20,4 +21,19 @@ const createPost = async(req, res) =>{
   }
 }
 
-module.exports = { getAllPosts, createPost };
+const updatePost = async(req, res) =>{
+  const { postUserId } = req.params
+  
+  const post = await PostModel.findOneAndUpdate(
+    {postUserId: postUserId},{
+    ...req.body
+  }, {new: true} );
+  if(!post){
+    return res.status(404).json({
+      error: "No such POst"
+    })
+  }
+  res.status(200).json(post)
+}
+
+module.exports = { getAllPosts, createPost, updatePost };
