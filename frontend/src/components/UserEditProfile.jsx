@@ -1,31 +1,56 @@
 
-
-// export default function UserEditProfile() {
-//   return (
-//     <div>
-//       edit profile
-//     </div>
-//   )
-// }
-
-// CheckoutForm.jsx
 import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const UserEditProfile = () => {
+  const localStudentId = localStorage.getItem("Id")
+  const UserEditProfile = () => {
   const navigate = useNavigate();
 
+  const [studentID, setStudentID]=useState("")
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [contact, setContact] = useState("");
+  const [password, setPassword] = useState("");
+  const [designation, setDesignation] = useState("");
+  const [department, setDepartment] =useState("")
   const [profileImage, setProfileImage] = useState(null);
   
+  // post request
+  const handleEditSubmit = async (e) => {
+    e.preventDefault()
+    const data = {};
+    if (name !== "") data.name = name;
+    if (email !== "") data.email = email;
+    if (password !== "") data.password = password;
+    if (designation !== "") data.designation = designation;
+    if (department !== "") data.department = department;
+    // Add more conditions for other fields if needed
+  
+    // Sending PATCH request if there are non-empty fields
+    
+    if (Object.keys(data).length > 0) {
+      console.log("ENTERED IF")
+      const response = await fetch(`/api/user/editUser/${localStudentId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      );
+      
+    const json = await response.json()
+    console.log(json)
+    if ( !response.ok ){
+      console.log(json.error)
+    }
+    else{
+      navigate("/UserDashboard");
+    }
+    }
+  }
 
-  const handleEditSubmit = () => {
-    // Handle the submission logic here, including the new image.
-    navigate("/UserDashboard");
-  };
+  
+    
+  
 
   return (
     <div className="container mx-auto p-4 md:p-10">
@@ -34,7 +59,20 @@ const UserEditProfile = () => {
           <div className="w-full px-3 py-8 md:p-8">
             <h2 className="text-2xl font-bold text-gray-800">Edit Profile</h2>
             <form className="mt-6">
-              <div className="mb-6">
+            <div className="mb-6">
+                <label htmlFor="studentID" className="block text-gray-800 font-bold mb-2">
+                  Student ID
+                </label>
+                <input
+                  id="studentID"
+                  type="number"
+                  placeholder=""
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={studentID}
+                  onChange={(e) => setStudentID(e.target.value)}
+                />
+              </div>
+            <div className="mb-6">
                 <label htmlFor="name" className="block text-gray-800 font-bold mb-2">
                   Name
                 </label>
@@ -47,6 +85,7 @@ const UserEditProfile = () => {
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
+              
               <div className="mb-6">
                 <label htmlFor="email" className="block text-gray-800 font-bold mb-2">
                   Email
@@ -61,29 +100,44 @@ const UserEditProfile = () => {
                 />
               </div>
               <div className="mb-6">
-                <label htmlFor="Address" className="block text-gray-800 font-bold mb-2">
-                  Address
+                <label htmlFor="password" className="block text-gray-800 font-bold mb-2">
+                  Password
                 </label>
                 <input
-                  id="Address"
+                  id="password"
                   type="text"
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <div className="mb-6">
-                <label htmlFor="number" className="block text-gray-800 font-bold mb-2">
-                  Contact
+                <label htmlFor="designation" className="block text-gray-800 font-bold mb-2">
+                  Designation
                 </label>
                 <input
-                  id="number"
-                  type="number"
+                  id="text"
+                  type="text"
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
+                  value={designation}
+                  onChange={(e) => setDesignation(e.target.value)}
+                  disabled
+                />
+              </div>
+              <div className="mb-6">
+                <label htmlFor="department" className="block text-gray-800 font-bold mb-2">
+                  Department
+                </label>
+                <input
+                  id="text"
+                  type="text"
+                  placeholder=""
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  disabled
                 />
               </div>
               <div className="mb-6">
@@ -111,6 +165,6 @@ const UserEditProfile = () => {
       </div>
     </div>
   );
-};
+}
 
 export default UserEditProfile;

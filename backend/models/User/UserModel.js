@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
-const allUserSchema = new schema(
+const UserSchema = new schema(
   {
     sid: {
       type: String,
@@ -30,4 +30,4 @@ const allUserSchema = new schema(
   },
   { timestamps: false }
 );
-module.exports = mongoose.model("AllUser", allUserSchema);
+module.exports = mongoose.model("User", UserSchema);
