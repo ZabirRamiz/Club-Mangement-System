@@ -145,7 +145,7 @@ const PostForm = () =>{
         const json = await response.json()
         if (response.ok){
             setPostBody("")
-            navigate("/UserDashboard");
+            navigate("/UserPost");
         }
         else{
             console.error("Jhamela hose")
