@@ -17,16 +17,23 @@ const UserPost = () =>{
   }, [])
 
   return(
+    <>
+    <div className="flex flex-col items-right "
+      style={{ backgroundImage: 'url("https://png.pngtree.com/background/20210716/original/pngtree-light-blue-cute-striped-baby-blue-background-picture-image_1348681.jpg")', backgroundSize: 'cover', minHeight: '100vh' }}>
     <div className='userpost'>
-      <div className='postform'>
+      <div className='postform' >
         <PostForm/>
-
+        <div  style={{ marginTop: '-720px' }} >
+         
         {posts && posts.map((post) =>(
           <PostFeed key={post._id} post = {post} />
         ))}
       </div>
+      </div>
 
     </div>
+    </div>
+    </>
 
   )
 
