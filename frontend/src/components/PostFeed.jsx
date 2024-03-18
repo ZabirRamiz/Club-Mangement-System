@@ -23,7 +23,7 @@ const feed = ({post}) =>{
     e.preventDefault()
     const newUpVote = upVote + 1
     console.log(post.postUserId)
-    const response = await fetch(`/api/posts/updatePost/${post.postUserId}`,{
+    const response = await fetch(`/api/posts/updatePost/${post._id}`,{
         method: "PATCH",
         body: JSON.stringify({upvote: newUpVote}),
         headers:{
@@ -45,7 +45,7 @@ const feed = ({post}) =>{
     e.preventDefault()
     const newDownVote = downVote + 1
     console.log(post.postUserId)
-    const response = await fetch(`/api/posts/updatePost/${post.postUserId}`,{
+    const response = await fetch(`/api/posts/updatePost/${post._id}`,{
         method: "PATCH",
         body: JSON.stringify({downvote: newDownVote}),
         headers:{
