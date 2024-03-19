@@ -136,7 +136,7 @@ export default function Login() {
             </div>
           </button> */}
 
-          <p className="mt-6">Wants to join? <a href="#" className="text-blue-500 hover:text-blue-700 font-semibold">Register Here</a></p>
+          <p className="mt-6">Wants to join? <a href="/Register" className="text-blue-500 hover:text-blue-700 font-semibold">Register Here</a></p>
 
         </div>
       </div>

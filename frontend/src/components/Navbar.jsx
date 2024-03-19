@@ -11,12 +11,15 @@ const Navbar = () => {
 
   useEffect(() =>{
     const fetchData = async() =>{
+      if(loginId !=0){
         const response = await fetch(`api/user/getSpecificUser/${loginId}`)
         const json = await response.json()
         if(response.ok){
           setUser(json)
           console.log(`User name is ${json.name}`)
         }
+      }
+        
 
         
     }
@@ -56,6 +59,8 @@ const Navbar = () => {
         { label: 'Post', path: '/UserPost' },
         { label: 'Event', path: '/UserEvent' },
         { label: 'Work', path: '/UserAssignWork'},
+        { label: 'Members', path: '/ManageMembers' },
+        { label: 'Pending', path: '/PendingMembers' },
         { label: 'Logout', path: '/', onClick: handleLogout },
       ],
       admin: [
@@ -64,6 +69,7 @@ const Navbar = () => {
         { label: 'Admin Dashboard', path: '/AdminDashboard' },
         { label: 'Admin Post', path: '/AdminPost' },
         { label: 'Admin Event', path: '/AdminEvent' },
+        { label: 'Members', path: '/ManageMembers' },
         { label: 'Logout', path: '/', onClick: handleLogout },
       ],
       // Add other user types as needed
