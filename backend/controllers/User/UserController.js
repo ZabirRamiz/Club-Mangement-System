@@ -57,6 +57,39 @@ const editUser = async(req, res) =>{
 
 }
 
+const createUser = async (req, res) =>{
+  const {studentID, name, email, password, designation, department, profileImage } = req.body
+  // add document to db
+  try {
+      const newUser = await userModel.create({
+        sid: studentID,
+        name: name,
+        email: email,
+        password: password,
+        designation: designation,
+        department: department
+      })   //create new document with given params
+      res.status(200).json(newUser)
+  } catch (error) {
+      res.status(400).json({error: error.message})
+  }
+}
+
+const deleteUser = async ( req, res) =>{
+  const { studentId } = req.params
+
+  const user = await userModel.findOneAndDelete({sid: studentId})
+
+  if(!user){
+      return res.status(404).json({
+          error: "No such user"
+      })
+  }
+
+  res.status(200).json(user)
+
+}
+
 
 
 
@@ -98,4 +131,4 @@ const editUser = async(req, res) =>{
 
 // User.save();
 
-module.exports = { getAllUser, getSpecificUser, editUser };
+module.exports = { getAllUser, getSpecificUser, editUser, createUser, deleteUser };

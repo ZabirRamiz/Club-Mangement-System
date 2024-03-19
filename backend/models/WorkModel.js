@@ -11,29 +11,24 @@ const WorkSchema = new Schema({
     required: true,
   },
   assign_date: {
-    type: Date, // or Date if you want to store time as a date object
-    default: null, // or ''
+    type: String, // or Date if you want to store time as a date object
+    required: true,
   },
   deadline: {
-    type: Date,
-    default: null, // or ''
+    type: String,
+    required: true,
   },
   body: {
     type: String,
-    default: null, // or ''
-  },
-  max_accepter: {
-    type: Number,
-    default: null, // or ''
+    required: true,
   },
   accepted_by: {
     type: String,
-    default: 0,
-    min: 0, // Example: Minimum budget value of 0
+    default: "",
   },
   work_status: {
     type: String,
-    default: null, // or ''
+    default: "Pending", // or ''
   },
 });
 

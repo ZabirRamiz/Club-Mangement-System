@@ -1,54 +1,47 @@
 
 import  { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-  const localStudentId = localStorage.getItem("Id")
-  const UserEditProfile = () => {
+  const Register = () => {
   const navigate = useNavigate();
 
   const [studentID, setStudentID]=useState("")
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [designation, setDesignation] = useState("");
+  const [designation, setDesignation] = useState("Pending");
   const [department, setDepartment] =useState("")
   const [profileImage, setProfileImage] = useState(null);
 
-  useEffect(() =>{
-    const fetchData = async() =>{
-        const user = localStorage.getItem("Id")
-        const response = await fetch(`api/user/getSpecificUser/${user}`)
-        const json = await response.json()
-        if(response.ok){
-            console.log(`User name is ${json.name}`)
-            setStudentID(json.sid)
-            setName(json.name)
-            setPassword(json.password)
-            setEmail(json.email)
-            setDesignation(json.designation)
-            console.log(designation)
-            setDepartment(json.department)
-        }
+//   useEffect(() =>{
+//     const fetchData = async() =>{
+//         const user = localStorage.getItem("Id")
+//         const response = await fetch(`api/user/getSpecificUser/${user}`)
+//         const json = await response.json()
+//         if(response.ok){
+//             console.log(`User name is ${json.name}`)
+//             setStudentID(json.sid)
+//             setName(json.name)
+//             setPassword(json.password)
+//             setEmail(json.email)
+//             setDesignation(json.designation)
+//             console.log(designation)
+//             setDepartment(json.department)
+//         }
 
         
         
-    }
+//     }
 
-    fetchData()
-}, [])
+//     fetchData()
+// }, [])
   
-  // post request
   const handleEditSubmit = async (e) => {
     e.preventDefault()
 
-    const response = await fetch(`/api/user/editUser/${studentID}`,{
-      method: "PATCH",
+    const response = await fetch(`/api/user/createUser`,{
+      method: "POST",
       body: JSON.stringify({
-        sid: studentID,
-        name: name,
-        email: email,
-        password: password,
-        designation: designation,
-        department: department
+        studentID, name, email, password, designation, department, profileImage
       }),
       headers: {
         'Content-Type': 'application/json'
@@ -57,10 +50,10 @@ import { useNavigate } from "react-router-dom";
 
     const json = await response.json()
     if (response.ok){
-      window.location.reload()
+      navigate("/")
     }
     else{
-      console.error("Edit e jhamela hoise")
+      console.error("Register e jhamela hoise")
     }
 
     
@@ -75,7 +68,7 @@ import { useNavigate } from "react-router-dom";
       <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-xl">
         <div className="md:flex">
           <div className="w-full px-3 py-8 md:p-8">
-            <h2 className="text-2xl font-bold text-gray-800">Edit Profile</h2>
+            <h2 className="text-2xl font-bold text-gray-800">Registration Form</h2>
             <form className="mt-6">
             <div className="mb-6">
                 <label htmlFor="studentID" className="block text-gray-800 font-bold mb-2">
@@ -87,7 +80,6 @@ import { useNavigate } from "react-router-dom";
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={studentID}
-                  {...(designation==="admin")? {disabled: false}: {disabled:true}}
                   onChange={(e) => setStudentID(e.target.value)}
                 />
               </div>
@@ -132,32 +124,19 @@ import { useNavigate } from "react-router-dom";
                 />
               </div>
               <div className="mb-6">
-                <label htmlFor="designation" className="block text-gray-800 font-bold mb-2">
-                  Designation
+                <label htmlFor="designation" className="block font-bold">
+                    Department:
                 </label>
-                <input
-                  id="designation"
-                  type="text"
-                  placeholder=""
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  value={designation}
-                  onChange={(e) => setDesignation(e.target.value)}
-                  {...(designation==="admin")? {disabled: false}: {disabled:true}}
-                />
-              </div>
-              <div className="mb-6">
-                <label htmlFor="department" className="block text-gray-800 font-bold mb-2">
-                  Department
-                </label>
-                <input
-                  id="text"
-                  type="text"
-                  placeholder=""
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  {...(designation==="admin")? {disabled: false}: {disabled:true}}
-                />
+                <select
+                    id="department"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    value={department}
+                    onChange={(e) => setDepartment(e.target.value)}
+                    >
+                    <option value="EM">EM</option>
+                    <option value="HR">HR</option>
+                    <option value="PR">PR</option>
+                </select>
               </div>
               <div className="mb-6">
                 <label htmlFor="profileImage" className="block text-gray-800 font-bold mb-2">
@@ -186,4 +165,4 @@ import { useNavigate } from "react-router-dom";
   );
 }
 
-export default UserEditProfile;
+export default Register;
