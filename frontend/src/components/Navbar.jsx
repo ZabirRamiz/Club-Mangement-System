@@ -1,12 +1,28 @@
-import  { useState} from 'react';
+import  { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem('State') === 'true');
   const [userType, setUserType] = useState(localStorage.getItem('userType') || 'user');
+  const [user, setUser] = useState(null)
   const loginId = localStorage.getItem("Id")
   const navigate = useNavigate();
+
+  useEffect(() =>{
+    const fetchData = async() =>{
+        const response = await fetch(`api/user/getSpecificUser/${loginId}`)
+        const json = await response.json()
+        if(response.ok){
+          setUser(json)
+          console.log(`User name is ${json.name}`)
+        }
+
+        
+    }
+
+    fetchData()
+}, [])
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -39,7 +55,7 @@ const Navbar = () => {
         { label: 'Dashboard', path: '/UserDashboard' },
         { label: 'Post', path: '/UserPost' },
         { label: 'Event', path: '/UserEvent' },
-        { label: 'AssignWork', path: '/UserAssignWork'},
+        { label: 'Work', path: '/UserAssignWork'},
         { label: 'Logout', path: '/', onClick: handleLogout },
       ],
       admin: [
@@ -80,10 +96,10 @@ const Navbar = () => {
         
           <ul className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
             
-            {loginId != "0" && (
+            {user != null && (
               <li className="nav-item" key={null}>
               <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
-                {loginId}
+                {user.name}
               </a>
             </li>
 

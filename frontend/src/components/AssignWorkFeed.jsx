@@ -12,6 +12,7 @@ const AssignWorkFeed = ({work}) =>{
 
     const[showAccept, setShowAccept] = useState(false)
     const[showDecline, setShowDecline] = useState(false)
+    const[showDelete, setShowDelete] = useState(false)
 
     useEffect(() =>{
         const fetchData = async() =>{
@@ -26,8 +27,11 @@ const AssignWorkFeed = ({work}) =>{
             if(acceptedBy == json.name){
               setShowDecline(true)
             }
-            else if(acceptedBy == ""){
+            else if(acceptedBy == "" && json.department == to){
               setShowAccept(true)
+            }
+            if(json.designation == "admin" || (json.department == from && json.designation != "e")){
+              setShowDelete(true)
             }
             
         }
@@ -146,9 +150,11 @@ const AssignWorkFeed = ({work}) =>{
             </button>
           )}
 
-          <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring focus:border-blue-300">
-          Delete
-          </button>
+          {showDelete && (
+            <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring focus:border-blue-300">
+            Delete
+            </button>
+          )}
 
 
           

@@ -1,5 +1,5 @@
 
-import  { useState } from "react";
+import  { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
   const localStudentId = localStorage.getItem("Id")
   const UserEditProfile = () => {
@@ -12,40 +12,58 @@ import { useNavigate } from "react-router-dom";
   const [designation, setDesignation] = useState("");
   const [department, setDepartment] =useState("")
   const [profileImage, setProfileImage] = useState(null);
+
+  useEffect(() =>{
+    const fetchData = async() =>{
+        const user = localStorage.getItem("Id")
+        const response = await fetch(`api/user/getSpecificUser/${user}`)
+        const json = await response.json()
+        if(response.ok){
+            console.log(`User name is ${json.name}`)
+            setStudentID(json.sid)
+            setName(json.name)
+            setPassword(json.password)
+            setEmail(json.email)
+            setDesignation(json.designation)
+            console.log(designation)
+            setDepartment(json.department)
+        }
+
+        
+        
+    }
+
+    fetchData()
+}, [])
   
   // post request
   const handleEditSubmit = async (e) => {
     e.preventDefault()
-    const data = {};
-    if (name !== "") data.name = name;
-    if (email !== "") data.email = email;
-    if (password !== "") data.password = password;
-    if (designation !== "") data.designation = designation;
-    if (department !== "") data.department = department;
-    // Add more conditions for other fields if needed
-  
-    // Sending PATCH request if there are non-empty fields
-    
-    if (Object.keys(data).length > 0) {
-      console.log("ENTERED IF")
-      const response = await fetch(`/api/user/editUser/${localStudentId}`, {
-        method: 'PATCH',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-      );
-      
+
+    const response = await fetch(`/api/user/editUser/${studentID}`,{
+      method: "PATCH",
+      body: JSON.stringify({
+        sid: studentID,
+        name: name,
+        email: email,
+        password: password,
+        designation: designation,
+        department: department
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+    }
+    })
+
     const json = await response.json()
-    console.log(json)
-    if ( !response.ok ){
-      console.log(json.error)
+    if (response.ok){
+      window.location.reload()
     }
     else{
-      navigate("/UserDashboard");
+      console.error("Edit e jhamela hoise")
     }
-    }
+
+    
   }
 
   
@@ -69,6 +87,7 @@ import { useNavigate } from "react-router-dom";
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={studentID}
+                  {...(designation==="admin")? {disabled: false}: {disabled:true}}
                   onChange={(e) => setStudentID(e.target.value)}
                 />
               </div>
@@ -105,7 +124,7 @@ import { useNavigate } from "react-router-dom";
                 </label>
                 <input
                   id="password"
-                  type="text"
+                  type="password"
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={password}
@@ -117,13 +136,13 @@ import { useNavigate } from "react-router-dom";
                   Designation
                 </label>
                 <input
-                  id="text"
+                  id="designation"
                   type="text"
                   placeholder=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={designation}
                   onChange={(e) => setDesignation(e.target.value)}
-                  disabled
+                  {...(designation==="admin")? {disabled: false}: {disabled:true}}
                 />
               </div>
               <div className="mb-6">
@@ -137,7 +156,7 @@ import { useNavigate } from "react-router-dom";
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
-                  disabled
+                  {...(designation==="admin")? {disabled: false}: {disabled:true}}
                 />
               </div>
               <div className="mb-6">

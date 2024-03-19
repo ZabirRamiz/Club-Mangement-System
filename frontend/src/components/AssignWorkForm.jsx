@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
 const AssignWorkForm = () => {
-    const [from, setFrom] = useState("EM")
+    const [from, setFrom] = useState("")
     const [to, setTo] = useState("HR")
     const [assign_date, setAssignDate] = useState("")
     const [deadline, setDeadline] = useState("")
@@ -11,6 +11,31 @@ const AssignWorkForm = () => {
     const [work_status, setWorkStatus] = useState("Pending")
     
     const navigate = useNavigate()
+
+    useEffect(() =>{
+      const fetchData = async() =>{
+          const user = localStorage.getItem("Id")
+          const response = await fetch(`api/user/getSpecificUser/${user}`)
+          const json = await response.json()
+          if(response.ok){
+            setFrom(json.department)
+            if(from == "HR"){
+              setTo("EM")
+            }
+
+
+            const today = new Date().toISOString().split("T")[0]
+            setAssignDate(today)
+            console.log(today)
+
+              console.log(`User name is ${json.name}`)
+          }
+          
+          
+      }
+
+      fetchData()
+  }, [])
 
   const handleSubmit = async(e) => {
     e.preventDefault()
@@ -47,13 +72,12 @@ const AssignWorkForm = () => {
           <select
             id="from"
             name="from"
-            // value={from}
-            onChange={(e) => setFrom(e.target.value)}
+            //value={from}
+            disabled
             className="mt-5 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
           >
-            <option value="EM">EM</option>
-            <option value="HR">HR</option>
-            <option value="PR">PR</option>
+            <option value={from}>{from}</option>
+
           </select>
         </div>
 
@@ -64,10 +88,11 @@ const AssignWorkForm = () => {
           <select
             id="to"
             name="to"
-            // value={to}
+            value={to}
             onChange={(e) => setTo(e.target.value)}
             className="mt-5 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
           >
+            <option value={to}>{to}</option>
             <option value="HR">HR</option>
             <option value="EM">EM</option>
             <option value="PR">PR</option>
@@ -85,7 +110,8 @@ const AssignWorkForm = () => {
             id="assigningDate"
             name="assigningDate"
             value={assign_date}
-            onChange={(e) => setAssignDate(e.target.value)}
+            // onChange={(e) => setAssignDate(e.target.value)}
+            disabled
             className="mt-5 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
           />
         </div>

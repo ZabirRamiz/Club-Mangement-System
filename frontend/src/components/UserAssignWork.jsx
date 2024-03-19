@@ -24,7 +24,7 @@ const UserAssignWork = () =>{
         <div className='postform md:w-1/4'>
           <AssignWorkForm />
         </div>
-        <div className='md:w-3/4'>
+        <div className='md:w-3/4 overflow-auto'>
           {works && works.map((work) => (
             <AssignWorkFeed key={work._id} work={work} />
           ))}
