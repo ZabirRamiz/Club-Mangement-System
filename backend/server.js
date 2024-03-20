@@ -3,8 +3,8 @@ const express = require("express");
 const documentRoutes = require("./routes/routing");
 const MemberListRoutes = require("./routes/routingMemberList");
 const mongoose = require("mongoose");
-const UserRoutes = require("./routes/User/UserRoute");
-const PostRoutes = require("./routes/Post/PostRoute");
+const UserRoutes = require("./routes/UserRoute");
+const PostRoutes = require("./routes/PostRoute");
 const EventRoutes = require("./routes/EventRoute");
 const WorkRoutes = require("./routes/WorkRoute");
 //express app
