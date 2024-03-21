@@ -61,6 +61,7 @@ const Navbar = () => {
         { label: 'Work', path: '/UserAssignWork'},
         { label: 'Members', path: '/ManageMembers' },
         { label: 'Pending', path: '/PendingMembers' },
+        { label: 'Interview', path: '/Interview' },
         { label: 'Logout', path: '/', onClick: handleLogout },
       ],
       admin: [
