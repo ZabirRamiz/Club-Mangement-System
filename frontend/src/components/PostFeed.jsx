@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 
 const feed = ({ post }) => {
   const [name, setName] = useState("");
-  const [upVote, setUpVote] = useState(post.upvote);
-  const [downVote, setDownVote] = useState(post.downvote);
+  const [userID, setUserID] = useState(parseInt(localStorage.getItem("Id")));
+  const [upVote, setUpVote] = useState(post.upvote.length);
+  const [downVote, setDownVote] = useState(post.downvote.length);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -13,8 +14,6 @@ const feed = ({ post }) => {
       const json = await response.json();
       if (response.ok) {
         setName(json.name);
-        // setUpVote(json.upvote)
-        // setDownVote(json.downvote)
       }
     };
 
@@ -23,11 +22,21 @@ const feed = ({ post }) => {
 
   const handleUpVote = async (e) => {
     e.preventDefault();
-    const newUpVote = upVote + 1;
     console.log(post.postUserId);
+    const upVoterArray = post.upvote;
+    const downVoterArray = post.downvote;
+    if (upVoterArray.indexOf(userID) === -1) {
+      upVoterArray.splice(upVoterArray.indexOf(userID), 0, userID);
+      if (downVoterArray.indexOf(userID) !== -1) {
+        downVoterArray.splice(downVoterArray.indexOf(userID), 1);
+      }
+    } else {
+      upVoterArray.splice(upVoterArray.indexOf(userID), 1);
+    }
+
     const response = await fetch(`/api/posts/updatePost/${post._id}`, {
       method: "PATCH",
-      body: JSON.stringify({ upvote: newUpVote }),
+      body: JSON.stringify({ upvote: upVoterArray }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -37,17 +46,28 @@ const feed = ({ post }) => {
     if (!response.ok) {
       console.log("BHI JHAMELA");
     } else {
-      setUpVote(newUpVote);
+      setUpVote(post.upvote.length);
+      setDownVote(post.downvote.length);
     }
   };
 
   const handleDownVote = async (e) => {
     e.preventDefault();
-    const newDownVote = downVote + 1;
+
     console.log(post.postUserId);
+    const upVoterArray = post.upvote;
+    const downVoterArray = post.downvote;
+    if (downVoterArray.indexOf(userID) === -1) {
+      downVoterArray.splice(downVoterArray.indexOf(userID), 0, userID);
+      if (upVoterArray.indexOf(userID) !== -1) {
+        upVoterArray.splice(upVoterArray.indexOf(userID), 1);
+      }
+    } else {
+      downVoterArray.splice(downVoterArray.indexOf(userID), 1);
+    }
     const response = await fetch(`/api/posts/updatePost/${post._id}`, {
       method: "PATCH",
-      body: JSON.stringify({ downvote: newDownVote }),
+      body: JSON.stringify({ downvote: downVoterArray }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -57,7 +77,8 @@ const feed = ({ post }) => {
     if (!response.ok) {
       console.log("BHI JHAMELA");
     } else {
-      setDownVote(newDownVote);
+      setUpVote(post.upvote.length);
+      setDownVote(post.downvote.length);
     }
   };
 

@@ -62,6 +62,7 @@ const Navbar = () => {
         { label: 'Members', path: '/ManageMembers' },
         { label: 'Pending', path: '/PendingMembers' },
         { label: 'Interview', path: '/Interview' },
+        { label: 'Finance', path: '/Finance'},
         { label: 'Logout', path: '/', onClick: handleLogout },
       ],
       admin: [

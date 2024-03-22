@@ -1,23 +1,28 @@
 const mongoose = require("mongoose");
-const schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-const PostSchema = new schema({
-  postUserId:{
+
+const PostSchema = new Schema({
+  postUserId: {
     type: String,
     required: true
   },
   body: {
     type: String,
-    required: true,
+    required: true
+  },
+  type: {
+    type: String,
+    required: true
   },
   upvote: {
-    type: Number,
-    default: 0,
+    type: [Number],
+    default: []
   },
-  downvote:{
-    type: Number,
-    default: 0
-  }
+  downvote: {
+    type: [Number],
+    default: []
+  },
 });
 
 module.exports = mongoose.model("Post", PostSchema);
