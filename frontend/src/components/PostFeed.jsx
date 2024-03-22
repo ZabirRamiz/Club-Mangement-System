@@ -150,9 +150,9 @@ const feed = ({post}) =>{
         </div>
         {/* Up and down arrows inside the card */}
         <div className="absolute right-4 bottom-4">
-          <button onClick={handleUpVote} className= {`bg-${upVoteColor} text-white rounded-full p-2 mr-2`}>↑ {upVote}</button>
-          <button onClick={handleDownVote} className={`bg-${downVoteColor} text-white rounded-full p-2`}>↓ {downVote}</button>
-          <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring focus:border-blue-300">
+        <button onClick={handleUpVote} className="bg-blue-500 text-white rounded-full p-2 mr-2">↑ {upVote}</button>
+          <button onClick={handleDownVote} className="bg-red-500 text-white rounded-full p-2">↓ {downVote}</button>
+          <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring focus:border-blue-300 ml-4">
             Delete
           </button>
         </div>
