@@ -38,7 +38,7 @@ function App() {
         <Route path='/Finance' element={<div><Navbar/><Finance/></div>}/>
         <Route path="/Login" element={<Login/>}/>
         <Route path="/Register" element={<Register/>}/>
-        <Route path="/InterviewRoom/:roomid" element={<InterviewRoom/>}/>
+        <Route path="/InterviewRoom/:roomid" element={<div><Navbar/><InterviewRoom/></div>}/>
       </Routes>
     
     </BrowserRouter>
