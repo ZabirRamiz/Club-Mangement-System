@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 // Event component to display each event
 function Event({ name, location, date, image }) {
   return (
-    <div className="bg-gray-200 text-gray-800 shadow-lg rounded-md p-4 mb-4">
-      <h2 className="text-xl font-bold mb-2">{name}</h2>
-      <img src={image} alt={name} className="w-full h-32 object-cover mb-2 rounded-md" />
+    <div className="bg-white text-gray-800 shadow-md rounded-md p-2 md:p-4 mb-4">
+      <h2 className="text-lg font-bold mb-2">{name}</h2>
+      {image && <img src={image} alt={name} className="w-full h-32 object-cover mb-2 rounded-md" />}
       <p><strong>Location:</strong> {location}</p>
       <p><strong>Date:</strong> {date}</p>
     </div>
@@ -30,38 +30,46 @@ function EventsPage() {
     { name: "Event 6", location: "555 Maple St", date: "June 10, 2024", image: "https://via.placeholder.com/300" }
   ];
 
-  // State to manage the visibility of the upcoming events box
-  const [showEvents, setShowEvents] = useState(false);
+  // State to manage the visibility of the upcoming and all events boxes
+  const [showUpcomingEvents, setShowUpcomingEvents] = useState(true);
+  const [showAllEvents, setShowAllEvents] = useState(true);
 
   return (
-    <div className="container mx-auto mt-8">
-      <div className="relative mb-8">
-        <div className="bg-gray-800 text-white py-3 px-4 rounded-t-md cursor-pointer flex justify-between shadow-lg" onClick={() => setShowEvents(!showEvents)}>
-          <h1 className="text-3xl font-bold">Upcoming Events</h1>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-        {showEvents && (
-          <div className="bg-gray-700 shadow-lg rounded-b-md p-4">
-            <div className="grid grid-cols-1 gap-4">
-              {upcomingEvents.map((event, index) => (
-                <Event key={index} {...event} />
-              ))}
+    <div className="min-h-screen" style={{ backgroundImage: 'url("https://png.pngtree.com/background/20210716/original/pngtree-light-blue-cute-striped-baby-blue-background-picture-image_1348681.jpg")', backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
+      <div className="container mx-auto pt-8">
+        <div className="relative mb-8">
+          <div className="bg-white text-gray-800 py-3 px-4 rounded-t-md cursor-pointer flex justify-between shadow-md" onClick={() => setShowUpcomingEvents(!showUpcomingEvents)}>
+            <h1 className="text-2xl font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>Upcoming Events</h1>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={showUpcomingEvents ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
+            </svg>
+          </div>
+          {showUpcomingEvents && (
+            <div className="bg-gray-100 shadow-md rounded-b-md p-2 md:p-4">
+              <div className="grid grid-cols-1">
+                {upcomingEvents.map((event, index) => (
+                  <Event key={index} {...event} />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-      <div className="relative">
-        <div className="bg-gray-800 text-white py-3 px-4 rounded-t-md">
-          <h1 className="text-3xl font-bold">All Events</h1>
+          )}
         </div>
-        <div className="bg-gray-700 shadow-lg rounded-b-md p-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {allEvents.map((event, index) => (
-              <Event key={index} {...event} />
-            ))}
+        <div className="relative">
+          <div className="bg-white text-gray-800 py-3 px-4 rounded-t-md cursor-pointer flex justify-between shadow-md" onClick={() => setShowAllEvents(!showAllEvents)}>
+            <h1 className="text-2xl font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>All Events</h1>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={showAllEvents ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
+            </svg>
           </div>
+          {showAllEvents && (
+            <div className="bg-gray-100 shadow-md rounded-b-md p-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {allEvents.map((event, index) => (
+                  <Event key={index} {...event} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -69,6 +77,16 @@ function EventsPage() {
 }
 
 export default EventsPage;
+
+
+
+
+
+
+
+
+
+
 
 
 
