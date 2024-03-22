@@ -44,7 +44,7 @@ const PostForm = () =>{
         const json = await response.json()
         if (response.ok){
             setPostBody("")
-            navigate("/UserPost");
+            window.location.reload()
         }
         else{
             console.error("Jhamela hose")

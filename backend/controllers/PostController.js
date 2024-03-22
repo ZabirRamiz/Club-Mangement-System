@@ -39,4 +39,19 @@ const updatePost = async (req, res) => {
   res.status(200).json(post);
 };
 
-module.exports = { getAllPosts, createPost, updatePost };
+const deletePost = async ( req, res) =>{
+  const { id } = req.params
+
+  const post = await PostModel.findOneAndDelete({_id: id})
+
+  if(!post){
+      return res.status(404).json({
+          error: "No such post"
+      })
+  }
+
+  res.status(200).json(post)
+
+}
+
+module.exports = { getAllPosts, createPost, updatePost, deletePost };
