@@ -58,6 +58,7 @@ const Navbar = () => {
         { label: 'Dashboard', path: '/UserDashboard' },
         { label: 'Post', path: '/UserPost' },
         { label: 'Event', path: '/UserEvent' },
+        { label: 'EM', path: '/EventPost' },
         { label: 'Work', path: '/UserAssignWork'},
         { label: 'Members', path: '/ManageMembers' },
         { label: 'Pending', path: '/PendingMembers' },
