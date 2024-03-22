@@ -108,10 +108,13 @@ const PostForm = () =>{
     const [postUserId, setPostUser] = useState("")
     const [postUserName, setPostUserName] = useState("")
     const [body, setPostBody] = useState("")
+    const [selectedOption, setSelectedOption] = useState('');
     
     const navigate = useNavigate();
 
-   
+    const handleDropdownChange = (e) => {
+      setSelectedOption(e.target.value);
+  };
     
     useEffect(() =>{
         
@@ -178,13 +181,32 @@ const PostForm = () =>{
               
                     
                     <div className="w-96 h-96 mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                    <div className="px-4 py-2 bg-white dark:bg-gray-800">
+                    <label htmlFor="dropdown" className="sr-only">
+                      Select an option
+                    </label>
+                    <select
+                      id="dropdown"
+                      value={selectedOption}
+                      onChange={handleDropdownChange}
+                      className="w-full h-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 mb-2"
+                    >
+                      <option value="" disabled>
+                        Select an option
+                      </option>
+                      <option value="option1">Post</option>
+                      <option value="option2">Suggetion</option>
+                      <option value="option3">Ideas</option>
+                      <option value="option3">Complains</option>
+                    </select>
+                  </div>
                       <div className=" w-96 h-96 px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                         <label htmlFor="post" className="block text-gray-800 font-bold mb-2">
                             Write Post
                         </label>
                         <textarea
                           id="post"
-                          rows="4"
+                          rows="15"
                           value={body}
                           onChange={(e) => setPostBody(e.target.value)}
                           className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
@@ -198,7 +220,7 @@ const PostForm = () =>{
                     type="button"
                     onClick={handleSubmit}
                   >
-                    Submit
+                    Post
                   </button>
                 </form>   
                 

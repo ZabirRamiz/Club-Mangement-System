@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import PostForm from '../components/PostForm.jsx'
+// import PostForm from '../components/PostForm.jsx'
 const Userdasboard = () => {
   const navigate = useNavigate();
 
@@ -14,9 +14,7 @@ const Userdasboard = () => {
   const [designation, setDesignation] = useState("");
   const [gsuite, setGsuite] = useState("");
   const [department, setDepartment] = useState("");
-  const [comment, setComment] = useState('');
-  const [selectedOption, setSelectedOption] = useState('');
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       const loginStatus = localStorage.getItem('State');
@@ -49,19 +47,7 @@ const Userdasboard = () => {
     navigate("/UserEditProfile");
   };
 
-  const handleCommentChange = (e) => {
-    setComment(e.target.value);
-  };
-  const handleDropdownChange = (e) => {
-    setSelectedOption(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add your logic to handle form submission
-    console.log('Comment submitted:', comment);
-    // You may want to send the comment to a server or perform other actions here
-  };
+ 
   return (
     
     <div className="flex flex-col items-right "
@@ -93,101 +79,12 @@ const Userdasboard = () => {
           </div>
         </div>
 
-        {/* Second Card */}
-        <div className="flex flex-col items-right mt-16 ml-1">
-          
-          <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                Assigned Work
-              </h5>
-            </a>
-            <div className="flex justify-between mt-4">
-              <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-300">
-                Accept
-              </button>
-              <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring focus:border-blue-300">
-                Decline
-              </button>
-            </div>
-          </div>
-        </div>
+        
+        
         
       </div>
-    {/* </div> */}
-    {/* text box area  */}
-    
-    <div className="flex flex-col items-center">
-    <div className="flex justify-end mt-5">
-      <form
-        onSubmit={handleSubmit}
-        className="absolute top-12 right-0 m-20 w-1/2 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
-      >
-        <div className="px-4 py-2 bg-white dark:bg-gray-800">
-          <label htmlFor="dropdown" className="sr-only">
-            Select an option
-          </label>
-          <select
-            id="dropdown"
-            value={selectedOption}
-            onChange={handleDropdownChange}
-            className="w-full h-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 mb-2"
-          >
-            <option value="" disabled>
-              Select an option
-            </option>
-            <option value="option1">Post</option>
-            <option value="option2">Suggetion</option>
-            <option value="option3">Ideas</option>
-            <option value="option3">Complains</option>
-          </select>
-        </div>
-
-        <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
-          <label htmlFor="comment" className="sr-only">
-            Your comment
-          </label>
-          <textarea
-            id="comment"
-            rows="6"
-            value={comment}
-            onChange={handleCommentChange}
-            className="w-full h-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-            placeholder="Text..."
-            required
-          />
-        </div>
-        <div className="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600">
-          <button
-            type="submit"
-            className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-10 py-2.5 text-center me-2 mb-2"
-          >
-            Post
-          </button>
-        </div>
-      </form>
-   
-    {/* 3rd card */}
-    {/* Card container */}
-    
-    <div className="flex mx-64 mt-[-180px] " style={{ marginLeft: '700px', marginRight: '12px' }}>
-        <div style={{ width: '500px' }} className=" p-8 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-          <a href="#">
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Pending Works
-            </h5>
-          </a>
-          <div className="flex justify-between mt-12">
-            <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring focus:border-blue-300">
-              Work Completed
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
-     </div>
-     </div>
-  
+    
   
   );
 };
