@@ -60,7 +60,8 @@ import { useNavigate } from "react-router-dom";
 
     const json = await response.json()
     if (response.ok){
-      window.location.reload()
+     //window.location.reload()
+      navigate("/UserDashboard")
     }
     else{
       console.error("Edit e jhamela hoise")
