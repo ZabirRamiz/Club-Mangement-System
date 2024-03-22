@@ -1,9 +1,8 @@
-const PostModel = require("../../models/Post/PostModel");
-const postModel = require("../../models/Post/PostModel");
+const PostModel = require("../models/PostModel");
 const mongoose = require("mongoose");
 
 const getAllPosts = async (req, res) => {
-  const posts = await postModel.find({}).sort({ createdAt: -1 });
+  const posts = await PostModel.find({}).sort({ createdAt: -1 });
   res.status(200).json(posts);
 };
 

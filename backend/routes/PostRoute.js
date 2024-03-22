@@ -1,11 +1,11 @@
 const express = require("express");
 // const { getSpecificUser } = require("../../controllers/User/UserController");
-const PostModel = require("../../models/Post/PostModel");
+
 const {
   getAllPosts,
   createPost,
   updatePost,
-} = require("../../controllers/Post/PostController");
+} = require("../controllers/PostController");
 
 const router = express.Router();
 
