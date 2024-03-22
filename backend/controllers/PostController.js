@@ -7,14 +7,13 @@ const getAllPosts = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
-  const { postUserId, body, upvote, downvote } = req.body;
+  const { postUserId, body, type } = req.body;
 
   try {
-    const newPost = await postModel.create({
+    const newPost = await PostModel.create({
       postUserId,
       body,
-      upvote,
-      downvote,
+      type,
     });
     res.status(200).json(newPost);
   } catch (error) {
@@ -40,4 +39,19 @@ const updatePost = async (req, res) => {
   res.status(200).json(post);
 };
 
-module.exports = { getAllPosts, createPost, updatePost };
+const deletePost = async ( req, res) =>{
+  const { id } = req.params
+
+  const post = await PostModel.findOneAndDelete({_id: id})
+
+  if(!post){
+      return res.status(404).json({
+          error: "No such post"
+      })
+  }
+
+  res.status(200).json(post)
+
+}
+
+module.exports = { getAllPosts, createPost, updatePost, deletePost };

@@ -50,6 +50,17 @@ io.on('connection', socket =>{
     io.to(socket.id).emit('board:join', data)
   })
 
+  socket.on('board:create', data =>{
+    
+    const { studentID, board } = data
+    console.log(studentID, board)
+    studentIdToSocketIdMap.set(studentID, socket.id)
+    socketIdToStudentIdMap.set(socket.id, studentID)
+    io.to(board).emit('user:joined', {studentID, id: socket.id})
+    socket.join(board)
+    io.to(socket.id).emit('board:join', data)
+  })
+
   socket.on("user:call", ({to, offer }) =>{
     io.to(to).emit('incoming:call', {from: socket.id, offer})
   })

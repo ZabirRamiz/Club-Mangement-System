@@ -17,6 +17,13 @@ const LobbyScreen = () =>{
         //'board:join' is event name, can be anything. {...} is data sent to the event
     }, [studentID, board, socket])
 
+    const handleCreate = useCallback((e) => {
+        e.preventDefault()
+        
+        socket.emit('board:create', {studentID, board})
+        //'board:join' is event name, can be anything. {...} is data sent to the event
+    }, [studentID, board, socket])
+
     const handleJoinRoom = useCallback((data) =>{
         const {studentID, board } = data
         console.log(data)

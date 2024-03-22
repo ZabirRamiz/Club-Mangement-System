@@ -4,7 +4,7 @@ const schema = mongoose.Schema;
 const UserSchema = new schema(
   {
     sid: {
-      type: String,
+      type: Number,
       required: true,
       unique: true,
     },
