@@ -16,6 +16,7 @@ import ManageMembers from './components/ManageMembers.jsx';
 import PendingMembers from './components/PendingMembers.jsx';
 import InterviewLobby from './components/InterviewLobby.jsx';
 import InterviewRoom from './components/InterviewRoom.jsx';
+import Finance from './components/Finance.jsx';
 
 function App() {
  
@@ -34,6 +35,7 @@ function App() {
         <Route path='/ManageMembers' element={<div><Navbar/><ManageMembers/></div>}/> 
         <Route path='/PendingMembers' element={<div><Navbar/><PendingMembers/></div>}/> 
         <Route path='/Interview' element={<div><Navbar/><InterviewLobby/></div>}/> 
+        <Route path='/Finance' element={<div><Navbar/><Finance/></div>}/>
         <Route path="/Login" element={<Login/>}/>
         <Route path="/Register" element={<Register/>}/>
         <Route path="/InterviewRoom/:roomid" element={<InterviewRoom/>}/>
