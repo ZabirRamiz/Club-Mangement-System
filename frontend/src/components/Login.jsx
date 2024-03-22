@@ -70,22 +70,22 @@ export default function Login() {
                 {showPassword ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 absolute right-3 top-3 cursor-pointer"
+                    className="h-6 w-6 absolute right-3 top-4 cursor-pointer"
                     viewBox="0 0 24 24"
                     fill="none"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <path stroke="gray" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke="gray" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
                   </svg>
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8 absolute right-3 top-3 cursor-pointer"
+                    className="h-6 w-6 absolute right-3 top-4 cursor-pointer"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="currentColor"
+                    stroke="gray"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
