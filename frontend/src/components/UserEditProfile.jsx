@@ -75,7 +75,11 @@ import { useNavigate } from "react-router-dom";
   
 
   return (
-    <div className="container mx-auto p-4 md:p-10">
+    <div
+      className="w-full h-full bg-cover bg-center"
+      style={{ backgroundImage: 'url("https://png.pngtree.com/background/20210716/original/pngtree-light-blue-cute-striped-baby-blue-background-picture-image_1348681.jpg")', backgroundSize: 'cover', minHeight: '100vh', minWidth: '100vh'}}
+    >
+    <div className="container mx-auto p-2 md:p-5">
       <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-xl">
         <div className="md:flex">
           <div className="w-full px-3 py-8 md:p-8">
@@ -270,6 +274,7 @@ import { useNavigate } from "react-router-dom";
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
