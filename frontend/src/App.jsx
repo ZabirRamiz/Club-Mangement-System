@@ -16,11 +16,8 @@ import ManageMembers from './components/ManageMembers.jsx';
 import PendingMembers from './components/PendingMembers.jsx';
 import InterviewLobby from './components/InterviewLobby.jsx';
 import InterviewRoom from './components/InterviewRoom.jsx';
-<<<<<<< HEAD
 import EventPost from './components/EventPost.jsx';
-=======
 import Finance from './components/Finance.jsx';
->>>>>>> origin/Aadit
 
 function App() {
  

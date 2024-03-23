@@ -43,12 +43,12 @@ function EventPost() {
         <div className="bg-gray-100 text-gray-800 py-3 px-4 rounded-md shadow-md">
           <div className="flex justify-between">
             <h2 className="text-xl font-semibold ml-7">Event Title</h2>
-            <h2 className="text-xl font-semibold">Event Post</h2>
+            <h2 className="text-xl font-semibold ml-5">Event Post</h2>
             <h2 className="text-xl font-semibold mr-7">Pending Work</h2>
           </div>
           {events.map((event, index) => (
             <div key={index} className="bg-white p-4 rounded-md my-4 shadow-lg">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center ml-7">
                 <h3 className="text-lg font-semibold">{event.title}</h3>
                 <div className="flex flex-col items-center">
                   <ul>
