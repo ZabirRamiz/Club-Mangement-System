@@ -64,6 +64,8 @@ const Navbar = () => {
         { label: 'Pending', path: '/PendingMembers' },
         { label: 'Interview', path: '/Interview' },
         { label: 'Finance', path: '/Finance'},
+        { label: 'Sponsor' , path: '/Sponsor'},
+        
         { label: 'Logout', path: '/', onClick: handleLogout },
       ],
       admin: [
