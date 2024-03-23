@@ -2,32 +2,102 @@ import React, {useCallback, useEffect, useState} from 'react'
 import { useSocket } from '../context/SocketProvider'
 import ReactPlayer from 'react-player'
 import peer from '../service/peer'
+import { useParams, useNavigate } from 'react-router';
 
 const InterviewRoom = () => {
     const socket = useSocket();
     const [remoteSocketId, setRemoteSocketId] = useState(null);
+    const [userID, setUserID] = useState(parseInt(localStorage.getItem('Id')))
+    const [joinedUserID, setJoinedUserID] = useState("")
+    const { board } = useParams()
+    const [isCreator, setIsCreator] = useState(false)
+    const [creatorID, setCreatorID] = useState(0)
     const [myStream, setMyStream] = useState();
     const [remoteStream, setRemoteStream] = useState();
     const [isCameraOn, setIsCameraOn] = useState(true);
     const [isMicrophoneOn, setIsMicrophoneOn] = useState(true);
+    const [isAccepted, setIsAccepted] = useState(false)
+    const [isStreaming, setIsStreaming] = useState(false)
+    const [isCallEnded, setIsCallEnded] = useState(false)
+    const [isReady, setIsReady] = useState(false)
+    const navigate = useNavigate();
+
+
+    useEffect(() =>{
+        const fetchData = async() =>{
+            console.log(board, userID)
+            const response = await fetch(`/api/interview/getSingleInterviewSession/${board}`);
+            const json = await response.json()
+            if(response.ok){
+                setCreatorID(parseInt(json.creator))
+                if (creatorID == userID){
+                    setIsCreator(true)
+                }
+            }
+        }
+        fetchData()
+    }, [creatorID, isCreator])
+
+    const getReadyForVideo = useCallback(async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true
+        });
+        setMyStream(stream);
+        setIsReady(true)
+    }, [])
+
+
+    const handleLeaveRoom = useCallback(async () =>{
+
+        console.log("Room left room")
+
+        const res = await fetch(`/api/interview/getSingleInterviewSession/${board}`);
+        const js = await res.json();
+
+        if (!res.ok) {
+            throw new Error('Failed to fetch interview session');
+        }
+        var participantArray = js.participants
+        participantArray = participantArray.splice(participantArray.indexOf(userID), 1)
+        console.log(participantArray)
+
+        const response = await fetch(`/api/interview/updateInterviewSession/${board}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ participants: participantArray }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update interview session');
+        }
+        socket.emit('call:ended', { to: remoteSocketId });
+        navigate(`/Interview`);
+
+    }, []);
 
     const handleUserJoined = useCallback(({ studentID, id }) => {
         console.log(`StudentID: ${studentID} joined the board`);
+        setJoinedUserID(studentID)
         setRemoteSocketId(id);
         console.log("RemoteSocket id in user joined: ", remoteSocketId);
     }, []);
 
     const handleCallUser = useCallback(async () => {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: true
-        });
+        setMyStream()
         const offer = await peer.getOffer();
         console.log("Offer is ", offer);
         socket.emit("user:call", { to: remoteSocketId, offer });
         console.log("RemoteSocketId", remoteSocketId);
+        setIsAccepted(true)
+        const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true
+        });
         setMyStream(stream);
-        sendStreams()
+        if(remoteSocketId){
+            sendStreams()
+        }
     }, [remoteSocketId, socket]);
 
     const handleIncomingCall = useCallback(async ({ from, offer }) => {
@@ -44,14 +114,17 @@ const InterviewRoom = () => {
     }, [socket]);
 
     const sendStreams = useCallback(() => {
+        console.log("STREAM IS", myStream)
         for (const track of myStream.getTracks()) {
             peer.peer.addTrack(track, myStream);
+            setIsStreaming(true)
         }
     }, [myStream]);
 
     const handleCallAccepted = useCallback(({ from, ans }) => {
         peer.setLocalDescription(ans);
         console.log("CAll acceppted, ans: ", ans);
+        setIsAccepted(true)
         sendStreams();
     }, [sendStreams]);
 
@@ -71,6 +144,22 @@ const InterviewRoom = () => {
         console.log("handle nego need finel, ans: ", ans);
         await peer.setLocalDescription(ans);
     }, []);
+
+    const handleEndCall = useCallback(async () => {
+        
+        setRemoteStream();
+        socket.emit('call:end', { to: remoteSocketId });
+        
+        
+        
+    }, [remoteSocketId, handleLeaveRoom, socket]  );
+
+    const handleCallEnded = useCallback(({ from }) => {
+        console.log("call:ended recieved")
+        setIsCallEnded(true)
+        setRemoteStream()
+        console.log(`Call ended by user ${from}`);
+      }, []);
 
     useEffect(() => {
         peer.peer.addEventListener('track', async (ev) => {
@@ -93,6 +182,8 @@ const InterviewRoom = () => {
         socket.on('call:accepted', handleCallAccepted);
         socket.on('peer:nego:needed', handleNegoNeedIncoming);
         socket.on('peer:nego:final', handleNegoNeedFinal);
+        socket.on('call:ended', handleCallEnded);
+        
 
         return () => {
             socket.off('user:joined', handleUserJoined);
@@ -100,6 +191,7 @@ const InterviewRoom = () => {
             socket.off('call:accepted', handleCallAccepted);
             socket.off('peer:nego:needed', handleNegoNeedIncoming);
             socket.off('peer:nego:final', handleNegoNeedFinal);
+            socket.off('call:ended', handleCallEnded);
         };
     }, [
         socket,
@@ -107,7 +199,8 @@ const InterviewRoom = () => {
         handleIncomingCall,
         handleCallAccepted,
         handleNegoNeedIncoming,
-        handleNegoNeedFinal
+        handleNegoNeedFinal,
+        handleCallEnded,
     ]);
 
     const toggleCamera = () => {
@@ -120,18 +213,23 @@ const InterviewRoom = () => {
         myStream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
     };
 
-    const endCall = () => {
-        setMyStream(null);
-        setRemoteStream(null);
-        socket.emit('call:end', { to: remoteSocketId });
-    };
-
     return (
         <div className="max-w-lg mx-auto my-8">
-            <h1 className="text-3xl font-bold mb-4">Room Page</h1>
-            <h4 className="text-lg mb-4">{remoteSocketId ? `${remoteSocketId} Entered the room` : "No One in room"}</h4>
-            {remoteSocketId && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleCallUser}>Accept</button>}
-            {myStream && <button className="bg-green-500 text-white px-4 py-2 rounded-md mr-4" onClick={sendStreams}>Send Stream</button>}
+            <h1 className="text-3xl font-bold mb-4">Room Page {isCreator && ("Creator")}</h1>
+            <h4 className="text-lg mb-4">
+                {isCreator
+                    ? remoteSocketId
+                    ? `${joinedUserID} Entered the room`
+                    : "No One in room"
+                    : remoteSocketId
+                    ? "Joined room"
+                    : "Waiting for creator to accept"}
+            </h4>
+
+            <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleLeaveRoom}>Leave Room</button>
+            {(!isReady) && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={getReadyForVideo}>Ready</button>}
+            {(remoteSocketId && !isAccepted && isCreator) && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleCallUser}>Accept</button>}
+            {(myStream && remoteSocketId && !isCreator && !isStreaming) && <button className="bg-green-500 text-white px-4 py-2 rounded-md mr-4" onClick={sendStreams}>Send Stream</button>}
             {myStream &&
                 <>
                     <h1 className="text-2xl font-semibold mb-2">My Stream</h1>
@@ -143,6 +241,11 @@ const InterviewRoom = () => {
                             width="100%"
                             url={myStream}
                         />
+                    </div>
+                    <div>
+                        {isCallEnded && (<button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleEndCall}>End Call</button>)}
+                        <button className={`bg-${isCameraOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleCamera}>{isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}</button>
+                        <button className={`bg-${isMicrophoneOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md`} onClick={toggleMicrophone}>{isMicrophoneOn ? 'Mute' : 'Unmute'}</button>
                     </div>
                 </>
             }
@@ -158,11 +261,7 @@ const InterviewRoom = () => {
                             url={remoteStream}
                         />
                     </div>
-                    <div>
-                        <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={endCall}>End Call</button>
-                        <button className={`bg-${isCameraOn ? 'green' : 'red'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleCamera}>{isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}</button>
-                        <button className={`bg-${isMicrophoneOn ? 'green' : 'red'}-500 text-white px-4 py-2 rounded-md`} onClick={toggleMicrophone}>{isMicrophoneOn ? 'Mute' : 'Unmute'}</button>
-                    </div>
+                    
                 </>
             }
             

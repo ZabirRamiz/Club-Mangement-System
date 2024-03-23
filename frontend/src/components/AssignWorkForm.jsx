@@ -137,10 +137,11 @@ const AssignWorkForm = () => {
             onChange={(e) => setForOption(e.target.value)}
             className="mt-5 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
           >
-            <option value="">Select For</option>
+            
+            
+            <option value="General">General</option>
             <option value="Event">Event</option>
             <option value="Meeting">Meeting</option>
-            <option value="General">General</option>
           </select>
         </div>
         {showEventDropdown && (

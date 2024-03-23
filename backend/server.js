@@ -15,6 +15,7 @@ const UserRoutes = require("./routes/UserRoute");
 const PostRoutes = require("./routes/PostRoute");
 const EventRoutes = require("./routes/EventRoute");
 const WorkRoutes = require("./routes/WorkRoute");
+const InterviewRoutes = require("./routes/InterviewRoute");
 
 
 
@@ -58,7 +59,7 @@ io.on('connection', socket =>{
     socketIdToStudentIdMap.set(socket.id, studentID)
     io.to(board).emit('user:joined', {studentID, id: socket.id})
     socket.join(board)
-    io.to(socket.id).emit('board:join', data)
+    io.to(socket.id).emit('board:create', data)
   })
 
   socket.on("user:call", ({to, offer }) =>{
@@ -75,6 +76,10 @@ io.on('connection', socket =>{
     console.log("peer:nego:done", ans);
     io.to(to).emit('peer:nego:final', {from: socket.id, ans})
   })
+  socket.on("call:end", ({ to }) => {
+    io.to(to).emit('call:ended', { from: socket.id });
+  });
+  
 })
 
 
@@ -114,3 +119,4 @@ app.use("/api/user", UserRoutes);
 app.use("/api/posts", PostRoutes);
 app.use("/api/events", EventRoutes)
 app.use("/api/works", WorkRoutes)
+app.use("/api/interview", InterviewRoutes)

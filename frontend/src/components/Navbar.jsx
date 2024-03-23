@@ -12,11 +12,14 @@ const Navbar = () => {
   useEffect(() =>{
     const fetchData = async() =>{
       if(loginId !=0){
-        const response = await fetch(`api/user/getSpecificUser/${loginId}`)
+        const response = await fetch(`/api/user/getSpecificUser/${loginId}`)
         const json = await response.json()
         if(response.ok){
           setUser(json)
           console.log(`User name is ${json.name}`)
+        }
+        else {
+          console.log("Something is wrong")
         }
       }
         
