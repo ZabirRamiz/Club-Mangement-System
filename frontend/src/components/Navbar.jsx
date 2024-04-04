@@ -12,11 +12,14 @@ const Navbar = () => {
   useEffect(() =>{
     const fetchData = async() =>{
       if(loginId !=0){
-        const response = await fetch(`api/user/getSpecificUser/${loginId}`)
+        const response = await fetch(`/api/user/getSpecificUser/${loginId}`)
         const json = await response.json()
         if(response.ok){
           setUser(json)
           console.log(`User name is ${json.name}`)
+        }
+        else {
+          console.log("Something is wrong")
         }
       }
         
@@ -58,11 +61,14 @@ const Navbar = () => {
         { label: 'Dashboard', path: '/UserDashboard' },
         { label: 'Post', path: '/UserPost' },
         { label: 'Event', path: '/UserEvent' },
+        { label: 'EM', path: '/EventPost' },
         { label: 'Work', path: '/UserAssignWork'},
         { label: 'Members', path: '/ManageMembers' },
         { label: 'Pending', path: '/PendingMembers' },
         { label: 'Interview', path: '/Interview' },
         { label: 'Finance', path: '/Finance'},
+        { label: 'Sponsor' , path: '/Sponsor'},
+        
         { label: 'Logout', path: '/', onClick: handleLogout },
       ],
       admin: [
