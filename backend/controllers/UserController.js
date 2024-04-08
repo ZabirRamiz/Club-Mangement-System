@@ -38,61 +38,58 @@ const getSpecificUser = async (req, res) => {
 //   }
 // };
 
-const editUser = async(req, res) =>{
-  const { studentId } = req.params
-  console.log(` member ${studentId}`)
-  const member = await userModel.findOneAndUpdate({sid: studentId},{
-    ...req.body
-  })
-  
-  if(!member){
-    console.log(`No such member ${studentId}`)
+const editUser = async (req, res) => {
+  const { studentId } = req.params;
+  console.log(` member ${studentId}`);
+  const member = await userModel.findOneAndUpdate(
+    { sid: studentId },
+    {
+      ...req.body,
+    }
+  );
+
+  if (!member) {
+    console.log(`No such member ${studentId}`);
     return res.status(404).json({
-      error: `No such member ${studentId}`
-      
-    })
+      error: `No such member ${studentId}`,
+    });
   }
 
-  res.status(200).json(member)
+  res.status(200).json(member);
+};
 
-}
-
-const createUser = async (req, res) =>{
-  const {studentID, name, email, password, designation, department, profileImage } = req.body
+const createUser = async (req, res) => {
+  const { studentID, name, email, password, designation, department } =
+    req.body;
   // add document to db
   try {
-      const newUser = await userModel.create({
-        sid: studentID,
-        name: name,
-        email: email,
-        password: password,
-        designation: designation,
-        department: department
-      })   //create new document with given params
-      res.status(200).json(newUser)
+    const newUser = await userModel.create({
+      sid: studentID,
+      name: name,
+      email: email,
+      password: password,
+      designation: designation,
+      department: department,
+    }); //create new document with given params
+    res.status(200).json(newUser);
   } catch (error) {
-      res.status(400).json({error: error.message})
+    res.status(400).json({ error: error.message });
   }
-}
+};
 
-const deleteUser = async ( req, res) =>{
-  const { studentId } = req.params
+const deleteUser = async (req, res) => {
+  const { studentId } = req.params;
 
-  const user = await userModel.findOneAndDelete({sid: studentId})
+  const user = await userModel.findOneAndDelete({ sid: studentId });
 
-  if(!user){
-      return res.status(404).json({
-          error: "No such user"
-      })
+  if (!user) {
+    return res.status(404).json({
+      error: "No such user",
+    });
   }
 
-  res.status(200).json(user)
-
-}
-
-
-
-
+  res.status(200).json(user);
+};
 
 // const User = new userModel(
 //   // {
@@ -131,4 +128,10 @@ const deleteUser = async ( req, res) =>{
 
 // User.save();
 
-module.exports = { getAllUser, getSpecificUser, editUser, createUser, deleteUser };
+module.exports = {
+  getAllUser,
+  getSpecificUser,
+  editUser,
+  createUser,
+  deleteUser,
+};
