@@ -4,7 +4,6 @@ const express = require("express");
 
 async function sendMail({ to, name, subject, body }) {
   const { SMTP_EMAIL, SMTP_PASSWORD } = process.env;
-
   const transport = nodemailer.createTransport({
     service: "gmail",
     auth: {

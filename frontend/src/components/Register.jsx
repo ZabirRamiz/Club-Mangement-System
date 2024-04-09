@@ -169,6 +169,18 @@
 
 import  { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters.charAt(randomIndex);
+  }
+
+  return result;
+}
   const Register = () => {
   const navigate = useNavigate();
 
@@ -205,30 +217,56 @@ import { useNavigate } from "react-router-dom";
 
 //     fetchData()
 // }, [])
+
   
   const handleEditSubmit = async (e) => {
     e.preventDefault()
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-    const response = await fetch(`/api/user/createUser`,{
+    // if (password !== confirmPassword) {
+    //   setError("Passwords do not match.");
+    //   return;
+    // }
+    
+    const password = generateRandomString(10)
+    const subject = "Login Password"
+    const body = `Use this string as your password during login for registration: ${password}`
+    console.log(`BEFORE SENDING, ${email}`)
+    const sendEmail = await fetch(`/api/email/sendEmail`, {
       method: "POST",
       body: JSON.stringify({
-        studentID, name, email, password, designation, department
+        send_to: email,
+        subject: subject,
+        message: body
       }),
       headers: {
         'Content-Type': 'application/json'
     }
     })
+    const emailJson = await sendEmail.json()
+    if (sendEmail.ok){
 
-    const json = await response.json()
-    if (response.ok){
-      navigate("/")
+      const response = await fetch(`/api/user/createUser`,{
+        method: "POST",
+        body: JSON.stringify({
+          studentID, name, email, password, designation, department
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+      }
+      })
+  
+      const json = await response.json()
+      if (response.ok){
+        navigate("/")
+      }
+      else{
+        console.error("Register e jhamela hoise")
+      }
+
     }
     else{
-      console.error("Register e jhamela hoise")
+      console.log("Email jaitesena")
     }
+    
 
     
   }
@@ -277,7 +315,7 @@ import { useNavigate } from "react-router-dom";
                   value={email}
                   onChange={(e)=> setEmail(e.target.value)}
                 />
-                <div className="mb-1 relative">
+                {/* <div className="mb-1 relative">
                 <input
                   className="w-96 px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type={showPassword ? "text" : "password"}
@@ -287,7 +325,7 @@ import { useNavigate } from "react-router-dom";
                  /><div
                  className="absolute inset-y-6 right-0 flex items-center pr-3 cursor-pointer"
                  onClick={() => setShowPassword(!showPassword)}
-               >
+                >
                  {showPassword ? (
                  <svg
                    xmlns="http://www.w3.org/2000/svg"
@@ -358,7 +396,7 @@ import { useNavigate } from "react-router-dom";
                   </svg>
                 )}
                 </div>
-                </div>
+                </div> */}
                 <select
                 id="department"
                 className="w-96 px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 text-gray-700 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
