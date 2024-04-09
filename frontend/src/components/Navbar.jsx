@@ -68,7 +68,7 @@ const Navbar = () => {
         { label: 'Interview', path: '/Interview' },
         { label: 'Finance', path: '/Finance'},
         { label: 'Sponsor' , path: '/Sponsor'},
-        
+        { label: 'Email' , path: '/Email'},
         { label: 'Logout', path: '/', onClick: handleLogout },
       ],
       admin: [
