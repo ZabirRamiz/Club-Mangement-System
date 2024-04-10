@@ -7,8 +7,7 @@ const PostForm = () =>{
     const [type, setType] = useState("General")
     const [eventList, setEventList] = useState([])
     const [event, setEvent] = useState("None")
-    const [event_id, setEvent_id] = useState("None")
-    const [eventDic, setEventDic] = useState({})
+
     
     const navigate = useNavigate();
 
@@ -17,7 +16,7 @@ const PostForm = () =>{
     };
     const handleEventDropdownChange = (e) => {
       setEvent(e.target.value);
-      setEvent_id(eventDic[e.target.value])
+      console.log(event, event_id)
     };
       
     useEffect(() =>{
@@ -31,17 +30,12 @@ const PostForm = () =>{
             const userData = await response.json();
             const getEvent = await fetch('/api/events/getEvents')
             const eventData = await getEvent.json()
-            eventData.forEach(event =>{
-              tempEventDic[event.title] = event._id
-            })
+
             console.log(tempEventDic)
             const titles = eventData.map(event => event.title)
             setEventList(titles)
             setEvent(titles[0])
-            setEventDic(tempEventDic)
-            setEvent_id(eventDic[event])
             setPostUserName(userData.name)
-            console.log(postUserName)
             
 
         }
@@ -50,7 +44,7 @@ const PostForm = () =>{
     const handleSubmit = async(e) =>{
         e.preventDefault()
 
-        const postData = {postUserId, body, type, event, event_id}
+        const postData = {postUserId, body, type, event}
         console.log(postData)
         const response = await fetch('/api/posts/makePost',{
             method: 'POST',

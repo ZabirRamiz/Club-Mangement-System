@@ -30,10 +30,6 @@ const WorkSchema = new Schema({
     type:String,
     default: "None"
   },
-  event_id: {
-    type:String,
-    default: "None"
-  },
   accepted_by: {
     type: String,
     default: "",

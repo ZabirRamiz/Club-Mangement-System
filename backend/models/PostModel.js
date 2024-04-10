@@ -19,10 +19,6 @@ const PostSchema = new Schema({
     type:String,
     default: "None"
   },
-  event_id:{
-    type: String,
-    default: "None"
-  },
   upvote: {
     type: [Number],
     default: []

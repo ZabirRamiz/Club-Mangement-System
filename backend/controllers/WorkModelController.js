@@ -34,9 +34,9 @@ const getSingleWork = async (req, res) =>{
 
 // create new work
 const createWork = async (req, res) =>{
-    const {from, to, assign_date, deadline, body, accepted_by, work_status, category, event, event_id } = req.body
+    const {from, to, assign_date, deadline, body, accepted_by, work_status, category, event } = req.body
     // add work to db
-    console.log(from, to, assign_date, deadline, body, accepted_by, work_status, category, event, event_id)
+    console.log(from, to, assign_date, deadline, body, accepted_by, work_status, category, event)
     try {
         const newWork = await WorkModel.create({
             from: from,
@@ -48,7 +48,6 @@ const createWork = async (req, res) =>{
             work_status: work_status, 
             category: category, 
             event: event,
-            event_id: event_id
         })   //create new work with given params
         res.status(200).json(newWork)
     } catch (error) {

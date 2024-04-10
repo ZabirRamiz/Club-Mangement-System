@@ -12,8 +12,6 @@ const AssignWorkForm = () => {
     const [eventList, setEventList] = useState([])
     const [event, setEvent] = useState("None")
     const [category, setCategory] = useState("General")
-    const [event_id, setEvent_id] = useState("None")
-    const [eventDic, setEventDic] = useState({})
     const [forOption, setForOption] = useState("");
     const [showEventDropdown, setShowEventDropdown] = useState(false);
     
@@ -35,18 +33,11 @@ const AssignWorkForm = () => {
             console.log(`User name is ${json.name}`)
           } 
 
-          const tempEventDic = {}
           const getEvent = await fetch('/api/events/getEvents')
           const eventData = await getEvent.json()
-          eventData.forEach(event =>{
-            tempEventDic[event.title] = event._id
-          })
-          console.log(tempEventDic)
           const titles = eventData.map(event => event.title)
           setEventList(titles)
           setEvent(titles[0])
-          setEventDic(tempEventDic)
-          setEvent_id(eventDic[event])
             
       }
       fetchData()
@@ -64,7 +55,6 @@ const AssignWorkForm = () => {
   
   const handleEventDropdownChange = (e) => {
     setEvent(e.target.value);
-    setEvent_id(eventDic[e.target.value])
   };
 
   const handleForDropdownChange = (e) => {
@@ -84,7 +74,6 @@ const AssignWorkForm = () => {
       work_status: work_status, 
       category: category, 
       event: event,
-      event_id: event_id
     };
     console.log(postData);
     const response = await fetch('/api/works/createWork',{
