@@ -17,6 +17,13 @@ const feed = ({post}) =>{
                 setUpVote(post.upvote.length)
                 setDownVote(post.downvote.length)
             }
+            console.log(`${post.postUserId}, upvote: ${post.upvote}, downvote: ${post.downvote}`)
+            if(post.upvote.includes(userID)){
+              setUpVoteColor('blue-800')
+            }
+            else if(post.downvote.includes(userID)){
+              setDownVoteColor('red-800')
+            }
         }
 
         fetchData()
@@ -43,7 +50,12 @@ const feed = ({post}) =>{
     console.log(post.postUserId)
     const upVoterArray = post.upvote
     const downVoterArray = post.downvote
-    if (upVoterArray.indexOf(userID) === -1){
+    if (upVoterArray.includes(userID)){
+      upVoterArray.splice(upVoterArray.indexOf(userID), 1)            //remove upvote
+      setUpVoteColor("blue-500")
+      
+    }
+    else{
       upVoterArray.splice(upVoterArray.indexOf(userID), 0, userID)    // add upvote
       setUpVoteColor("blue-800")
       if (downVoterArray.indexOf(userID) !== -1){
@@ -51,16 +63,12 @@ const feed = ({post}) =>{
         setDownVoteColor("red-500")
         
       }
+      
     }
-    else{
-      upVoterArray.splice(upVoterArray.indexOf(userID), 1)            //remove upvote
-      setUpVoteColor("blue-500")
-    }
-
 
     const response = await fetch(`/api/posts/updatePost/${post._id}`,{
         method: "PATCH",
-        body: JSON.stringify({upvote: upVoterArray}),
+        body: JSON.stringify({upvote: upVoterArray, downvote: downVoterArray}),
         headers:{
           'Content-Type': 'application/json'
         }
@@ -83,23 +91,22 @@ const feed = ({post}) =>{
     console.log(post.postUserId)
     const upVoterArray = post.upvote
     const downVoterArray = post.downvote
-    if (downVoterArray.indexOf(userID) === -1){
-      downVoterArray.splice(downVoterArray.indexOf(userID), 0, userID)    // add downvote
-      setDownVoteColor("red-800")
+    if (downVoterArray.includes(userID)){
+      downVoterArray.splice(downVoterArray.indexOf(userID), 1)            // remove downvote
+      setDownVoteColor("red-500")
+    }
+    else{
       
       if (upVoterArray.indexOf(userID) !== -1){
         upVoterArray.splice(upVoterArray.indexOf(userID), 1)              // remove upvote
         setUpVoteColor("blue-500")
-        
       }
-    }
-    else{
-      downVoterArray.splice(downVoterArray.indexOf(userID), 1)            // remove downvote
-      setDownVoteColor("red-500")
+      downVoterArray.splice(downVoterArray.indexOf(userID), 0, userID)    // add downvote
+      setDownVoteColor("red-800")
     }
     const response = await fetch(`/api/posts/updatePost/${post._id}`,{
         method: "PATCH",
-        body: JSON.stringify({downvote: downVoterArray}),
+        body: JSON.stringify({upvote: upVoterArray, downvote: downVoterArray}),
         headers:{
           'Content-Type': 'application/json'
         }
