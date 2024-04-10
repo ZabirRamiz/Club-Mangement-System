@@ -5,23 +5,41 @@ const PostForm = () =>{
     const [postUserName, setPostUserName] = useState("")
     const [body, setPostBody] = useState("")
     const [type, setType] = useState("General")
+    const [eventList, setEventList] = useState([])
+    const [event, setEvent] = useState("None")
+    const [event_id, setEvent_id] = useState("None")
+    const [eventDic, setEventDic] = useState({})
     
     const navigate = useNavigate();
 
     const handleDropdownChange = (e) => {
       setType(e.target.value);
-  };
-    
+    };
+    const handleEventDropdownChange = (e) => {
+      setEvent(e.target.value);
+      setEvent_id(eventDic[e.target.value])
+    };
+      
     useEffect(() =>{
         
 
         const fetchData = async() =>{
             const loginId = localStorage.getItem("Id")
             setPostUser(loginId)
-
+            const tempEventDic = {}
             const response = await fetch(`/api/user/getSpecificUser/${loginId}`)
             const userData = await response.json();
-            
+            const getEvent = await fetch('/api/events/getEvents')
+            const eventData = await getEvent.json()
+            eventData.forEach(event =>{
+              tempEventDic[event.title] = event._id
+            })
+            console.log(tempEventDic)
+            const titles = eventData.map(event => event.title)
+            setEventList(titles)
+            setEvent(titles[0])
+            setEventDic(tempEventDic)
+            setEvent_id(eventDic[event])
             setPostUserName(userData.name)
             console.log(postUserName)
             
@@ -32,7 +50,7 @@ const PostForm = () =>{
     const handleSubmit = async(e) =>{
         e.preventDefault()
 
-        const postData = {postUserId, body, type}
+        const postData = {postUserId, body, type, event, event_id}
         console.log(postData)
         const response = await fetch('/api/posts/makePost',{
             method: 'POST',
@@ -96,6 +114,26 @@ const PostForm = () =>{
                       <option value="Complain">Complains</option>
                     </select>
                   </div>
+                  {type == "Event" && (
+                    <div className="px-4 py-2 bg-white dark:bg-gray-800">
+                    <label htmlFor="EventDropdown" className="sr-only">
+                      Select an option
+                    </label>
+                    <select
+                      id="EventDropdown"
+                      value={event}
+                      onChange={handleEventDropdownChange}
+                      className="w-full h-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 mb-2"
+                    >
+                      <option value="" disabled>
+                        Select an Event
+                      </option>
+                        {eventList.map((title, index) => (
+                          <option key={index} value={title}>{title}</option>
+                        ))}
+                    </select>
+                  </div>
+                  )}
                       <div className=" w-96 h-96 px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                         <label htmlFor="post" className="block text-gray-800 font-bold mb-2">
                             Write Post
