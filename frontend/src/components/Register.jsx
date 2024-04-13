@@ -62,7 +62,7 @@ function generateRandomString(length) {
         console.log("Email jaitesena")
         // PROMPT
         console.log("Please contact the admins for registration problems")
-        window.location.reaload()
+        window.location.reload()
       }
       const response = await fetch(`/api/user/createUser`,{
         method: "POST",
@@ -82,13 +82,9 @@ function generateRandomString(length) {
         console.error("Register e jhamela hoise")
         // PROMPT
         console.log("Please contact the admins for registration problems")
-        window.location.reaload()
+        window.location.reload()
       }
     }
-    
-    
-    
-
     
   }
 
