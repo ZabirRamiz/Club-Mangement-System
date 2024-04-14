@@ -9,7 +9,6 @@ const AssignWorkFeed = ({work}) =>{
     const [acceptedBy, setAcceptedBy] = useState(work.accepted_by)
     const [workStatus, setWorkStatus] = useState(work.work_status)
     const [userName, setUserName] = useState("")
-
     const[showAccept, setShowAccept] = useState(false)
     const[showDecline, setShowDecline] = useState(false)
     const[showDelete, setShowDelete] = useState(false)
@@ -119,8 +118,13 @@ const AssignWorkFeed = ({work}) =>{
         <div className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {from} → {to}
         </div>
+        {work.category == "Event" &&(
+          <div className="mb-2 text-1xl tracking-tight text-gray-900 dark:text-white">
+          <p><b>Event: </b>{work.event}</p>
+          </div>
+        )}
         <div className="mb-2 text-1xl tracking-tight text-gray-900 dark:text-white">
-        {body}
+          <p><b>Task: </b>{body}</p>
         </div>
         <div className="mb-2 text-1xl tracking-tight text-gray-900 dark:text-white">
         <b>Assigned on: </b>{assignDate}

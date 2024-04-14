@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react'
-import { useSocket } from '../context/SocketProvider'
-import ReactPlayer from 'react-player'
-import peer from '../service/peer'
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSocket } from '../context/SocketProvider';
+import ReactPlayer from 'react-player';
+import peer from '../service/peer';
 import { useParams, useNavigate } from 'react-router';
 
 const InterviewRoom = () => {
@@ -22,21 +22,20 @@ const InterviewRoom = () => {
     const [isReady, setIsReady] = useState(false)
     const navigate = useNavigate();
 
-
-    useEffect(() =>{
-        const fetchData = async() =>{
+    useEffect(() => {
+        const fetchData = async () => {
             console.log(board, userID)
             const response = await fetch(`/api/interview/getSingleInterviewSession/${board}`);
             const json = await response.json()
-            if(response.ok){
+            if (response.ok) {
                 setCreatorID(parseInt(json.creator))
-                if (creatorID == userID){
+                if (creatorID == userID) {
                     setIsCreator(true)
                 }
             }
         }
         fetchData()
-    }, [creatorID, isCreator])
+    }, [creatorID, isCreator]);
 
     const getReadyForVideo = useCallback(async () => {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -45,13 +44,10 @@ const InterviewRoom = () => {
         });
         setMyStream(stream);
         setIsReady(true)
-    }, [])
+    }, []);
 
-
-    const handleLeaveRoom = useCallback(async () =>{
-
+    const handleLeaveRoom = useCallback(async () => {
         console.log("Room left room")
-
         const res = await fetch(`/api/interview/getSingleInterviewSession/${board}`);
         const js = await res.json();
 
@@ -95,7 +91,7 @@ const InterviewRoom = () => {
             video: true
         });
         setMyStream(stream);
-        if(remoteSocketId){
+        if (remoteSocketId) {
             sendStreams()
         }
     }, [remoteSocketId, socket]);
@@ -146,20 +142,16 @@ const InterviewRoom = () => {
     }, []);
 
     const handleEndCall = useCallback(async () => {
-        
         setRemoteStream();
         socket.emit('call:end', { to: remoteSocketId });
-        
-        
-        
-    }, [remoteSocketId, handleLeaveRoom, socket]  );
+    }, [remoteSocketId, handleLeaveRoom, socket]);
 
     const handleCallEnded = useCallback(({ from }) => {
         console.log("call:ended recieved")
         setIsCallEnded(true)
         setRemoteStream()
         console.log(`Call ended by user ${from}`);
-      }, []);
+    }, []);
 
     useEffect(() => {
         peer.peer.addEventListener('track', async (ev) => {
@@ -183,7 +175,6 @@ const InterviewRoom = () => {
         socket.on('peer:nego:needed', handleNegoNeedIncoming);
         socket.on('peer:nego:final', handleNegoNeedFinal);
         socket.on('call:ended', handleCallEnded);
-        
 
         return () => {
             socket.off('user:joined', handleUserJoined);
@@ -214,59 +205,65 @@ const InterviewRoom = () => {
     };
 
     return (
-        <div className="max-w-lg mx-auto my-8">
+        <div className="max-w-lg mx-auto my-8 relative">
             <h1 className="text-3xl font-bold mb-4">Room Page {isCreator && ("Creator")}</h1>
             <h4 className="text-lg mb-4">
                 {isCreator
                     ? remoteSocketId
-                    ? `${joinedUserID} Entered the room`
-                    : "No One in room"
+                        ? `${joinedUserID} Entered the room`
+                        : "No One in room"
                     : remoteSocketId
-                    ? "Joined room"
-                    : "Waiting for creator to accept"}
+                        ? "Joined room"
+                        : "Waiting for creator to accept"}
             </h4>
 
             <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleLeaveRoom}>Leave Room</button>
-            {(!isReady) && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={getReadyForVideo}>Ready</button>}
-            {(remoteSocketId && !isAccepted && isCreator) && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleCallUser}>Accept</button>}
-            {(myStream && remoteSocketId && !isCreator && !isStreaming) && <button className="bg-green-500 text-white px-4 py-2 rounded-md mr-4" onClick={sendStreams}>Send Stream</button>}
+            {!isReady && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={getReadyForVideo}>Ready</button>}
+            {remoteSocketId && !isAccepted && isCreator && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleCallUser}>Accept</button>}
+            {myStream && remoteSocketId && !isCreator && !isStreaming && <button className="bg-green-500 text-white px-4 py-2 rounded-md mr-4" onClick={sendStreams}>Send Stream</button>}
             {myStream &&
                 <>
-                    <h1 className="text-2xl font-semibold mb-2">My Stream</h1>
-                    <div className="bg-gray-200 rounded-md overflow-hidden mb-4">
+                    <div className="bg-gray-200 rounded-md overflow-hidden mb-4 absolute bottom-0 right-0">
                         <ReactPlayer
                             playing
                             muted
-                            height="300px"
-                            width="100%"
+                            height="150px" // Adjust height as needed
+                            width="200px" // Adjust width as needed
                             url={myStream}
                         />
                     </div>
                     <div>
-                        {isCallEnded && (<button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleEndCall}>End Call</button>)}
+                        {isCallEnded && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleEndCall}>End Call</button>}
+                    </div>
+                </>
+            }
+
+            {/* Add a gap between Leave Room button and remote stream window */}
+            {remoteStream && <div className="mt-4"></div>}
+
+            {remoteStream &&
+                <>
+                    <div className="bg-gray-200 rounded-md overflow-hidden mb-4 mx-auto">
+                        <ReactPlayer
+                            playing
+                            muted
+                            height="300px" // Adjust height as needed
+                            width="400px" // Adjust width as needed
+                            url={remoteStream}
+                        />
+                    </div>
+                    <div>
                         <button className={`bg-${isCameraOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleCamera}>{isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}</button>
                         <button className={`bg-${isMicrophoneOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md`} onClick={toggleMicrophone}>{isMicrophoneOn ? 'Mute' : 'Unmute'}</button>
                     </div>
                 </>
             }
-            {remoteStream &&
-                <>
-                    <h1 className="text-2xl font-semibold mb-2">Remote Stream</h1>
-                    <div className="bg-gray-200 rounded-md overflow-hidden mb-4">
-                        <ReactPlayer
-                            playing
-                            muted
-                            height="300px"
-                            width="100%"
-                            url={remoteStream}
-                        />
-                    </div>
-                    
-                </>
-            }
-            
         </div>
     );
 };
 
 export default InterviewRoom;
+
+    
+
+

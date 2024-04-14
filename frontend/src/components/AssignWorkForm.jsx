@@ -9,7 +9,9 @@ const AssignWorkForm = () => {
     const [body, setBody] = useState("")
     const [accepted_by, setAcceptedBy] = useState("")
     const [work_status, setWorkStatus] = useState("Pending")
-    const [event, setEvent] = useState("");
+    const [eventList, setEventList] = useState([])
+    const [event, setEvent] = useState("None")
+    const [category, setCategory] = useState("General")
     const [forOption, setForOption] = useState("");
     const [showEventDropdown, setShowEventDropdown] = useState(false);
     
@@ -30,23 +32,49 @@ const AssignWorkForm = () => {
             console.log(today)
             console.log(`User name is ${json.name}`)
           } 
+
+          const getEvent = await fetch('/api/events/getEvents')
+          const eventData = await getEvent.json()
+          const titles = eventData.map(event => event.title)
+          setEventList(titles)
+          setEvent(titles[0])
+            
       }
       fetchData()
   }, [])
 
   useEffect(() => {
     // Condition to show the event dropdown based on the selected option in the "For" dropdown
-    if (forOption === "Event") {
+    if (forOption == "Event") {
       setShowEventDropdown(true);
     } else {
       setShowEventDropdown(false);
       setEvent(""); // Reset event value if "For" dropdown option changes
     }
   }, [forOption]);
+  
+  const handleEventDropdownChange = (e) => {
+    setEvent(e.target.value);
+  };
+
+  const handleForDropdownChange = (e) => {
+    setForOption(e.target.value);
+    setCategory(e.target.value)
+  };
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    const postData = {from, to, assign_date, deadline, body, accepted_by, work_status};
+    const postData = {
+      from: from,
+      to: to, 
+      assign_date: assign_date, 
+      deadline: deadline, 
+      body: body,
+      accepted_by: accepted_by, 
+      work_status: work_status, 
+      category: category, 
+      event: event,
+    };
     console.log(postData);
     const response = await fetch('/api/works/createWork',{
       method: 'POST',
@@ -134,7 +162,7 @@ const AssignWorkForm = () => {
             id="forOption"
             name="forOption"
             value={forOption}
-            onChange={(e) => setForOption(e.target.value)}
+            onChange={handleForDropdownChange}
             className="mt-5 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
           >
             
@@ -153,13 +181,15 @@ const AssignWorkForm = () => {
               id="event"
               name="event"
               value={event}
-              onChange={(e) => setEvent(e.target.value)}
+              onChange={handleEventDropdownChange}
               className="mt-5 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
             >
-              <option value="">Select Event</option>
-              <option value="Event1">Event 1</option>
-              <option value="Event2">Event 2</option>
-              <option value="Event3">Event 3</option>
+              <option value="" disabled>
+                Select an Event
+              </option>
+              {eventList.map((title, index) => (
+                <option key={index} value={title}>{title}</option>
+              ))}
             </select>
           </div>
         )}

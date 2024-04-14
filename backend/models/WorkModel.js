@@ -22,6 +22,14 @@ const WorkSchema = new Schema({
     type: String,
     required: true,
   },
+  category:{
+    type: String,
+    required: true
+  },
+  event: {
+    type:String,
+    default: "None"
+  },
   accepted_by: {
     type: String,
     default: "",
@@ -29,7 +37,7 @@ const WorkSchema = new Schema({
   work_status: {
     type: String,
     default: "Pending", // or ''
-  },
+  }
 });
 
 module.exports = mongoose.model("Work", WorkSchema);

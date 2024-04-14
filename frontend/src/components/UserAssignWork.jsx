@@ -15,6 +15,7 @@ const UserAssignWork = () =>{
       }
     }
     fetchWorks()
+    console.log(works)
   }, [])
 
   return (
