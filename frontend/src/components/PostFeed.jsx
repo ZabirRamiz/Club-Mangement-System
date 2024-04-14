@@ -45,7 +45,7 @@ const feed = ({post}) =>{
     const downVoterArray = post.downvote
     if (upVoterArray.indexOf(userID) === -1){
       upVoterArray.splice(upVoterArray.indexOf(userID), 0, userID)    // add upvote
-      setUpVoteColor("blue-800")
+      setUpVoteColor( <div style={{ color: "#1E429F" }}></div>)
       if (downVoterArray.indexOf(userID) !== -1){
         downVoterArray.splice(downVoterArray.indexOf(userID), 1)      //remove downvote
         setDownVoteColor("red-500")
@@ -138,14 +138,15 @@ const feed = ({post}) =>{
 
   
     return(
-      <div className="flex flex-col items-right mt-4 "  style={{ marginLeft: '700px'}}>
+      
+      <div className="flex flex-col items-right mt-4"  style={{ marginLeft: '700px'}}>
       <div className="max-w-xl p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative">
         <a href="#">
           <h6 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             {name}
           </h6>
         </a>
-        <div className="flex justify-between mt-4">
+        <div className="flex text-gray justify-between mt-4">
           {post.body}
         </div>
         {/* Up and down arrows inside the card */}
@@ -158,7 +159,7 @@ const feed = ({post}) =>{
         </div>
       </div>
     </div>
-
+    
     )
 }
 

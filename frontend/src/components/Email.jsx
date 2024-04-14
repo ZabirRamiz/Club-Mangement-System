@@ -69,7 +69,7 @@ const EmailForm = () => {
           <option value="EM">EM</option>
           <option value="PR">PR</option>
           <option value="HR">HR</option>
-          <option value="ALL">ALL</option>
+          <option value="ALL">All</option>
         </select>
         <div className="ml-4">
           <input

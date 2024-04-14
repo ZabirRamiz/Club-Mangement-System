@@ -13,7 +13,7 @@ const navigate = useNavigate();
   return (
     <div className="flex flex-col items-right "
     style={{ backgroundImage: 'url("https://png.pngtree.com/background/20210716/original/pngtree-light-blue-cute-striped-baby-blue-background-picture-image_1348681.jpg")', backgroundSize: 'cover', minHeight: '100vh' }}>
-      <div className="container mx-auto mt-2 ml-4">
+      <div className="container mx-auto mt-10 ml-4">
         <div className="w-1/2 bg-gray-100 text-gray-800 py-3 px-0 rounded-md shadow-md" style={{ maxWidth: '31rem', width: '100%' }}>
           <div className="flex justify-between">
     <div className="mt-2 ml-7 mb-2  bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300" style={{ maxWidth: '27rem', width: '100%' }}>
