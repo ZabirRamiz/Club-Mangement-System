@@ -44,7 +44,7 @@ const EmailForm = () => {
           <div className="flex justify-between">
     <div className="mt-2 ml-7 mb-2  bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300" style={{ maxWidth: '27rem', width: '100%' }}>
       
-      <div className="mb-4 flex items-center ml-2 mr-1">
+      <div className="mb-6 flex items-center ml-2 mr-1">
         <label htmlFor="from" className="block font-medium mb-1 mr-2">From:</label>
         <select
           id="from"
@@ -58,7 +58,7 @@ const EmailForm = () => {
         </select>
       </div>
       
-      <div className="mb-4 flex items-center ml-2 mr-1">
+      <div className="mb-6 flex items-center ml-2 mr-1">
         <label htmlFor="to" className="block font-medium mb-1 mr-7">To:</label>
         <select
           id="to"
@@ -81,7 +81,7 @@ const EmailForm = () => {
           <label htmlFor="copyCheckbox" className="ml-1">GM</label>
         </div>
       </div>
-      <div className="mb-4 flex items-center ml-2 mr-1">
+      <div className="mb-6 flex items-center ml-2 mr-1">
         <label htmlFor="subject" className="block font-medium mb-1 mr-2">Subject:</label>
         <textarea
           id="subject"
@@ -90,7 +90,7 @@ const EmailForm = () => {
           onChange={handleSubjectChange}
         />
       </div>
-      <div className="mb-4 items-center ml-2 mr-1">
+      <div className="mb-6 items-center ml-2 mr-1">
         <label htmlFor="body" className="block font-medium mb-1">Body:</label>
         <textarea
           id="body"
