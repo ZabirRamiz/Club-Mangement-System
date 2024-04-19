@@ -146,7 +146,7 @@ export default function Landing() {
               </div>
 
               <div className="w-full md:w-4/12 px-4 mr-auto ml-auto">
-                <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-blue-300">
+                <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-white-600">
                   <img
                     alt="..."
                     src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1051&q=80"
@@ -165,13 +165,13 @@ export default function Landing() {
                     >
                       <polygon
                         points="-30,95 583,95 583,65"
-                        className="text-blue-300 fill-current"
+                        className="text-white fill-current"
                       ></polygon>
                     </svg>
-                    <h4 className="text-xl font-bold text-white">
+                    <h4 className="text-black font-bold text-black">
                       Top Notch Services
                     </h4>
-                    <p className="text-md font-light mt-2 text-white">
+                    <p className="text-md font-light mt-2 text-black">
                       The Arctic Ocean freezes every winter and much of the
                       sea-ice then thaws every summer, and that process will
                       continue whatever happens.
@@ -293,18 +293,18 @@ export default function Landing() {
                 <div className="px-6">
                   <img
                     alt="..."
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxujQvF2rFWpLlOJqJQCa6t-8g9hsgvLt4wQ&usqp=CAU"
+                    src="https://i.pinimg.com/736x/ef/d0/b3/efd0b3540c0985bfcc1545be52d8069b.jpg"
                     className="shadow-lg rounded-full max-w-full mx-auto"
                     style={{ maxWidth: "120px" }}
                   />
                   <div className="pt-6 text-center">
                     <h5 className="text-xl font-bold">
-                      Ryan Tompson
+                      Md. Amir Ul Islam
                     </h5>
                     <p className="mt-1 text-sm text-gray-500 uppercase font-semibold">
-                      Web Developer
+                      Contributor
                     </p>
-                    <div className="mt-6">
+                    {/* <div className="mt-6">
                       <button
                         className="bg-blue-400 text-white w-8 h-8 rounded-full outline-none focus:outline-none mr-1 mb-1"
                         type="button"
@@ -323,7 +323,7 @@ export default function Landing() {
                       >
                         <i className="fab fa-dribbble"></i>
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -331,18 +331,19 @@ export default function Landing() {
                 <div className="px-6">
                   <img
                     alt="..."
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxujQvF2rFWpLlOJqJQCa6t-8g9hsgvLt4wQ&usqp=CAU"
+                    src="https://i.pinimg.com/736x/66/8d/96/668d96abb623dfe3b0926a2935b0b472.jpg"
                     className="shadow-lg rounded-full max-w-full mx-auto"
                     style={{ maxWidth: "120px" }}
                   />
                   <div className="pt-6 text-center">
                     <h5 className="text-xl font-bold">
-                      Romina Hadid
+                      Purba Tahia Hassan
                     </h5>
                     <p className="mt-1 text-sm text-gray-500 uppercase font-semibold">
-                      Marketing Specialist
+                      {/* Marketing Specialist */}
+                      Contributor
                     </p>
-                    <div className="mt-6">
+                    {/* <div className="mt-6">
                       <button
                         className="bg-red-600 text-white w-8 h-8 rounded-full outline-none focus:outline-none mr-1 mb-1"
                         type="button"
@@ -355,7 +356,7 @@ export default function Landing() {
                       >
                         <i className="fab fa-facebook-f"></i>
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -363,18 +364,19 @@ export default function Landing() {
                 <div className="px-6">
                   <img
                     alt="..."
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxujQvF2rFWpLlOJqJQCa6t-8g9hsgvLt4wQ&usqp=CAU"
+                    src="https://i.pinimg.com/736x/4c/2e/2e/4c2e2efceeeee58048869b39c61f748e.jpg"
                     className="shadow-lg rounded-full max-w-full mx-auto"
                     style={{ maxWidth: "120px" }}
                   />
                   <div className="pt-6 text-center">
                     <h5 className="text-xl font-bold">
-                      Alexa Smith
+                      Zabir Ramiz
                     </h5>
                     <p className="mt-1 text-sm text-gray-500 uppercase font-semibold">
-                      UI/UX Designer
+                      {/* UI/UX Designer */}
+                      contributor
                     </p>
-                    <div className="mt-6">
+                    {/* <div className="mt-6">
                       <button
                         className="bg-red-600 text-white w-8 h-8 rounded-full outline-none focus:outline-none mr-1 mb-1"
                         type="button"
@@ -393,7 +395,7 @@ export default function Landing() {
                       >
                         <i className="fab fa-instagram"></i>
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -401,19 +403,19 @@ export default function Landing() {
                 <div className="px-6">
                   <img
                     alt="..."
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxujQvF2rFWpLlOJqJQCa6t-8g9hsgvLt4wQ&usqp=CAU"
+                    src="https://i.pinimg.com/736x/3d/9e/7e/3d9e7eab240d5069e99b3454a144ebe1.jpg"
                     
                     className="shadow-lg rounded-full max-w-full mx-auto"
                     style={{ maxWidth: "120px" }}
                   />
                   <div className="pt-6 text-center">
                     <h5 className="text-xl font-bold">
-                      Jenna Kardi
+                      Sajida Hossain
                     </h5>
                     <p className="mt-1 text-sm text-gray-500 uppercase font-semibold">
-                      Founder and CEO
+                      contributor
                     </p>
-                    <div className="mt-6">
+                    {/* <div className="mt-6">
                       <button
                         className="bg-pink-500 text-white w-8 h-8 rounded-full outline-none focus:outline-none mr-1 mb-1"
                         type="button"
@@ -438,7 +440,7 @@ export default function Landing() {
                       >
                         <i className="fab fa-instagram"></i>
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -446,7 +448,7 @@ export default function Landing() {
           </div>
         </section>
 
-        <section className="pb-20 relative block bg-gray-900">
+        {/* <section className="pb-20 relative block bg-gray-900">
           <div
             className="bottom-auto top-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden -mt-20"
             style={{ height: "80px" }}
@@ -589,7 +591,7 @@ export default function Landing() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
       {/* <Footer /> */}
     </>
