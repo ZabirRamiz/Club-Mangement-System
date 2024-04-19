@@ -97,6 +97,7 @@ const EmailForm = () => {
           rows="10"
           className="w-full p-2 border rounded-md"
           value={body}
+          style={{maxHeight: '320px', minHeight: "320px" }}
           onChange={handleBodyChange}
         />
       </div>
