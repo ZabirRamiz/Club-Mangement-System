@@ -117,7 +117,7 @@ const EventForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="sponsor" className="block text-sm font-medium text-gray-600">Sponsor Level:</label>
+            <label htmlFor="sponsor" className="block text-sm font-medium text-gray-600">Sponsor:</label>
             <select 
               id="sponsor" 
               className="mt-1 p-2 w-full border rounded-md" 
@@ -139,8 +139,9 @@ const EventForm = () => {
               value={budgetStatus}
               onChange={(e) => setBudgetStatus(e.target.value)}
             >
-              <option value="true">True</option>
-              <option value="false">False</option>
+              <option value="false">Not Recieved</option>
+              <option value="true">Recieved</option>
+              
             </select>
           </div>
           <button 

@@ -77,7 +77,7 @@ const EmailForm = () => {
                   <option value="PR">PR</option>
                   <option value="HR">HR</option>
                   <option value="ALL">All</option>
-                  <option value="Sponser">Sponser</option>
+                  <option value="Sponser">Sponsor</option>
                 </select>
                 <div className="ml-4">
                   <input
