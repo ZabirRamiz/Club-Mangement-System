@@ -7,13 +7,14 @@ const getAllPosts = async (req, res) => {
 };
 
 const createPost = async (req, res) => {
-  const { postUserId, body, type } = req.body;
+  const { postUserId, body, type, event } = req.body;
 
   try {
     const newPost = await PostModel.create({
       postUserId,
       body,
       type,
+      event,
     });
     res.status(200).json(newPost);
   } catch (error) {

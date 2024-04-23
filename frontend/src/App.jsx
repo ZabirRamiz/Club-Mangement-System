@@ -20,6 +20,7 @@ import Finance from './components/Finance.jsx';
 import EventPost from './components/EventPost.jsx';
 import Sponsor from './components/Sponsor.jsx';
 import SponsorEdit from './components/SponsorEdit.jsx';
+import Email from './components/Email.jsx';
 
 
 function App() {
@@ -42,7 +43,8 @@ function App() {
         <Route path='/Interview' element={<div><Navbar/><InterviewLobby/></div>}/> 
         <Route path='/Finance' element={<div><Navbar/><Finance/></div>}/>
         <Route path='/Sponsor' element={<div><Navbar/><Sponsor/></div>}/>
-        <Route path= "/SponsorEdit" element={<div><Navbar/><SponsorEdit/></div>}/>
+        <Route path= "/SponsorEdit/:sponsor_id" element={<div><Navbar/><SponsorEdit/></div>}/>
+        <Route path= "/Email" element={<div><Navbar/><Email/></div>}/>
         <Route path="/Login" element={<Login/>}/>
         <Route path="/Register" element={<Register/>}/>
         <Route path="/InterviewRoom/:board" element={<div><Navbar/><InterviewRoom/></div>}/>

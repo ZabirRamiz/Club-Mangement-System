@@ -37,6 +37,10 @@ const EventSchema = new Schema({
     amount: Number,
     // Add more fields as needed
   },
+  budget_status:{
+    type: Boolean,
+    default: false
+  },
   pr: {
     type: String,
     default: null, // or ''
