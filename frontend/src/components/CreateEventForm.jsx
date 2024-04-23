@@ -12,6 +12,8 @@ const EventForm = () => {
   const [sponsorList, setSponsorList] = useState([]);
   const [selectedSponsor, setSelectedSponsor] = useState('');
   const [budgetStatus, setBudgetStatus] = useState('');
+  const [pr, setPr] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     // Fetch sponsors from the API
@@ -25,10 +27,10 @@ const EventForm = () => {
       });
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // Handle form submission here
-    console.log({
+    const EventData={
       title,
       date,
       time,
@@ -37,9 +39,27 @@ const EventForm = () => {
       type,
       budget,
       selectedSponsor,
-      budgetStatus
+      budgetStatus,
+      pr
+
+    };
+    console.log(EventData);
+    const response = await fetch ("api/events/createEvent",{
+      method: 'POST',
+      body: JSON.stringify(EventData),
+      headers: {
+        'Content-type': 'application/json'
+      }
+
     });
-  };
+    const json = await response.json();
+    if (response.ok){
+      window.location.reload();
+    } else{
+      setError(json.message);
+    }
+    };
+  
 
   return (
     <div className="flex flex-col items-center  justify-center min-h-screen bg-gray-100">
@@ -143,10 +163,20 @@ const EventForm = () => {
               <option value="false">False</option>
             </select>
           </div>
+          <div className="mb-4">
+            <label htmlFor="budget" className="block text-sm font-medium text-gray-600"><b>Pr:</b></label>
+            <input 
+              type="text" 
+              id="pr" 
+              className="mt-1 p-2 w-full border rounded-md" 
+              value={pr}
+              onChange={(e) => setPr(e.target.value)}
+            />
+          </div>
           <button 
             type="submit" 
             className="mt-6 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm py-2 px-6 text-center"
-          >
+            >
             Submit
           </button>
         </form>
