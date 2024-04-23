@@ -42,12 +42,12 @@ const EventForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center ml-0 justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl mb-4">Sponsor Form</h2>
+    <div className="flex flex-col items-center  justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-4 rounded-lg shadow-md w-3/4">
+        <h2 className="text-2xl mb-4"><b>Event Form</b></h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="title" className="block text-sm font-medium text-gray-600">Title:</label>
+            <label htmlFor="title" className="block text-sm font-medium text-gray-600"><b>Title:</b></label>
             <input 
               type="text" 
               id="title" 
@@ -57,7 +57,7 @@ const EventForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="date" className="block text-sm font-medium text-gray-600">Date:</label>
+            <label htmlFor="date" className="block text-sm font-medium text-gray-600"><b>Date:</b></label>
             <input 
               type="date" 
               id="date" 
@@ -67,7 +67,7 @@ const EventForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="time" className="block text-sm font-medium text-gray-600">Time:</label>
+            <label htmlFor="time" className="block text-sm font-medium text-gray-600"><b>Time:</b></label>
             <input 
               type="time" 
               id="time" 
@@ -77,7 +77,7 @@ const EventForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="venue" className="block text-sm font-medium text-gray-600">Venue:</label>
+            <label htmlFor="venue" className="block text-sm font-medium text-gray-600"><b>Venue:</b></label>
             <input 
               type="text" 
               id="venue" 
@@ -87,7 +87,7 @@ const EventForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="guest" className="block text-sm font-medium text-gray-600">Guest:</label>
+            <label htmlFor="guest" className="block text-sm font-medium text-gray-600"><b>Guest:</b></label>
             <input 
               type="text" 
               id="guest" 
@@ -97,7 +97,7 @@ const EventForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="type" className="block text-sm font-medium text-gray-600">Type:</label>
+            <label htmlFor="type" className="block text-sm font-medium text-gray-600"><b>Type:</b></label>
             <input 
               type="text" 
               id="type" 
@@ -107,7 +107,7 @@ const EventForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="budget" className="block text-sm font-medium text-gray-600">Budget:</label>
+            <label htmlFor="budget" className="block text-sm font-medium text-gray-600"><b>Budget:</b></label>
             <input 
               type="number" 
               id="budget" 
@@ -117,7 +117,7 @@ const EventForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="sponsor" className="block text-sm font-medium text-gray-600">Sponsor:</label>
+            <label htmlFor="sponsor" className="block text-sm font-medium text-gray-600"><b>Sponsor:</b></label>
             <select 
               id="sponsor" 
               className="mt-1 p-2 w-full border rounded-md" 
@@ -132,21 +132,20 @@ const EventForm = () => {
             </select>
           </div>
           <div className="mb-4">
-            <label htmlFor="budgetStatus" className="block text-sm font-medium text-gray-600">Budget Status:</label>
+            <label htmlFor="budgetStatus" className="block text-sm font-medium text-gray-600"><b>Budget Status:</b></label>
             <select 
               id="budgetStatus" 
               className="mt-1 p-2 w-full border rounded-md" 
               value={budgetStatus}
               onChange={(e) => setBudgetStatus(e.target.value)}
             >
-              <option value="false">Not Recieved</option>
-              <option value="true">Recieved</option>
-              
+              <option value="true">True</option>
+              <option value="false">False</option>
             </select>
           </div>
           <button 
             type="submit" 
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            className="mt-6 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm py-2 px-6 text-center"
           >
             Submit
           </button>

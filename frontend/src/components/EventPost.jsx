@@ -68,11 +68,11 @@ const EventPost = () => {
   return (
 <>
 
-  <div className="flex flex-col items-right " style={{ backgroundImage: 'url("https://png.pngtree.com/background/20210716/original/pngtree-light-blue-cute-striped-baby-blue-background-picture-image_1348681.jpg")', backgroundSize: 'cover', minHeight: '100vh' }}>
-  <div className="w-2/6 mt-10 ml-4">
+  <div className="flex flex-col items-right " style={{ backgroundImage: 'url("https://png.pngtree.com/background/20210716/original/pngtree-light-blue-cute-striped-baby-blue-background-picture-image_1348681.jpg")', backgroundSize: 'cover', minHeight: '110vh' }}>
+  <div className="w-2/6 mt-12 ml-4">
     <CreateEventForm/>
     </div>
-    <div className="container mx-auto mt-0 w-2/4 overflow-y-auto mr-12">
+    <div className="container mx-auto mt-0 w-2/4 overflow-y-auto mr-16 " style={{ marginTop: '-900px' }}>
 
       <div className="bg-gray-100 text-gray-800 py-3 px-4 rounded-md shadow-md">
         <div className="flex justify-between">
