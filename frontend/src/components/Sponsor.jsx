@@ -38,10 +38,10 @@ const Sponsor = () => {
                 <SponsorForm />
             </div>
             <div className="w-4/5 overflow-y-auto" style={{ maxHeight: `${maxHeight}px` }}>
-    {sponsors.map(sponsor => (
-        <SponsorFeed key={sponsor._id} sponsor={sponsor} />
-    ))}
-</div>
+                {sponsors.map(sponsor => (
+                    <SponsorFeed key={sponsor._id} sponsor={sponsor} />
+                ))}
+            </div>
 
 
         </div>
