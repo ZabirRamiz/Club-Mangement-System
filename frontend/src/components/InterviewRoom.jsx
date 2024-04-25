@@ -31,20 +31,22 @@ const InterviewRoom = () => {
                 setCreatorID(parseInt(json.creator))
                 if (creatorID == userID) {
                     setIsCreator(true)
+
                 }
             }
         }
         fetchData()
     }, [creatorID, isCreator]);
 
-    const getReadyForVideo = useCallback(async () => {
+    const onCamera = ( async() =>{
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
             video: true
         });
         setMyStream(stream);
-        setIsReady(true)
-    }, []);
+        setIsCameraOn(true)
+    })
+
 
     const handleLeaveRoom = useCallback(async () => {
         console.log("Room left room")
@@ -72,11 +74,12 @@ const InterviewRoom = () => {
 
     }, []);
 
-    const handleUserJoined = useCallback(({ studentID, id }) => {
+    const handleUserJoined = useCallback(async({ studentID, id }) => {
         console.log(`StudentID: ${studentID} joined the board`);
         setJoinedUserID(studentID)
         setRemoteSocketId(id);
         console.log("RemoteSocket id in user joined: ", remoteSocketId);
+        onCamera()
     }, []);
 
     const handleCallUser = useCallback(async () => {
@@ -131,10 +134,11 @@ const InterviewRoom = () => {
     }, [remoteSocketId, socket]);
 
     const handleNegoNeedIncoming = useCallback(async ({ from, offer }) => {
-        console.log("Handle Negitiation: need incoming ", from, offer);
+        console.log("Handle Negitiation: need incoming (isStreaming)", isStreaming, from, offer);
         const ans = await peer.getAnswer(offer);
         socket.emit('peer:nego:done', { to: from, ans });
-    }, [socket]);
+        sendStreams()
+    }, [socket, sendStreams]);
 
     const handleNegoNeedFinal = useCallback(async ({ ans }) => {
         console.log("handle nego need finel, ans: ", ans);
@@ -218,9 +222,8 @@ const InterviewRoom = () => {
             </h4>
 
             <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleLeaveRoom}>Leave Room</button>
-            {!isReady && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={getReadyForVideo}>Ready</button>}
             {remoteSocketId && !isAccepted && isCreator && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleCallUser}>Accept</button>}
-            {myStream && remoteSocketId && !isCreator && !isStreaming && <button className="bg-green-500 text-white px-4 py-2 rounded-md mr-4" onClick={sendStreams}>Send Stream</button>}
+           
             {myStream &&
                 <>
                     <div className="bg-gray-200 rounded-md overflow-hidden mb-4 absolute bottom-0 right-0">
@@ -235,6 +238,15 @@ const InterviewRoom = () => {
                     <div>
                         {isCallEnded && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleEndCall}>End Call</button>}
                     </div>
+                    <div className="p-2">
+                        <button className={`bg-${isCameraOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleCamera}>
+                            {isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}
+                        </button>
+                        <button className={`bg-${isMicrophoneOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md`} onClick={toggleMicrophone}>
+                            {isMicrophoneOn ? 'Mute' : 'Unmute'}
+                        </button>
+                    </div>
+
                 </>
             }
 
@@ -251,10 +263,6 @@ const InterviewRoom = () => {
                             width="400px" // Adjust width as needed
                             url={remoteStream}
                         />
-                    </div>
-                    <div>
-                        <button className={`bg-${isCameraOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleCamera}>{isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}</button>
-                        <button className={`bg-${isMicrophoneOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md`} onClick={toggleMicrophone}>{isMicrophoneOn ? 'Mute' : 'Unmute'}</button>
                     </div>
                 </>
             }
