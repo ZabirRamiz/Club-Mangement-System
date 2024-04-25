@@ -106,7 +106,7 @@ const InterviewRoom = () => {
         setMyStream(stream);
         const ans = await peer.getAnswer(offer);
         socket.emit("call:accepted", { to: from, ans });
-
+        sendStreams()
     }, [socket]);
 
     const sendStreams = useCallback(() => {
