@@ -69,7 +69,7 @@ const EventPost = () => {
 <>
 
   <div className="flex flex-col items-right " style={{ backgroundImage: 'url("https://png.pngtree.com/background/20210716/original/pngtree-light-blue-cute-striped-baby-blue-background-picture-image_1348681.jpg")', backgroundSize: 'cover', minHeight: '115vh' }}>
-  <div className="w-2/6 mt-12 ml-4">
+  <div className="w-2/6 mt-6 ml-4">
     <CreateEventForm/>
     </div>
     <div className="container mx-auto mt-0 w-2/4 overflow-y-auto mr-16 " style={{ marginTop: '-950px' }}>
