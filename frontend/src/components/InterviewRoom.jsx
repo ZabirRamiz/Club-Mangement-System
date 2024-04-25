@@ -3,12 +3,14 @@ import { useSocket } from '../context/SocketProvider';
 import ReactPlayer from 'react-player';
 import peer from '../service/peer';
 import { useParams, useNavigate } from 'react-router';
+import PendingMemberFeed from "../components/PendingMemberFeed.jsx"
 
 const InterviewRoom = () => {
     const socket = useSocket();
     const [remoteSocketId, setRemoteSocketId] = useState(null);
     const [userID, setUserID] = useState(parseInt(localStorage.getItem('Id')))
     const [joinedUserID, setJoinedUserID] = useState("")
+    const [pending, setPending] = useState(false)
     const { board } = useParams()
     const [isCreator, setIsCreator] = useState(false)
     const [creatorID, setCreatorID] = useState(0)
@@ -20,7 +22,25 @@ const InterviewRoom = () => {
     const [isStreaming, setIsStreaming] = useState(false)
     const [isCallEnded, setIsCallEnded] = useState(false)
     const [isReady, setIsReady] = useState(false)
+    const [users, setUser] = useState(null)
     const navigate = useNavigate();
+
+
+    const fetchUser = async() =>{
+        console.log("PENDING ASE")
+        console.log(joinedUserID)
+        console.log(`api/user/getSpecificUser/${joinedUserID}`)
+        const response = await fetch(`/api/user/getSpecificUser/${joinedUserID}`)
+        const json = await response.json()
+        console.log(json)
+        if(response.ok){
+            if (json.designation === "Pending"){
+                setPending(true)
+            }
+            setUser([json])
+            console.log("USERS", [json])
+        }
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,20 +51,24 @@ const InterviewRoom = () => {
                 setCreatorID(parseInt(json.creator))
                 if (creatorID == userID) {
                     setIsCreator(true)
+                    if (joinedUserID!= ""){
+                        fetchUser()
+                    }
                 }
             }
         }
         fetchData()
-    }, [creatorID, isCreator]);
+    }, [creatorID, isCreator, joinedUserID]);
 
-    const getReadyForVideo = useCallback(async () => {
+    const onCamera = ( async() =>{
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
             video: true
         });
         setMyStream(stream);
-        setIsReady(true)
-    }, []);
+        setIsCameraOn(true)
+    })
+
 
     const handleLeaveRoom = useCallback(async () => {
         console.log("Room left room")
@@ -72,11 +96,12 @@ const InterviewRoom = () => {
 
     }, []);
 
-    const handleUserJoined = useCallback(({ studentID, id }) => {
+    const handleUserJoined = useCallback(async({ studentID, id }) => {
         console.log(`StudentID: ${studentID} joined the board`);
         setJoinedUserID(studentID)
         setRemoteSocketId(id);
         console.log("RemoteSocket id in user joined: ", remoteSocketId);
+        onCamera()
     }, []);
 
     const handleCallUser = useCallback(async () => {
@@ -106,7 +131,7 @@ const InterviewRoom = () => {
         setMyStream(stream);
         const ans = await peer.getAnswer(offer);
         socket.emit("call:accepted", { to: from, ans });
-
+        sendStreams()
     }, [socket]);
 
     const sendStreams = useCallback(() => {
@@ -131,10 +156,11 @@ const InterviewRoom = () => {
     }, [remoteSocketId, socket]);
 
     const handleNegoNeedIncoming = useCallback(async ({ from, offer }) => {
-        console.log("Handle Negitiation: need incoming ", from, offer);
+        console.log("Handle Negitiation: need incoming (isStreaming)", isStreaming, from, offer);
         const ans = await peer.getAnswer(offer);
         socket.emit('peer:nego:done', { to: from, ans });
-    }, [socket]);
+        sendStreams()
+    }, [socket, sendStreams]);
 
     const handleNegoNeedFinal = useCallback(async ({ ans }) => {
         console.log("handle nego need finel, ans: ", ans);
@@ -216,11 +242,18 @@ const InterviewRoom = () => {
                         ? "Joined room"
                         : "Waiting for creator to accept"}
             </h4>
+            {pending && 
+            <>
+                {users && users.map((user) => {
+
+                    return <PendingMemberFeed key={user.sid} user={user} />;
+
+                })}
+            </>}
 
             <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleLeaveRoom}>Leave Room</button>
-            {!isReady && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={getReadyForVideo}>Ready</button>}
             {remoteSocketId && !isAccepted && isCreator && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleCallUser}>Accept</button>}
-            {myStream && remoteSocketId && !isCreator && !isStreaming && <button className="bg-green-500 text-white px-4 py-2 rounded-md mr-4" onClick={sendStreams}>Send Stream</button>}
+           
             {myStream &&
                 <>
                     <div className="bg-gray-200 rounded-md overflow-hidden mb-4 absolute bottom-0 right-0">
@@ -235,6 +268,15 @@ const InterviewRoom = () => {
                     <div>
                         {isCallEnded && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleEndCall}>End Call</button>}
                     </div>
+                    <div className="p-2">
+                        <button className={`bg-${isCameraOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleCamera}>
+                            {isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}
+                        </button>
+                        <button className={`bg-${isMicrophoneOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md`} onClick={toggleMicrophone}>
+                            {isMicrophoneOn ? 'Mute' : 'Unmute'}
+                        </button>
+                    </div>
+
                 </>
             }
 
@@ -251,10 +293,6 @@ const InterviewRoom = () => {
                             width="400px" // Adjust width as needed
                             url={remoteStream}
                         />
-                    </div>
-                    <div>
-                        <button className={`bg-${isCameraOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleCamera}>{isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}</button>
-                        <button className={`bg-${isMicrophoneOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md`} onClick={toggleMicrophone}>{isMicrophoneOn ? 'Mute' : 'Unmute'}</button>
                     </div>
                 </>
             }
