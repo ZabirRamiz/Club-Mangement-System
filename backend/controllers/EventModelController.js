@@ -92,11 +92,50 @@ const updateEvent = async(req, res) =>{
     res.status(200).json(event)
 }
 
+//get upcoming events
+const upcomingEvents = async(req, res) =>{
+    try {
+        // Get today's date
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set time to beginning of the day
 
+        // Find upcoming events where the date stored in the model is later than today's date
+        const events = await EventModel.find({ date: { $gt: today } });
+        
+        // Send the upcoming events as response
+        res.json(events);
+    } catch (error) {
+        // Handle error
+        console.error('Error fetching upcoming events:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+    
+}
+//get past events
+const pastEvents = async(req, res) =>{
+    try {
+        // Get today's date
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set time to beginning of the day
+
+        // Find upcoming events where the date stored in the model is later than today's date
+        const events = await EventModel.find({ date: { $lt: today } });
+        console.log(today)
+        // Send the upcoming events as response
+        res.json(events);
+    } catch (error) {
+        // Handle error
+        console.error('Error fetching past events:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+    
+}
 module.exports = {
     getEvents,
     getSingleEvent,
     createEvent,
     deleteEvent,
-    updateEvent
+    updateEvent,
+    upcomingEvents,
+    pastEvents
 }
