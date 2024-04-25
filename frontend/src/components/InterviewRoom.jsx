@@ -92,7 +92,7 @@ const InterviewRoom = () => {
             throw new Error('Failed to update interview session');
         }
         socket.emit('call:ended', { to: remoteSocketId });
-        navigate(`/Interview`);
+        // navigate(`/Interview`);
 
     }, []);
 
@@ -167,15 +167,18 @@ const InterviewRoom = () => {
         await peer.setLocalDescription(ans);
     }, []);
 
+    // will be called in participant
     const handleEndCall = useCallback(async () => {
         setRemoteStream();
         socket.emit('call:end', { to: remoteSocketId });
     }, [remoteSocketId, handleLeaveRoom, socket]);
 
+    // will be called in creator
     const handleCallEnded = useCallback(({ from }) => {
         console.log("call:ended recieved")
         setIsCallEnded(true)
-        setRemoteStream()
+        setRemoteSocketId(null)
+        setRemoteStream(null)
         console.log(`Call ended by user ${from}`);
     }, []);
 
@@ -250,8 +253,10 @@ const InterviewRoom = () => {
 
                 })}
             </>}
-
-            <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleLeaveRoom}>Leave Room</button>
+            {!isCreator && (
+                <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleLeaveRoom}>Leave Room</button>
+            )}
+            
             {remoteSocketId && !isAccepted && isCreator && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleCallUser}>Accept</button>}
            
             {myStream &&
@@ -283,7 +288,7 @@ const InterviewRoom = () => {
             {/* Add a gap between Leave Room button and remote stream window */}
             {remoteStream && <div className="mt-4"></div>}
 
-            {remoteStream &&
+            {remoteStream && !isCallEnded &&
                 <>
                     <div className="bg-gray-200 rounded-md overflow-hidden mb-4 mx-auto">
                         <ReactPlayer
