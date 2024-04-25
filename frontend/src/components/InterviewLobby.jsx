@@ -7,6 +7,7 @@ const LobbyScreen = () =>{
     const [studentID, setStudentID] = useState(parseInt(localStorage.getItem('Id')))
     const [board, setBoard] = useState(1)
     const [boardStatus, setBoardStatus] = useState(true)
+    const [creator, setCreator] = useState(null)
     const socket = useSocket()
     const navigate = useNavigate();
     //console.log(socket)
@@ -23,6 +24,7 @@ const LobbyScreen = () =>{
             if(response.ok){
                 setBoardStatus(true)
                 console.log("This board exists", board, boardStatus)
+                setCreator(json.creator)
                 
             }
             else{
@@ -104,6 +106,7 @@ const LobbyScreen = () =>{
     }, [navigate]);
     
 
+
     useEffect(() =>{
         socket.on('board:join', handleJoinRoom)
         socket.on('board:create', handleCreateRoom)
@@ -153,6 +156,12 @@ const LobbyScreen = () =>{
                 >
                     {boardStatus ? 'Join' : 'Create'}
                 </button>
+                {boardStatus && 
+                <>
+                <b>Created By: </b>{creator}
+                </>
+                    
+                }
             </form>
         </div>
 
