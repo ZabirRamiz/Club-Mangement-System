@@ -92,9 +92,33 @@ const InterviewRoom = () => {
             throw new Error('Failed to update interview session');
         }
         socket.emit('call:ended', { to: remoteSocketId });
-        // navigate(`/Interview`);
+        navigate(`/Interview`);
 
     }, []);
+
+    const handleDeleteRoom = async (e) => {
+        e.preventDefault()
+
+        const response = await fetch(`/api/interview/deleteInterviewSession/${board}`,{
+            method: "DELETE",
+            headers:{
+              'Content-Type': 'application/json'
+            }
+          })
+      
+          const json = await response.json()
+          console.log(json)
+          if(response.ok){
+            navigate(`/Interview`);
+          }
+          else{
+            console.error("Hoynai delete")
+          }
+
+        
+
+    };
+
 
     const handleUserJoined = useCallback(async({ studentID, id }) => {
         console.log(`StudentID: ${studentID} joined the board`);
@@ -170,7 +194,9 @@ const InterviewRoom = () => {
     // will be called in participant
     const handleEndCall = useCallback(async () => {
         setRemoteStream();
+        setIsCallEnded(true)
         socket.emit('call:end', { to: remoteSocketId });
+        handleLeaveRoom()
     }, [remoteSocketId, handleLeaveRoom, socket]);
 
     // will be called in creator
@@ -253,6 +279,9 @@ const InterviewRoom = () => {
 
                 })}
             </>}
+            <div>
+                {isCreator && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleDeleteRoom}>Delete Room</button>}
+            </div>
             {!isCreator && (
                 <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleLeaveRoom}>Leave Room</button>
             )}
@@ -271,8 +300,9 @@ const InterviewRoom = () => {
                         />
                     </div>
                     <div>
-                        {isCallEnded && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleEndCall}>End Call</button>}
+                        {!isCallEnded && !isCreator && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleEndCall}>End Call</button>}
                     </div>
+
                     <div className="p-2">
                         <button className={`bg-${isCameraOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleCamera}>
                             {isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}
