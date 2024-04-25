@@ -3,12 +3,14 @@ import { useSocket } from '../context/SocketProvider';
 import ReactPlayer from 'react-player';
 import peer from '../service/peer';
 import { useParams, useNavigate } from 'react-router';
+import PendingMemberFeed from "../components/PendingMemberFeed.jsx"
 
 const InterviewRoom = () => {
     const socket = useSocket();
     const [remoteSocketId, setRemoteSocketId] = useState(null);
     const [userID, setUserID] = useState(parseInt(localStorage.getItem('Id')))
     const [joinedUserID, setJoinedUserID] = useState("")
+    const [pending, setPending] = useState(false)
     const { board } = useParams()
     const [isCreator, setIsCreator] = useState(false)
     const [creatorID, setCreatorID] = useState(0)
@@ -20,7 +22,25 @@ const InterviewRoom = () => {
     const [isStreaming, setIsStreaming] = useState(false)
     const [isCallEnded, setIsCallEnded] = useState(false)
     const [isReady, setIsReady] = useState(false)
+    const [users, setUser] = useState(null)
     const navigate = useNavigate();
+
+
+    const fetchUser = async() =>{
+        console.log("PENDING ASE")
+        console.log(joinedUserID)
+        console.log(`api/user/getSpecificUser/${joinedUserID}`)
+        const response = await fetch(`/api/user/getSpecificUser/${joinedUserID}`)
+        const json = await response.json()
+        console.log(json)
+        if(response.ok){
+            if (json.designation === "Pending"){
+                setPending(true)
+            }
+            setUser([json])
+            console.log("USERS", [json])
+        }
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,12 +51,14 @@ const InterviewRoom = () => {
                 setCreatorID(parseInt(json.creator))
                 if (creatorID == userID) {
                     setIsCreator(true)
-
+                    if (joinedUserID!= ""){
+                        fetchUser()
+                    }
                 }
             }
         }
         fetchData()
-    }, [creatorID, isCreator]);
+    }, [creatorID, isCreator, joinedUserID]);
 
     const onCamera = ( async() =>{
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -220,6 +242,14 @@ const InterviewRoom = () => {
                         ? "Joined room"
                         : "Waiting for creator to accept"}
             </h4>
+            {pending && 
+            <>
+                {users && users.map((user) => {
+
+                    return <PendingMemberFeed key={user.sid} user={user} />;
+
+                })}
+            </>}
 
             <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleLeaveRoom}>Leave Room</button>
             {remoteSocketId && !isAccepted && isCreator && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleCallUser}>Accept</button>}
