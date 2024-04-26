@@ -12,7 +12,7 @@ const EventCard = ({ event }) => {
     // Add your logic here to handle edit functionality
     // For example, you can toggle the edit mode or open a modal for editing
     setIsEditing(true);
-    navigate("/EventEdit")
+    navigate(`/EventEdit/${event._id}`)
   };
 
   return (
