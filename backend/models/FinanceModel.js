@@ -18,13 +18,16 @@ const FinanceSchema = new Schema({
         min: 0
     },
     dateReceived:{
-        type: Date,    
+        type: Date,   
+        default: null 
     },
     sponsor:{
-        type:String
+        type:String,
+        default: null
     },
     event:{
         type:String,
+        default: null
     }
 
 })

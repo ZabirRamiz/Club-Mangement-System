@@ -33,16 +33,15 @@ const getSingleEvent = async (req, res) =>{
 
 
 // create new event
-const createEvent = async (req, res) =>{
-    const {title, date, time, venue, guests, type, budget, sponsor, pr } = req.body
-    // add event to db
+const createEvent = async (req, res) => {
+    const { title, date, time, venue, guests, type, pr } = req.body;
     try {
-        const newEvent = await EventModel.create({title, date, time, venue, guests, type, budget, sponsor, pr})   //create new event with given params
-        res.status(200).json(newEvent)
+        const newEvent = await EventModel.create({ title, date, time, venue, guests, type, pr });
+        res.status(200).json({ _id: newEvent._id }); // Return the _id of the newly created event document
     } catch (error) {
-        res.status(400).json({error: error.message})
+        res.status(400).json({ error: error.message });
     }
-}
+};
 
 // delete a event
 const deleteEvent = async ( req, res) =>{
