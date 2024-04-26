@@ -27,6 +27,10 @@ const UserSchema = new schema(
     department: {
       type: String,
     },
+    image: {
+      data: Buffer, // Store image data as buffer
+      contentType: String // Store content type of the image
+    }
   },
   { timestamps: false }
 );
