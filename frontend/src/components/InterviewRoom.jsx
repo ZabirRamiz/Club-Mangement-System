@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSocket } from '../context/SocketProvider';
 import ReactPlayer from 'react-player';
 import peer from '../service/peer';
@@ -8,7 +8,7 @@ import PendingMemberFeed from "../components/PendingMemberFeed.jsx"
 const InterviewRoom = () => {
     const socket = useSocket();
     const [remoteSocketId, setRemoteSocketId] = useState(null);
-    const [userID, setUserID] = useState(parseInt(localStorage.getItem('Id')))
+    const userID  = parseInt(localStorage.getItem('Id'))
     const [joinedUserID, setJoinedUserID] = useState("")
     const [pending, setPending] = useState(false)
     const { board } = useParams()
@@ -21,13 +21,21 @@ const InterviewRoom = () => {
     const [isAccepted, setIsAccepted] = useState(false)
     const [isStreaming, setIsStreaming] = useState(false)
     const [isCallEnded, setIsCallEnded] = useState(false)
-    const [isReady, setIsReady] = useState(false)
     const [users, setUser] = useState(null)
     const [interview, setInterview] = useState(null)
     const navigate = useNavigate();
 
 
-    const fetchUser = async() =>{
+
+    const sendStreams = useCallback(() => {
+        console.log("STREAM IS", myStream)
+        for (const track of myStream.getTracks()) {
+            peer.peer.addTrack(track, myStream);
+            setIsStreaming(true)
+        }
+    }, [myStream]);
+
+    const fetchUser = useCallback(async() =>{
         console.log("PENDING ASE")
         console.log(joinedUserID)
         console.log(`api/user/getSpecificUser/${joinedUserID}`)
@@ -41,7 +49,7 @@ const InterviewRoom = () => {
             setUser([json])
             console.log("USERS", [json])
         }
-    }
+    }, [joinedUserID])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -66,7 +74,7 @@ const InterviewRoom = () => {
             }
         }
         fetchData()
-    }, [creatorID, isCreator, joinedUserID, isAccepted, remoteSocketId, interview]);
+    }, [board, fetchUser, userID, creatorID, isCreator, joinedUserID, isAccepted, remoteSocketId, interview]);
 
     const onCamera = ( async() =>{
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -97,7 +105,7 @@ const InterviewRoom = () => {
         socket.emit('call:ended', { to: remoteSocketId });
         navigate(`/Interview`);
 
-    }, []);
+    }, [board, navigate, remoteSocketId, socket]);
 
     const handleDeleteRoom = async (e) => {
         e.preventDefault()
@@ -129,7 +137,7 @@ const InterviewRoom = () => {
         setRemoteSocketId(id);
         console.log("RemoteSocket id in user joined: ", remoteSocketId);
         onCamera()
-    }, []);
+    }, [remoteSocketId]);
 
     const handleCallUser = useCallback(async () => {
         setMyStream()
@@ -137,7 +145,7 @@ const InterviewRoom = () => {
         console.log("Offer is ", offer);
         socket.emit("user:call", { to: remoteSocketId, offer });
         console.log("RemoteSocketId", remoteSocketId);
-        setIsAccepted(true)
+        // setIsAccepted(true)
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
             video: true
@@ -146,11 +154,11 @@ const InterviewRoom = () => {
         if (remoteSocketId) {
             sendStreams()
         }
-    }, [remoteSocketId, socket]);
+    }, [remoteSocketId, sendStreams, socket]);
 
     const handleIncomingCall = useCallback(async ({ from, offer }) => {
         console.log(`Incoming call from ${from} ${offer}`);
-        await setRemoteSocketId(from)
+        setRemoteSocketId(from)
 
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
@@ -161,15 +169,9 @@ const InterviewRoom = () => {
         socket.emit("call:accepted", { to: from, ans });
         
         sendStreams()
-    }, [socket]);
+    }, [socket, sendStreams]);
 
-    const sendStreams = useCallback(() => {
-        console.log("STREAM IS", myStream)
-        for (const track of myStream.getTracks()) {
-            peer.peer.addTrack(track, myStream);
-            setIsStreaming(true)
-        }
-    }, [myStream]);
+
 
     const handleCallAccepted = useCallback(({ from, ans }) => {
         peer.setLocalDescription(ans);
@@ -191,14 +193,14 @@ const InterviewRoom = () => {
         socket.emit('peer:nego:done', { to: from, ans });
 
         sendStreams()
-    }, [socket, sendStreams]);
+    }, [isStreaming, socket, sendStreams]);
 
     const handleNegoNeedFinal = useCallback(async ({ ans }) => {
         console.log("handle nego need finel, ans: ", ans);
         await peer.setLocalDescription(ans);
         console.log(isStreaming, isAccepted, remoteSocketId)
-        console.log(interview.remoteSocket)
-    }, []);
+        
+    }, [isAccepted, isStreaming, remoteSocketId]);
 
     // will be called in participant
     const handleEndCall = useCallback(async () => {

@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem('State') === 'true');
-  const [userType, setUserType] = useState(localStorage.getItem('userType') || 'user');
+  const [userType, setUserType] = useState();
+  const [designation, setDesignation] = useState("")
+  const [department, setDepartment] = useState("")
   const [user, setUser] = useState(null)
   const loginId = localStorage.getItem("Id")
   const navigate = useNavigate();
@@ -16,7 +18,10 @@ const Navbar = () => {
         const json = await response.json()
         if(response.ok){
           setUser(json)
+          setDesignation(json.designation)
+          setDepartment(json.department)
           console.log(`User name is ${json.name}`)
+
         }
         else {
           console.log("Something is wrong")
