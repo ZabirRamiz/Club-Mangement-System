@@ -117,8 +117,12 @@ const sendAll = async (req, res) => {
       if (user.designation === "Executive Body" || user.designation === "Governing Body") {
         ccEmailIds.push(user.email);
       } else {
+        if (user.designation !== "Pending" )
         bccEmailIds.push(user.email);
       }
+
+      console.log(ccEmailIds)
+      console.log(bccEmailIds)
     });
 
     // Send email to the extracted email ids with CC and BCC
