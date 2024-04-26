@@ -1,5 +1,5 @@
 
-import{ useState, useEffect } from 'react';
+import{ useState } from 'react';
 
 const EventForm = () => {
   const [title, setTitle] = useState('');
@@ -8,28 +8,23 @@ const EventForm = () => {
   const [venue, setVenue] = useState('');
   const [guest, setGuest] = useState('');
   const [type, setType] = useState('');
-  const [budget, setBudget] = useState(0);
 
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-
-    
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission here
+
     const EventData={
-    const EventData={
-      title,
-      date,
-      time,
-      venue,
-      guest,
-      type,
+      title: title,
+      date: date,
+      time: time,
+      venue: venue,
+      guest: guest,
+      type: type,
 
     };
+    console.log(EventData)
     var eventId = 0
     const response = await fetch ("api/events/createEvent",{
       method: 'POST',
@@ -49,8 +44,8 @@ const EventForm = () => {
           budget: 0,
           pl: false,
           recieved: 0,
-          dateReceived: null,
-          sponsor: null,
+          dateReceived: "",
+          sponsor: "661abf66de55a9b6325f39b0",  //oca
           event: eventId
         }),
         headers: {
@@ -64,7 +59,7 @@ const EventForm = () => {
         window.location.reload();
       }
       else{
-        setError(financeJson.message)
+        console.log("Error")
       }
 
 
@@ -72,14 +67,14 @@ const EventForm = () => {
 
       
     } else{
-      setError(json.message);
+      console.log("Error")
     }
     };
 
 
   return (
     <div className="ml-10 flex flex-col items-center  justify-center min-h-screen bg-gray-100">
-      <div className="mt-4 mb-4 bg-white p-4 rounded-lg shadow-md w-3/4">
+      <div className="mt-2 mb-4 bg-white p-4 rounded-lg shadow-md w-3/4">
         <h2 className="text-2xl mb-4"><b>Event Form</b></h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

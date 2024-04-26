@@ -19,7 +19,7 @@ const FinanceSchema = new Schema({
     },
     dateReceived:{
         type: Date,   
-        default: null 
+        default: ""
     },
     sponsor:{
         type:String,

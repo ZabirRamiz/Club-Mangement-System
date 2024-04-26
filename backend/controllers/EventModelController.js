@@ -34,9 +34,14 @@ const getSingleEvent = async (req, res) =>{
 
 // create new event
 const createEvent = async (req, res) => {
-    const { title, date, time, venue, guests, type, pr } = req.body;
+    const { title, date, time, venue, guest, type} = req.body;
     try {
-        const newEvent = await EventModel.create({ title, date, time, venue, guests, type, pr });
+        const newEvent = await EventModel.create({ title:title, 
+            date:date, 
+            time: time, 
+            venue:venue, 
+            guests:guest, 
+            type:type});
         res.status(200).json({ _id: newEvent._id }); // Return the _id of the newly created event document
     } catch (error) {
         res.status(400).json({ error: error.message });

@@ -1,57 +1,75 @@
 
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const Feed = ({finance}) => {
+
   const [event, setEvent] = useState()
+  const [budget, setBudget] = useState(0)
+  const [pl, setPl] = useState(finance.pl)
+  const [received, setReceived] = useState(0)
+  const [dateReceived, setDateReceived] = useState("")
   const [sponsorList, setSponsorList] = useState()
-
-
-
-  // fetch('api/sponsor/getSponsors')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setSponsorList(data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching sponsors:', error);
-  //     });
+  const [selectedSponsor, setSelectedSponsor] = useState(finance.sponsor);
 
   useEffect(() => {
     const fetchData = async () => {
       console.log(finance)
+      setBudget(finance.budget)
+      setPl(finance.pl)
+      setReceived(finance.received)
+      setDateReceived(finance.dateReceived)
+      setSelectedSponsor(finance.sponsor)
       const eventResponse = await fetch(`/api/events/getSingleEvent/${finance.event}`);
-      const sponsorResponse = await fetch('api/sponsor/getSponsors')
+      const sponsorResponse = await fetch('api/sponsor/getActiveSponsors')
       const eventJson = await eventResponse.json()
-      const sponsorJson = await sponsorResponse
+      const sponsorJson = await sponsorResponse.json()
       if (eventResponse.ok){
         setEvent(eventJson)
       }
       if (sponsorResponse.ok){
         setSponsorList(sponsorJson)
+        console.log(sponsorJson)
       }
-
       
   }
   fetchData()
     
-  }, []);
+  }, [finance]);
 
 
-  const navigate = useNavigate();
 
-  // State to manage the dropdown visibility for each event
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Function to toggle the dropdown visibility
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault()
+    const data = {
+      budget: budget,
+      pl: pl,
+      received: received,
+      dateReceived: dateReceived,
+      sponsor: selectedSponsor
+    }
+
+    const response =  await fetch(`api/finances/updateFinance/${finance._id}`,{
+      method:'PATCH',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    const json = await response.json()
+      if (response.ok){
+        window.location.reload()
+        console.log(json)
+      }
+      else{
+        console.log("UPDATE HOYNAI")
+      }
+    
   };
+  
 
-  const handleUpdate = () => {
-    navigate("/UserDashboard");
-  };
 
   return (
     <>
@@ -62,61 +80,80 @@ const Feed = ({finance}) => {
             <label className="text-lg font-semibold text-center ml-20 mb-2" htmlFor={`allocatedBudget`}>
               Allocated budget:
             </label>
-            <input type="text" id={`allocatedBudget`} className="text-lg font-semibold text-center ml-2 border border-gray-400 px-2 py-1 rounded-md" />
+            <input 
+              type="text" 
+              id={`allocatedBudget`} 
+              placeholder={finance.budget}
+              className="text-lg font-semibold text-center ml-2 border border-gray-400 px-2 py-1 rounded-md" 
+              onChange={(e) => setBudget(e.target.value)}
+              />
           </div>
           <div className="flex items-center ml-20 mb-4">
             <label className="text-lg font-semibold text-center ml-20 mb-2" htmlFor={`pl`}>
               PL:
             </label>
-            <input type="checkbox" id={`pl`} className="accent-green-500 h-6 w-6 ml-2" />
+            <input 
+              type="checkbox" 
+              id={`pl`} 
+              className="accent-green-500 h-6 w-6 ml-2" 
+              onChange={(e) => setPl(e.target.checked)}
+              checked={pl}
+            />
+
           </div>
+
           <div className="flex items-center ml-20 mb-4">
             <label className="text-lg font-semibold text-center ml-20 mb-2" htmlFor={`moneyReceived`}>
               Money Received:
             </label>
-            <input type="text" id={`moneyReceived`} className="text-lg font-semibold text-center ml-2 border border-gray-400 px-2 py-1 rounded-md" />
+            <input 
+              type="text" 
+              id={`moneyReceived`} 
+              placeholder={finance.received}
+              className="text-lg font-semibold text-center ml-2 border border-gray-400 px-2 py-1 rounded-md" 
+              onChange={(e) => setReceived(e.target.value)}
+            />
           </div>
+
           <div className="flex items-center ml-20 mb-4">
             <label className="text-lg font-semibold text-right ml-20 mb-2" htmlFor={`date`}>
               Money Received Date:
             </label>
-            <input type="date" id={`date`} className="text-lg font-semibold text-center ml-2 border border-gray-400 px-2 py-1 rounded-md" />
+            <input 
+              type="date" 
+              id={`date`} 
+              defaultValue={finance.dateReceived !== null ? new Date(finance.dateReceived).toISOString().split('T')[0] : ""} 
+              onChange={(e) => setDateReceived(e.target.value)} 
+              className="text-lg font-semibold text-center ml-2 border border-gray-400 px-2 py-1 rounded-md" 
+            />
+
           </div>
+
           <div className="flex items-center ml-20 mb-4">
             <label className="text-lg font-semibold text-center ml-20 mb-2" htmlFor={`moneyReceived`}>
               Sponsor:
             </label>
             <div className="relative inline-block text-left">
-              <div>
-                <button
-                  type="button"
-                  className="inline-flex justify-center ml-2 w-full rounded-md border border-gray-300 shadow-sm bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                  id={`options-menu`}
-                  aria-expanded="true"
-                  aria-haspopup="true"
-                  onClick={toggleDropdown}
-                >
-                  {/* {finance.selectedSponsor} */}
-                  <svg className="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </button>
-              </div>
-
-              {isDropdownOpen && (
-                <div className="origin-top-right absolute right-0 mt-2 ml-5 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby={`options-menu`} tabIndex="-1">
-                  <div className="py-1 ml-2" role="none">
-                    {sponsorList.map((sponsor, i) => (
-                      <a href="#" key={i} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabIndex="-1" id={`option-${i}`} onClick={() => console.log(sponsor)}>
-                        {sponsor}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <select
+                id="sponsor"
+                className="inline-flex justify-center ml-2 w-full rounded-md border border-gray-300 shadow-sm bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                value={selectedSponsor}
+                placeholder="Hello"
+                onChange={(e) => setSelectedSponsor(e.target.value)}
+              >
+                {sponsorList && sponsorList.map(sponsor => (
+                  <option 
+                    key={sponsor._id} 
+                    value={sponsor._id} // Conditionally set the selected attribute
+                  >
+                    {sponsor.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
+
         <button className="bg-green-500 hover:bg-green-700 text-white rounded-full p-2 mr-7 transition duration-300 ease-in-out" onClick={handleUpdate}>
           Update
         </button>

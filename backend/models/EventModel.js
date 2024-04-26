@@ -12,23 +12,23 @@ const EventSchema = new Schema({
   },
   time: {
     type: String, // or Date if you want to store time as a date object
-    default: null, // or ''
+    default: "", // or ''
   },
   venue: {
     type: String,
-    default: null, // or ''
+    default: "", // or ''
   },
   guests: {
     type: String,
-    default: null, // or ''
+    default: "", // or ''
   },
   type: {
     type: String,
-    default: null, // or ''
+    default: "", // or ''
   },
   pr: {
     type: String,
-    default: null, // or ''
+    default: "", // or ''
   },
 });
 

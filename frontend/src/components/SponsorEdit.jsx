@@ -8,7 +8,7 @@ const SponsorEdit=()=>{
   const [more_info, setMoreInfo] = useState("None")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
-  const [sponsor_status, setSponsorStatus] = useState("Inactive")
+  const [sponsorstatus, setSponsorStatus] = useState("Inactive")
   const [typeList, setTypeList] = useState(['BRACU', 'IT', 'Food', 'Publication', 'Media','Education', 'Others'])
   const [status_list, setStatusList] = useState(['Inactive', 'Active'])
   const navigate = useNavigate()
@@ -41,8 +41,11 @@ const SponsorEdit=()=>{
             more_info: more_info,
             phone:phone,
             email: email,
-            sponsor_status: sponsor_status
-          })
+            sponsor_status: sponsorstatus
+          }),
+          headers: {
+            'Content-type': 'application/json'
+          }
         })
         const json = await response.json()
         console.log(json)
@@ -91,8 +94,8 @@ const SponsorEdit=()=>{
                   <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="text" placeholder={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="sponsorstatus" className="block text-sm font-medium text-gray-600">sponsorstatus</label>
-                  <select id="sponsorstatus" name="sponsorstatus" value={sponsor_status} onChange={(e) => setSponsorStatus(e.target.value)} className="mt-5 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300">
+                  <label htmlFor="sponsorstatus" className="block text-sm font-medium text-gray-600">Sponsor status</label>
+                  <select id="sponsorstatus" name="sponsorstatus" value={sponsorstatus} onChange={(e) => setSponsorStatus(e.target.value)} className="mt-5 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300">
                     {status_list.map((statusValue, index) => (
                       <option key={index} value={statusValue}>{statusValue}</option>
                     ))}
