@@ -4,7 +4,7 @@ const express = require("express");
 const UserModel = require("../models/UserModel")
 const SponsorModel = require("../models/SponsorModel")
 
-async function sendMail({ to, name = 'None' = 'None', subject, body, cc = [], bcc = [], cc = [], bcc = [] }) {
+async function sendMail({ to, name = 'None', subject, body, cc = [], bcc = []}) {
   const { SMTP_EMAIL, SMTP_PASSWORD } = process.env;
   const transport = nodemailer.createTransport({
     service: "gmail",
@@ -27,8 +27,6 @@ async function sendMail({ to, name = 'None' = 'None', subject, body, cc = [], bc
       to,
       subject,
       html: body,
-      cc,
-      bcc
       cc,
       bcc
     });
@@ -92,7 +90,7 @@ const send = async (req, res) => {
 // }
 
 
-const sendAll = async (req, res) => {
+// const sendAll = async (req, res) => {
 //   try {
 //     let users;
 //     let {department,subject,message} = req.body
@@ -145,12 +143,7 @@ const sendAll = async (req, res) => {
       users = await UserModel.find({ department: department }, 'email designation');
       // Retrieve all users' email ids
       users = await UserModel.find({}, 'email designation');
-    } else if (department === "Sponsor") {
-      users = await SponsorModel.find({}, 'email');
-    } else {
-      // Retrieve users' email ids based on department
-      users = await UserModel.find({ department: department }, 'email designation');
-    }
+    } 
     console.log(users);
     console.log(users);
 
@@ -193,7 +186,10 @@ const sendAll = async (req, res) => {
 };
 
 
+
 module.exports = {
   send,
   sendAll
-};
+}
+
+
