@@ -7,6 +7,8 @@ const LobbyScreen = () =>{
     const [studentID, setStudentID] = useState(parseInt(localStorage.getItem('Id')))
     const [board, setBoard] = useState(1)
     const [boardStatus, setBoardStatus] = useState(true)
+    const [participant, setParticipant] = useState(0)
+    const [creator, setCreator] = useState(null)
     const socket = useSocket()
     const navigate = useNavigate();
     //console.log(socket)
@@ -23,6 +25,8 @@ const LobbyScreen = () =>{
             if(response.ok){
                 setBoardStatus(true)
                 console.log("This board exists", board, boardStatus)
+                setCreator(json.creator)
+                setParticipant(json.participants)
                 
             }
             else{
@@ -53,11 +57,13 @@ const LobbyScreen = () =>{
         const {studentID, board } = data
         console.log(data)
         console.log("Creating room")
+        console.log(socket.id, "OWN SOCKET")
         const response = await fetch('/api/interview/createInterviewSession',{
             method: 'POST',
             body: JSON.stringify({
                 board: board,
-                creator: studentID
+                creator: studentID,
+                creatorSocket: socket.id
             }),
             headers:{
                 'Content-Type': 'application/json'
@@ -84,12 +90,13 @@ const LobbyScreen = () =>{
                 throw new Error('Failed to fetch interview session');
             }
     
-            const participantArray = [...js.participants, studentID];
-            console.log(participantArray)
+            // const participant = [...js.participants, studentID];
+            const participant  = studentID;
+            console.log(participant)
     
             const response = await fetch(`/api/interview/updateInterviewSession/${board}`, {
                 method: 'PATCH',
-                body: JSON.stringify({ participants: participantArray }),
+                body: JSON.stringify({ participants: participant, remoteSocket: socket.id }),
                 headers: { 'Content-Type': 'application/json' }
             });
     
@@ -103,6 +110,7 @@ const LobbyScreen = () =>{
         }
     }, [navigate]);
     
+
 
     useEffect(() =>{
         socket.on('board:join', handleJoinRoom)
@@ -149,10 +157,18 @@ const LobbyScreen = () =>{
                 
                 <button 
                     onClick={handleJoin} 
-                    className="w-full py-2 px-4 mt-4 bg-blue-500 text-white rounded-md focus:outline-none focus:bg-blue-600"
+                    className={`w-full py-2 px-4 mt-4 bg-blue-500 text-white rounded-md focus:outline-none ${boardStatus ? 'focus:bg-blue-600' : ''}`}
+                    disabled={boardStatus && participant !== 0}
                 >
-                    {boardStatus ? 'Join' : 'Create'}
+                    {boardStatus ? (participant === 0 ? 'Join' : 'Please wait, board is full.') : 'Create'}
                 </button>
+
+                {boardStatus && 
+                <>
+                <b>Created By: </b>{creator}
+                </>
+                    
+                }
             </form>
         </div>
 

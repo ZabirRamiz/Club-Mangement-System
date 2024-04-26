@@ -13,9 +13,19 @@ const InterviewSchema = new Schema({
         type: Number,
         required: true
     },
+    creatorSocket:{
+        type:String,
+        default: ""
+    },
+    remoteSocket:{
+        type:String,
+        default: ""
+    },
     participants:{
-        type: [Number],
-        default: []      
+        // type: [Number],
+        // default: []    
+        type: Number,
+        default: 0  
     }
     
 }, { timestamps: true })   

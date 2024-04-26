@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSocket } from '../context/SocketProvider';
 import ReactPlayer from 'react-player';
 import peer from '../service/peer';
@@ -8,7 +8,7 @@ import PendingMemberFeed from "../components/PendingMemberFeed.jsx"
 const InterviewRoom = () => {
     const socket = useSocket();
     const [remoteSocketId, setRemoteSocketId] = useState(null);
-    const [userID, setUserID] = useState(parseInt(localStorage.getItem('Id')))
+    const userID  = parseInt(localStorage.getItem('Id'))
     const [joinedUserID, setJoinedUserID] = useState("")
     const [pending, setPending] = useState(false)
     const { board } = useParams()
@@ -21,12 +21,21 @@ const InterviewRoom = () => {
     const [isAccepted, setIsAccepted] = useState(false)
     const [isStreaming, setIsStreaming] = useState(false)
     const [isCallEnded, setIsCallEnded] = useState(false)
-    const [isReady, setIsReady] = useState(false)
     const [users, setUser] = useState(null)
+    const [interview, setInterview] = useState(null)
     const navigate = useNavigate();
 
 
-    const fetchUser = async() =>{
+
+    const sendStreams = useCallback(() => {
+        console.log("STREAM IS", myStream)
+        for (const track of myStream.getTracks()) {
+            peer.peer.addTrack(track, myStream);
+            setIsStreaming(true)
+        }
+    }, [myStream]);
+
+    const fetchUser = useCallback(async() =>{
         console.log("PENDING ASE")
         console.log(joinedUserID)
         console.log(`api/user/getSpecificUser/${joinedUserID}`)
@@ -40,15 +49,22 @@ const InterviewRoom = () => {
             setUser([json])
             console.log("USERS", [json])
         }
-    }
+    }, [joinedUserID])
 
     useEffect(() => {
         const fetchData = async () => {
             console.log(board, userID)
             const response = await fetch(`/api/interview/getSingleInterviewSession/${board}`);
             const json = await response.json()
+            
             if (response.ok) {
+                if (interview == null){
+                    setInterview(json)
+                }
+                    
+                console.log("INTERVIEW ", json)
                 setCreatorID(parseInt(json.creator))
+
                 if (creatorID == userID) {
                     setIsCreator(true)
                     if (joinedUserID!= ""){
@@ -58,7 +74,7 @@ const InterviewRoom = () => {
             }
         }
         fetchData()
-    }, [creatorID, isCreator, joinedUserID]);
+    }, [board, fetchUser, userID, creatorID, isCreator, joinedUserID, isAccepted, remoteSocketId, interview]);
 
     const onCamera = ( async() =>{
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -72,19 +88,14 @@ const InterviewRoom = () => {
 
     const handleLeaveRoom = useCallback(async () => {
         console.log("Room left room")
-        const res = await fetch(`/api/interview/getSingleInterviewSession/${board}`);
-        const js = await res.json();
 
-        if (!res.ok) {
-            throw new Error('Failed to fetch interview session');
-        }
-        var participantArray = js.participants
-        participantArray = participantArray.splice(participantArray.indexOf(userID), 1)
-        console.log(participantArray)
+        var participant = 0
+        // participant = participant.splice(participant.indexOf(userID), 1)
+        console.log(participant)
 
         const response = await fetch(`/api/interview/updateInterviewSession/${board}`, {
             method: 'PATCH',
-            body: JSON.stringify({ participants: participantArray }),
+            body: JSON.stringify({ participants: participant, remoteSocket: "" }),
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -94,7 +105,31 @@ const InterviewRoom = () => {
         socket.emit('call:ended', { to: remoteSocketId });
         navigate(`/Interview`);
 
-    }, []);
+    }, [board, navigate, remoteSocketId, socket]);
+
+    const handleDeleteRoom = async (e) => {
+        e.preventDefault()
+
+        const response = await fetch(`/api/interview/deleteInterviewSession/${board}`,{
+            method: "DELETE",
+            headers:{
+              'Content-Type': 'application/json'
+            }
+          })
+      
+          const json = await response.json()
+          console.log(json)
+          if(response.ok){
+            navigate(`/Interview`);
+          }
+          else{
+            console.error("Hoynai delete")
+          }
+
+        
+
+    };
+
 
     const handleUserJoined = useCallback(async({ studentID, id }) => {
         console.log(`StudentID: ${studentID} joined the board`);
@@ -102,7 +137,7 @@ const InterviewRoom = () => {
         setRemoteSocketId(id);
         console.log("RemoteSocket id in user joined: ", remoteSocketId);
         onCamera()
-    }, []);
+    }, [remoteSocketId]);
 
     const handleCallUser = useCallback(async () => {
         setMyStream()
@@ -110,7 +145,7 @@ const InterviewRoom = () => {
         console.log("Offer is ", offer);
         socket.emit("user:call", { to: remoteSocketId, offer });
         console.log("RemoteSocketId", remoteSocketId);
-        setIsAccepted(true)
+        // setIsAccepted(true)
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
             video: true
@@ -119,11 +154,12 @@ const InterviewRoom = () => {
         if (remoteSocketId) {
             sendStreams()
         }
-    }, [remoteSocketId, socket]);
+    }, [remoteSocketId, sendStreams, socket]);
 
     const handleIncomingCall = useCallback(async ({ from, offer }) => {
         console.log(`Incoming call from ${from} ${offer}`);
-        setRemoteSocketId(from);
+        setRemoteSocketId(from)
+
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
             video: true
@@ -131,21 +167,17 @@ const InterviewRoom = () => {
         setMyStream(stream);
         const ans = await peer.getAnswer(offer);
         socket.emit("call:accepted", { to: from, ans });
+        
         sendStreams()
-    }, [socket]);
+    }, [socket, sendStreams]);
 
-    const sendStreams = useCallback(() => {
-        console.log("STREAM IS", myStream)
-        for (const track of myStream.getTracks()) {
-            peer.peer.addTrack(track, myStream);
-            setIsStreaming(true)
-        }
-    }, [myStream]);
+
 
     const handleCallAccepted = useCallback(({ from, ans }) => {
         peer.setLocalDescription(ans);
         console.log("CAll acceppted, ans: ", ans);
         setIsAccepted(true)
+        console.log("CALL ACCEPTED by ", from)
         sendStreams();
     }, [sendStreams]);
 
@@ -159,23 +191,42 @@ const InterviewRoom = () => {
         console.log("Handle Negitiation: need incoming (isStreaming)", isStreaming, from, offer);
         const ans = await peer.getAnswer(offer);
         socket.emit('peer:nego:done', { to: from, ans });
+
         sendStreams()
-    }, [socket, sendStreams]);
+    }, [isStreaming, socket, sendStreams]);
 
     const handleNegoNeedFinal = useCallback(async ({ ans }) => {
         console.log("handle nego need finel, ans: ", ans);
         await peer.setLocalDescription(ans);
-    }, []);
+        console.log(isStreaming, isAccepted, remoteSocketId)
+        
+    }, [isAccepted, isStreaming, remoteSocketId]);
 
+    // will be called in participant
     const handleEndCall = useCallback(async () => {
-        setRemoteStream();
+        console.log("CALL END FROM PARTICIPANT")
+        setRemoteStream(null);
+        setMyStream(null)
+        setIsAccepted(false)
+        setPending(false)
+        setIsCallEnded(true)
+        setIsStreaming(false)
+        setInterview(null)
         socket.emit('call:end', { to: remoteSocketId });
+        handleLeaveRoom()
     }, [remoteSocketId, handleLeaveRoom, socket]);
 
+    // will be called in creator
     const handleCallEnded = useCallback(({ from }) => {
-        console.log("call:ended recieved")
+        console.log("call:ended recieved CREATOR")
         setIsCallEnded(true)
-        setRemoteStream()
+        setRemoteSocketId(null)
+        setRemoteStream(null)
+        setIsAccepted(false)
+        setJoinedUserID("")
+        setPending(false)
+        setIsStreaming(false)
+        setUser(null)
         console.log(`Call ended by user ${from}`);
     }, []);
 
@@ -250,8 +301,10 @@ const InterviewRoom = () => {
 
                 })}
             </>}
-
-            <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleLeaveRoom}>Leave Room</button>
+            <div>
+                {isCreator && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleDeleteRoom}>Delete Room</button>}
+            </div>
+            
             {remoteSocketId && !isAccepted && isCreator && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleCallUser}>Accept</button>}
            
             {myStream &&
@@ -266,8 +319,9 @@ const InterviewRoom = () => {
                         />
                     </div>
                     <div>
-                        {isCallEnded && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleEndCall}>End Call</button>}
+                        {!isCallEnded && !isCreator && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleEndCall}>End Call</button>}
                     </div>
+
                     <div className="p-2">
                         <button className={`bg-${isCameraOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleCamera}>
                             {isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}
@@ -283,7 +337,7 @@ const InterviewRoom = () => {
             {/* Add a gap between Leave Room button and remote stream window */}
             {remoteStream && <div className="mt-4"></div>}
 
-            {remoteStream &&
+            {remoteStream && !isCallEnded &&
                 <>
                     <div className="bg-gray-200 rounded-md overflow-hidden mb-4 mx-auto">
                         <ReactPlayer

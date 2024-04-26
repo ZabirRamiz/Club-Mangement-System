@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem('State') === 'true');
-  const [userType, setUserType] = useState(localStorage.getItem('userType') || 'user');
+  const [userType, setUserType] = useState();
+  const [designation, setDesignation] = useState("")
+  const [department, setDepartment] = useState("")
   const [user, setUser] = useState(null)
   const loginId = localStorage.getItem("Id")
   const navigate = useNavigate();
@@ -16,7 +18,10 @@ const Navbar = () => {
         const json = await response.json()
         if(response.ok){
           setUser(json)
+          setDesignation(json.designation)
+          setDepartment(json.department)
           console.log(`User name is ${json.name}`)
+
         }
         else {
           console.log("Something is wrong")
@@ -50,13 +55,54 @@ const Navbar = () => {
     
   };
 
+      // const navItems = {
+    //   default: [
+    //     { label: 'Home', path: '/' },
+    //     { label: 'Login', path: '/Login', onClick: handleLogin },
+    //   ],
+    //   user: [
+    //     { label: 'Home', path: '/' },
+    //     { label: 'Dashboard', path: '/UserDashboard' },
+    //     { label: 'Post', path: '/UserPost' },
+    //     { label: 'Event', path: '/UserEvent' },
+    //     { label: 'EM', path: '/EventPost' },
+    //     { label: 'Work', path: '/UserAssignWork'},
+    //     { label: 'Members', path: '/ManageMembers' },
+    //     { label: 'Pending', path: '/PendingMembers' },
+    //     { label: 'Interview', path: '/Interview' },
+    //     { label: 'Finance', path: '/Finance'},
+    //     { label: 'Sponsor' , path: '/Sponsor'},
+    //     { label: 'Email' , path: '/Email'},
+    //     { label: 'Logout', path: '/', onClick: handleLogout },
+    //   ],
+    //   admin: [
+    //     // Add admin-specific links
+    //     { label: 'Home', path: '/' },
+    //     { label: 'Admin Dashboard', path: '/AdminDashboard' },
+    //     { label: 'Admin Post', path: '/AdminPost' },
+    //     { label: 'Admin Event', path: '/AdminEvent' },
+    //     { label: 'Members', path: '/ManageMembers' },
+    //     { label: 'Logout', path: '/', onClick: handleLogout },
+    //   ],
+    //   // Add other user types as needed
+    // };
+
+    // return isLoggedIn ? navItems[userType] || navItems.default : navItems.default;
+
+
   const getNavItems = () => {
-    const navItems = {
-      default: [
-        { label: 'Home', path: '/' },
-        { label: 'Login', path: '/Login', onClick: handleLogin },
-      ],
-      user: [
+    
+
+    const all = [
+          { label: 'Home', path: '/' },
+          { label: 'Dashboard', path: '/UserDashboard' },
+          { label: 'Post', path: '/UserPost' },
+          { label: 'Event', path: '/UserEvent' }
+        ]
+    let typeWise = []
+    let extra = []
+    if (designation === "Executive Body" || designation === "Governing Body"){
+      return [
         { label: 'Home', path: '/' },
         { label: 'Dashboard', path: '/UserDashboard' },
         { label: 'Post', path: '/UserPost' },
@@ -70,20 +116,83 @@ const Navbar = () => {
         { label: 'Sponsor' , path: '/Sponsor'},
         { label: 'Email' , path: '/Email'},
         { label: 'Logout', path: '/', onClick: handleLogout },
-      ],
-      admin: [
-        // Add admin-specific links
-        { label: 'Home', path: '/' },
-        { label: 'Admin Dashboard', path: '/AdminDashboard' },
-        { label: 'Admin Post', path: '/AdminPost' },
-        { label: 'Admin Event', path: '/AdminEvent' },
-        { label: 'Members', path: '/ManageMembers' },
-        { label: 'Logout', path: '/', onClick: handleLogout },
-      ],
-      // Add other user types as needed
-    };
+      ]
+  }
 
-    return isLoggedIn ? navItems[userType] || navItems.default : navItems.default;
+    if (designation === "General Member"){
+      if (department === "EM"){
+         typeWise = [
+          { label: 'EM', path: '/EventPost' },
+          { label: 'Logout', path: '/', onClick: handleLogout },
+        ]
+      }
+      else if (department === "HR"){
+        typeWise = [
+          { label: 'Email' , path: '/Email'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+        ]
+      }
+      else if (department === "Finance"){
+        typeWise = [  
+          { label: 'Finance', path: '/Finance'},
+          { label: 'Sponsor' , path: '/Sponsor'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+        ]
+      }
+    }
+    else if (designation === "Pending"){
+      extra = [
+        { label: 'Interview', path: '/Interview' },
+      ]
+      typeWise =[
+        { label: 'Logout', path: '/', onClick: handleLogout },
+      ]
+    }
+
+
+    else{
+      console.log(`Designation: ${designation}`)
+      if (department === "EM"){
+        typeWise = [
+        { label: 'EM', path: '/EventPost' },
+        { label: 'Work', path: '/UserAssignWork'},
+        { label: 'Logout', path: '/', onClick: handleLogout },
+       ]
+     }
+     else if (department === "HR"){
+       typeWise = [
+          { label: 'Work', path: '/UserAssignWork'},
+          { label: 'Members', path: '/ManageMembers' },
+          { label: 'Email' , path: '/Email'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+       ]
+     }
+     else if (department === "Finance"){
+       typeWise = [  
+          { label: 'Work', path: '/UserAssignWork'},
+          { label: 'Finance', path: '/Finance'},
+          { label: 'Sponsor' , path: '/Sponsor'},
+          { label: 'Email' , path: '/Email'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+       ]
+     }
+    }
+
+
+    const totalNavBar = [...all, ...extra, ... typeWise]
+    if (loginId !== "0"){
+      return totalNavBar
+    }
+    else{
+      return [
+      { label: 'Home', path: '/' },
+      { label: 'Dashboard', path: '/UserDashboard' },
+      { label: 'Post', path: '/UserPost' },
+      { label: 'Event', path: '/UserEvent' },
+      { label: 'Login', path: '/Login', onClick: handleLogin },
+    ]
+    }
+
   };
 
   const navItems = getNavItems();
@@ -118,8 +227,7 @@ const Navbar = () => {
               </a>
             </li>
 
-            )
-            }
+            )}
             
             {navItems.map((item, index) => (
               <li className="nav-item" key={index}>
@@ -128,6 +236,8 @@ const Navbar = () => {
                 </a>
               </li>
             ))}
+          
+
           </ul>
         </div>
       </div>

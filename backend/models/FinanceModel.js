@@ -22,6 +22,9 @@ const FinanceSchema = new Schema({
     },
     sponsor:{
         type:String
+    },
+    event:{
+        type:String,
     }
 
 })
