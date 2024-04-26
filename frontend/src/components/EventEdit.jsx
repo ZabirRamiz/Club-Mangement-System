@@ -1,31 +1,15 @@
 
 import{ useState, useEffect } from 'react';
 
-const EventForm = () => {
+const EventEdit = () => {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [venue, setVenue] = useState('');
   const [guest, setGuest] = useState('');
   const [type, setType] = useState('');
-  const [budget, setBudget] = useState(0);
-  const [sponsorList, setSponsorList] = useState([]);
-  const [selectedSponsor, setSelectedSponsor] = useState('');
-  const [budgetStatus, setBudgetStatus] = useState('');
   const [pr, setPr] = useState('');
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    // Fetch sponsors from the API
-    fetch('api/sponsor/getSponsors')
-      .then(response => response.json())
-      .then(data => {
-        setSponsorList(data);
-      })
-      .catch(error => {
-        console.error('Error fetching sponsors:', error);
-      });
-  }, []);
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -37,9 +21,6 @@ const EventForm = () => {
       venue,
       guest,
       type,
-      budget,
-      selectedSponsor,
-      budgetStatus,
       pr
 
     };
@@ -62,9 +43,17 @@ const EventForm = () => {
   
 
   return (
-    <div className="ml-10 flex flex-col items-center  justify-center min-h-screen bg-gray-100">
+    <div 
+      className="flex flex-col items-right"
+      style={{ 
+        backgroundImage: 'url("https://png.pngtree.com/background/20210716/original/pngtree-light-blue-cute-striped-baby-blue-background-picture-image_1348681.jpg")', 
+        backgroundSize: 'cover', 
+        minHeight: '100vh' 
+      }}
+    >
+    <div className="ml-10 flex flex-col items-center  justify-center min-h-screen ">
       <div className="mt-4 mb-4 bg-white p-4 rounded-lg shadow-md w-3/4">
-        <h2 className="text-2xl mb-4"><b>Event Form</b></h2>
+        <h2 className="text-2xl mb-4"><b>Event Edit Form</b></h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="title" className="block text-sm font-medium text-gray-600"><b>Title:</b></label>
@@ -126,50 +115,15 @@ const EventForm = () => {
               onChange={(e) => setType(e.target.value)}
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="budget" className="block text-sm font-medium text-gray-600"><b>Budget:</b></label>
-            <input 
-              type="number" 
-              id="budget" 
-              className="mt-1 p-2 w-full border rounded-md" 
-              value={budget}
-              onChange={(e) => setBudget(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="sponsor" className="block text-sm font-medium text-gray-600"><b>Sponsor:</b></label>
-            <select 
-              id="sponsor" 
-              className="mt-1 p-2 w-full border rounded-md" 
-              value={selectedSponsor}
-              onChange={(e) => setSelectedSponsor(e.target.value)}
-            >
-              {sponsorList.map(sponsor => (
-                <option key={sponsor.id} value={sponsor.name}>
-                  {sponsor.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="mb-4">
-            <label htmlFor="budgetStatus" className="block text-sm font-medium text-gray-600"><b>Budget Status:</b></label>
-            <select 
-              id="budgetStatus" 
-              className="mt-1 p-2 w-full border rounded-md" 
-              value={budgetStatus}
-              onChange={(e) => setBudgetStatus(e.target.value)}
-            >
-              <option value="true">True</option>
-              <option value="false">False</option>
-            </select>
-          </div>
+          
           <div className="mb-4">
             <label htmlFor="budget" className="block text-sm font-medium text-gray-600"><b>Pr:</b></label>
-            <input 
-              type="text" 
-              id="pr" 
-              className="mt-1 p-2 w-full border rounded-md" 
-              value={pr}
+            <textarea
+                  id="body"
+                  rows="10"
+                  className="w-full p-2 border rounded-md"
+                  value={pr}
+                  style={{ maxHeight: '120px', minHeight: "120px" }}
               onChange={(e) => setPr(e.target.value)}
             />
           </div>
@@ -182,7 +136,8 @@ const EventForm = () => {
         </form>
       </div>
     </div>
+    </div>
   );
 };
 
-export default EventForm;
+export default EventEdit;
