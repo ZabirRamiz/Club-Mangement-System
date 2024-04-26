@@ -132,7 +132,7 @@ const ManageMemberFeed = ({user}) =>{
                 >
                 <option value="EM">EM</option>
                 <option value="HR">HR</option>
-                <option value="PR">PR</option>
+                <option value="Finance">Finance</option>
                 <option value="Governing Body">Governing Body</option>
             </select>
         </div>

@@ -1,26 +1,19 @@
 
 import{ useState, useEffect } from 'react';
 
-const EventForm = () => {
+const EventEdit = () => {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [venue, setVenue] = useState('');
   const [guest, setGuest] = useState('');
   const [type, setType] = useState('');
-  const [budget, setBudget] = useState(0);
-
+  const [pr, setPr] = useState('');
   const [error, setError] = useState("");
 
-  useEffect(() => {
-
-    
-  }, []);
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // Handle form submission here
-    const EventData={
     const EventData={
       title,
       date,
@@ -28,9 +21,10 @@ const EventForm = () => {
       venue,
       guest,
       type,
+      pr
 
     };
-    var eventId = 0
+    console.log(EventData);
     const response = await fetch ("api/events/createEvent",{
       method: 'POST',
       body: JSON.stringify(EventData),
@@ -41,46 +35,25 @@ const EventForm = () => {
     });
     const json = await response.json();
     if (response.ok){
-      eventId = json._id
-
-      const financeResponse = await fetch("/api/finances/createFinance", {
-        method: 'POST',
-        body: JSON.stringify({
-          budget: 0,
-          pl: false,
-          recieved: 0,
-          dateReceived: null,
-          sponsor: null,
-          event: eventId
-        }),
-        headers: {
-          'Content-type': 'application/json'
-        }
-      })
-
-      const financeJson = await financeResponse.json()
-      if (financeResponse.ok){
-        console.log(financeJson)
-        window.location.reload();
-      }
-      else{
-        setError(financeJson.message)
-      }
-
-
-
-
-      
+      window.location.reload();
     } else{
       setError(json.message);
     }
     };
-
+  
 
   return (
-    <div className="ml-10 flex flex-col items-center  justify-center min-h-screen bg-gray-100">
+    <div 
+      className="flex flex-col items-right"
+      style={{ 
+        backgroundImage: 'url("https://png.pngtree.com/background/20210716/original/pngtree-light-blue-cute-striped-baby-blue-background-picture-image_1348681.jpg")', 
+        backgroundSize: 'cover', 
+        minHeight: '100vh' 
+      }}
+    >
+    <div className="ml-10 flex flex-col items-center  justify-center min-h-screen ">
       <div className="mt-4 mb-4 bg-white p-4 rounded-lg shadow-md w-3/4">
-        <h2 className="text-2xl mb-4"><b>Event Form</b></h2>
+        <h2 className="text-2xl mb-4"><b>Event Edit Form</b></h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="title" className="block text-sm font-medium text-gray-600"><b>Title:</b></label>
@@ -143,6 +116,17 @@ const EventForm = () => {
             />
           </div>
           
+          <div className="mb-4">
+            <label htmlFor="budget" className="block text-sm font-medium text-gray-600"><b>Pr:</b></label>
+            <textarea
+                  id="body"
+                  rows="10"
+                  className="w-full p-2 border rounded-md"
+                  value={pr}
+                  style={{ maxHeight: '120px', minHeight: "120px" }}
+              onChange={(e) => setPr(e.target.value)}
+            />
+          </div>
           <button 
             type="submit" 
             className="mt-6 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm py-2 px-6 text-center"
@@ -152,7 +136,8 @@ const EventForm = () => {
         </form>
       </div>
     </div>
+    </div>
   );
 };
 
-export default EventForm;
+export default EventEdit;
