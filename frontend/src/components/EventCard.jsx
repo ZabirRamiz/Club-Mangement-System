@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const EventCard = ({ event }) => {
   return (
@@ -15,7 +15,7 @@ const EventCard = ({ event }) => {
                   <li key={post._id} className="flex items-center justify-between">
                     {post.body}
                     <div>
-                      <button className="bg-blue-500 text-white rounded-full p-2 ml-2">
+                      <button className="bg-blue-500 text-white rounded-full p-2 ml-2 mt-2">
                         ↑ {post.upvote.length}
                       </button>
                       <button className="bg-red-500 text-white rounded-full p-2 ml-2">
