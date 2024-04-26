@@ -28,10 +28,16 @@ const getSingleInterviewSession = async (req, res) =>{
 
 // create new member
 const createInterviewSession = async (req, res) =>{
-    const { board, creator, participants } = req.body
+    const { board, creator, participants, creatorSocket, remoteSocket } = req.body
     // add member to db
     try {
-        const newInterviewSession = await InterviewModel.create({board, creator, participants})   //create new member with given params
+        const newInterviewSession = await InterviewModel.create({
+            board: board, 
+            creator: creator, 
+            participants: participants,
+            creatorSocket: creatorSocket,
+            remoteSocket: remoteSocket
+        })   
         res.status(200).json(newInterviewSession)
     } catch (error) {
         res.status(400).json({error: error.message})

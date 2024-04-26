@@ -23,6 +23,7 @@ const InterviewRoom = () => {
     const [isCallEnded, setIsCallEnded] = useState(false)
     const [isReady, setIsReady] = useState(false)
     const [users, setUser] = useState(null)
+    const [interview, setInterview] = useState(null)
     const navigate = useNavigate();
 
 
@@ -47,8 +48,15 @@ const InterviewRoom = () => {
             console.log(board, userID)
             const response = await fetch(`/api/interview/getSingleInterviewSession/${board}`);
             const json = await response.json()
+            
             if (response.ok) {
+                if (interview == null){
+                    setInterview(json)
+                }
+                    
+                console.log("INTERVIEW ", json)
                 setCreatorID(parseInt(json.creator))
+
                 if (creatorID == userID) {
                     setIsCreator(true)
                     if (joinedUserID!= ""){
@@ -58,7 +66,7 @@ const InterviewRoom = () => {
             }
         }
         fetchData()
-    }, [creatorID, isCreator, joinedUserID]);
+    }, [creatorID, isCreator, joinedUserID, isAccepted, remoteSocketId, interview]);
 
     const onCamera = ( async() =>{
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -72,19 +80,14 @@ const InterviewRoom = () => {
 
     const handleLeaveRoom = useCallback(async () => {
         console.log("Room left room")
-        const res = await fetch(`/api/interview/getSingleInterviewSession/${board}`);
-        const js = await res.json();
 
-        if (!res.ok) {
-            throw new Error('Failed to fetch interview session');
-        }
-        var participantArray = js.participants
-        participantArray = participantArray.splice(participantArray.indexOf(userID), 1)
-        console.log(participantArray)
+        var participant = 0
+        // participant = participant.splice(participant.indexOf(userID), 1)
+        console.log(participant)
 
         const response = await fetch(`/api/interview/updateInterviewSession/${board}`, {
             method: 'PATCH',
-            body: JSON.stringify({ participants: participantArray }),
+            body: JSON.stringify({ participants: participant, remoteSocket: "" }),
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -150,7 +153,8 @@ const InterviewRoom = () => {
 
     const handleIncomingCall = useCallback(async ({ from, offer }) => {
         console.log(`Incoming call from ${from} ${offer}`);
-        setRemoteSocketId(from);
+        await setRemoteSocketId(from)
+
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: true,
             video: true
@@ -158,6 +162,7 @@ const InterviewRoom = () => {
         setMyStream(stream);
         const ans = await peer.getAnswer(offer);
         socket.emit("call:accepted", { to: from, ans });
+        
         sendStreams()
     }, [socket]);
 
@@ -173,6 +178,7 @@ const InterviewRoom = () => {
         peer.setLocalDescription(ans);
         console.log("CAll acceppted, ans: ", ans);
         setIsAccepted(true)
+        console.log("CALL ACCEPTED by ", from)
         sendStreams();
     }, [sendStreams]);
 
@@ -186,28 +192,42 @@ const InterviewRoom = () => {
         console.log("Handle Negitiation: need incoming (isStreaming)", isStreaming, from, offer);
         const ans = await peer.getAnswer(offer);
         socket.emit('peer:nego:done', { to: from, ans });
+
         sendStreams()
     }, [socket, sendStreams]);
 
     const handleNegoNeedFinal = useCallback(async ({ ans }) => {
         console.log("handle nego need finel, ans: ", ans);
         await peer.setLocalDescription(ans);
+        console.log(isStreaming, isAccepted, remoteSocketId)
+        console.log(interview.remoteSocket)
     }, []);
 
     // will be called in participant
     const handleEndCall = useCallback(async () => {
-        setRemoteStream();
+        console.log("CALL END FROM PARTICIPANT")
+        setRemoteStream(null);
+        setMyStream(null)
+        setIsAccepted(false)
+        setPending(false)
         setIsCallEnded(true)
+        setIsStreaming(false)
+        setInterview(null)
         socket.emit('call:end', { to: remoteSocketId });
         handleLeaveRoom()
     }, [remoteSocketId, handleLeaveRoom, socket]);
 
     // will be called in creator
     const handleCallEnded = useCallback(({ from }) => {
-        console.log("call:ended recieved")
+        console.log("call:ended recieved CREATOR")
         setIsCallEnded(true)
         setRemoteSocketId(null)
         setRemoteStream(null)
+        setIsAccepted(false)
+        setJoinedUserID("")
+        setPending(false)
+        setIsStreaming(false)
+        setUser(null)
         console.log(`Call ended by user ${from}`);
     }, []);
 
@@ -285,9 +305,6 @@ const InterviewRoom = () => {
             <div>
                 {isCreator && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleDeleteRoom}>Delete Room</button>}
             </div>
-            {!isCreator && (
-                <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleLeaveRoom}>Leave Room</button>
-            )}
             
             {remoteSocketId && !isAccepted && isCreator && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleCallUser}>Accept</button>}
            
