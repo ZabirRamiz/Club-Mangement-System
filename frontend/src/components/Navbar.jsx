@@ -55,40 +55,130 @@ const Navbar = () => {
     
   };
 
+      // const navItems = {
+    //   default: [
+    //     { label: 'Home', path: '/' },
+    //     { label: 'Login', path: '/Login', onClick: handleLogin },
+    //   ],
+    //   user: [
+    //     { label: 'Home', path: '/' },
+    //     { label: 'Dashboard', path: '/UserDashboard' },
+    //     { label: 'Post', path: '/UserPost' },
+    //     { label: 'Event', path: '/UserEvent' },
+    //     { label: 'EM', path: '/EventPost' },
+    //     { label: 'Work', path: '/UserAssignWork'},
+    //     { label: 'Members', path: '/ManageMembers' },
+    //     { label: 'Pending', path: '/PendingMembers' },
+    //     { label: 'Interview', path: '/Interview' },
+    //     { label: 'Finance', path: '/Finance'},
+    //     { label: 'Sponsor' , path: '/Sponsor'},
+    //     { label: 'Email' , path: '/Email'},
+    //     { label: 'Logout', path: '/', onClick: handleLogout },
+    //   ],
+    //   admin: [
+    //     // Add admin-specific links
+    //     { label: 'Home', path: '/' },
+    //     { label: 'Admin Dashboard', path: '/AdminDashboard' },
+    //     { label: 'Admin Post', path: '/AdminPost' },
+    //     { label: 'Admin Event', path: '/AdminEvent' },
+    //     { label: 'Members', path: '/ManageMembers' },
+    //     { label: 'Logout', path: '/', onClick: handleLogout },
+    //   ],
+    //   // Add other user types as needed
+    // };
+
+    // return isLoggedIn ? navItems[userType] || navItems.default : navItems.default;
+
+
   const getNavItems = () => {
-    const navItems = {
-      default: [
-        { label: 'Home', path: '/' },
-        { label: 'Login', path: '/Login', onClick: handleLogin },
-      ],
-      user: [
-        { label: 'Home', path: '/' },
-        { label: 'Dashboard', path: '/UserDashboard' },
-        { label: 'Post', path: '/UserPost' },
-        { label: 'Event', path: '/UserEvent' },
+    
+
+    const all = [
+          { label: 'Home', path: '/' },
+          { label: 'Dashboard', path: '/UserDashboard' },
+          { label: 'Post', path: '/UserPost' },
+          { label: 'Event', path: '/UserEvent' }
+        ]
+    let typeWise = []
+    let extra = []
+    if (designation === "Executive Body" || designation === "Governing Body"){
+      extra = [
+          { label: 'Pending', path: '/PendingMembers' },
+          { label: 'Interview', path: '/Interview' },
+        ]
+    }
+
+    if (designation === "General Member"){
+      if (department === "EM"){
+         typeWise = [
+          { label: 'EM', path: '/EventPost' },
+          { label: 'Logout', path: '/', onClick: handleLogout },
+        ]
+      }
+      else if (department === "HR"){
+        typeWise = [
+          { label: 'Email' , path: '/Email'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+        ]
+      }
+      else if (department === "Finance"){
+        typeWise = [  
+          { label: 'Finance', path: '/Finance'},
+          { label: 'Sponsor' , path: '/Sponsor'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+        ]
+      }
+    }
+
+
+    else{
+      if (department === "EM"){
+        typeWise = [
+        { label: 'EM', path: '/EventPost' },
+        { label: 'Work', path: '/UserAssignWork'},
+        { label: 'Logout', path: '/', onClick: handleLogout },
+       ]
+     }
+     else if (department === "HR"){
+       typeWise = [
+          { label: 'Home', path: '/' },
+          { label: 'Dashboard', path: '/UserDashboard' },
+          { label: 'Post', path: '/UserPost' },
+          { label: 'Event', path: '/UserEvent' },
+          { label: 'Work', path: '/UserAssignWork'},
+          { label: 'Members', path: '/ManageMembers' },
+          { label: 'Email' , path: '/Email'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+       ]
+     }
+     else if (department === "Finance"){
+       typeWise = [  
+          { label: 'Work', path: '/UserAssignWork'},
+          { label: 'Finance', path: '/Finance'},
+          { label: 'Sponsor' , path: '/Sponsor'},
+          { label: 'Email' , path: '/Email'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+       ]
+     }
+     else{
+      typeWise = [
         { label: 'EM', path: '/EventPost' },
         { label: 'Work', path: '/UserAssignWork'},
         { label: 'Members', path: '/ManageMembers' },
-        { label: 'Pending', path: '/PendingMembers' },
-        { label: 'Interview', path: '/Interview' },
         { label: 'Finance', path: '/Finance'},
         { label: 'Sponsor' , path: '/Sponsor'},
         { label: 'Email' , path: '/Email'},
         { label: 'Logout', path: '/', onClick: handleLogout },
-      ],
-      admin: [
-        // Add admin-specific links
-        { label: 'Home', path: '/' },
-        { label: 'Admin Dashboard', path: '/AdminDashboard' },
-        { label: 'Admin Post', path: '/AdminPost' },
-        { label: 'Admin Event', path: '/AdminEvent' },
-        { label: 'Members', path: '/ManageMembers' },
-        { label: 'Logout', path: '/', onClick: handleLogout },
-      ],
-      // Add other user types as needed
-    };
+      ]
+     }
+    }
 
-    return isLoggedIn ? navItems[userType] || navItems.default : navItems.default;
+      
+    
+
+    const totalNavBar = [...all, ...extra, ... typeWise]
+    return totalNavBar
+
   };
 
   const navItems = getNavItems();
@@ -123,8 +213,7 @@ const Navbar = () => {
               </a>
             </li>
 
-            )
-            }
+            )}
             
             {navItems.map((item, index) => (
               <li className="nav-item" key={index}>
@@ -133,6 +222,8 @@ const Navbar = () => {
                 </a>
               </li>
             ))}
+          
+
           </ul>
         </div>
       </div>
