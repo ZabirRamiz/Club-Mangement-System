@@ -102,11 +102,22 @@ const Navbar = () => {
     let typeWise = []
     let extra = []
     if (designation === "Executive Body" || designation === "Governing Body"){
-      extra = [
-          { label: 'Pending', path: '/PendingMembers' },
-          { label: 'Interview', path: '/Interview' },
-        ]
-    }
+      return [
+        { label: 'Home', path: '/' },
+        { label: 'Dashboard', path: '/UserDashboard' },
+        { label: 'Post', path: '/UserPost' },
+        { label: 'Event', path: '/UserEvent' },
+        { label: 'EM', path: '/EventPost' },
+        { label: 'Work', path: '/UserAssignWork'},
+        { label: 'Members', path: '/ManageMembers' },
+        { label: 'Pending', path: '/PendingMembers' },
+        { label: 'Interview', path: '/Interview' },
+        { label: 'Finance', path: '/Finance'},
+        { label: 'Sponsor' , path: '/Sponsor'},
+        { label: 'Email' , path: '/Email'},
+        { label: 'Logout', path: '/', onClick: handleLogout },
+      ]
+  }
 
     if (designation === "General Member"){
       if (department === "EM"){
@@ -133,10 +144,14 @@ const Navbar = () => {
       extra = [
         { label: 'Interview', path: '/Interview' },
       ]
+      typeWise =[
+        { label: 'Logout', path: '/', onClick: handleLogout },
+      ]
     }
 
 
     else{
+      console.log(`Designation: ${designation}`)
       if (department === "EM"){
         typeWise = [
         { label: 'EM', path: '/EventPost' },
@@ -146,10 +161,6 @@ const Navbar = () => {
      }
      else if (department === "HR"){
        typeWise = [
-          { label: 'Home', path: '/' },
-          { label: 'Dashboard', path: '/UserDashboard' },
-          { label: 'Post', path: '/UserPost' },
-          { label: 'Event', path: '/UserEvent' },
           { label: 'Work', path: '/UserAssignWork'},
           { label: 'Members', path: '/ManageMembers' },
           { label: 'Email' , path: '/Email'},
@@ -165,21 +176,8 @@ const Navbar = () => {
           { label: 'Logout', path: '/', onClick: handleLogout },
        ]
      }
-     else{
-      typeWise = [
-        { label: 'EM', path: '/EventPost' },
-        { label: 'Work', path: '/UserAssignWork'},
-        { label: 'Members', path: '/ManageMembers' },
-        { label: 'Finance', path: '/Finance'},
-        { label: 'Sponsor' , path: '/Sponsor'},
-        { label: 'Email' , path: '/Email'},
-        { label: 'Logout', path: '/', onClick: handleLogout },
-      ]
-     }
     }
 
-      
-    
 
     const totalNavBar = [...all, ...extra, ... typeWise]
     if (loginId !== "0"){
