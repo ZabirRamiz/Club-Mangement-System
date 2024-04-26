@@ -55,11 +55,13 @@ const LobbyScreen = () =>{
         const {studentID, board } = data
         console.log(data)
         console.log("Creating room")
+        console.log(socket.id, "OWN SOCKET")
         const response = await fetch('/api/interview/createInterviewSession',{
             method: 'POST',
             body: JSON.stringify({
                 board: board,
-                creator: studentID
+                creator: studentID,
+                creatorSocket: socket.id
             }),
             headers:{
                 'Content-Type': 'application/json'
@@ -86,12 +88,13 @@ const LobbyScreen = () =>{
                 throw new Error('Failed to fetch interview session');
             }
     
-            const participantArray = [...js.participants, studentID];
-            console.log(participantArray)
+            // const participant = [...js.participants, studentID];
+            const participant  = studentID;
+            console.log(participant)
     
             const response = await fetch(`/api/interview/updateInterviewSession/${board}`, {
                 method: 'PATCH',
-                body: JSON.stringify({ participants: participantArray }),
+                body: JSON.stringify({ participants: participant, remoteSocket: socket.id }),
                 headers: { 'Content-Type': 'application/json' }
             });
     
