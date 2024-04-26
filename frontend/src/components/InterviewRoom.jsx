@@ -282,7 +282,7 @@ const InterviewRoom = () => {
     };
 
     return (
-        <div className="max-w-lg mx-auto my-8 relative">
+        <div className="max-w-5xl mx-auto my-8 relative">
             <h1 className="text-3xl font-bold mb-4">Room Page {isCreator && ("Creator")}</h1>
             <h4 className="text-lg mb-4">
                 {isCreator
@@ -293,68 +293,81 @@ const InterviewRoom = () => {
                         ? "Joined room"
                         : "Waiting for creator to accept"}
             </h4>
-            {pending && 
-            <>
-                {users && users.map((user) => {
-
-                    return <PendingMemberFeed key={user.sid} user={user} />;
-
-                })}
-            </>}
-            <div>
-                {isCreator && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleDeleteRoom}>Delete Room</button>}
-            </div>
             
-            {remoteSocketId && !isAccepted && isCreator && <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleCallUser}>Accept</button>}
-           
-            {myStream &&
-                <>
-                    <div className="bg-gray-200 rounded-md overflow-hidden mb-4 absolute bottom-0 right-0">
-                        <ReactPlayer
-                            playing
-                            muted
-                            height="150px" // Adjust height as needed
-                            width="200px" // Adjust width as needed
-                            url={myStream}
-                        />
-                    </div>
-                    <div>
-                        {!isCallEnded && !isCreator && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleEndCall}>End Call</button>}
-                    </div>
-
-                    <div className="p-2">
-                        <button className={`bg-${isCameraOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleCamera}>
-                            {isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}
+            <div className="flex justify-between items-start">
+                {/* Stream Section */}
+                <div className="flex flex-col items-end" style={{ flex: '0 0 65%' }}>
+                    {isCreator && (
+                        <div>
+                            <button className="bg-red-500 text-white px-4 py-2 rounded-md mb-4" onClick={handleDeleteRoom}>
+                                Delete Room
+                            </button>
+                        </div>
+                    )}
+                    
+                    {remoteSocketId && !isAccepted && isCreator && (
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4" onClick={handleCallUser}>
+                            Accept
                         </button>
-                        <button className={`bg-${isMicrophoneOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md`} onClick={toggleMicrophone}>
-                            {isMicrophoneOn ? 'Mute' : 'Unmute'}
-                        </button>
+                    )}
+    
+                    {/* My Stream */}
+                    {myStream && (
+                        <div className="bg-gray-200 rounded-md overflow-hidden mb-4 absolute bottom-0">
+                            <ReactPlayer
+                                playing
+                                muted
+                                height="150px" // Adjust height as needed
+                                width="200px" // Adjust width as needed
+                                url={myStream}
+                            />
+                        </div>
+                    )}
+    
+                    {/* Remote Stream */}
+                    {remoteStream && !isCallEnded && (
+                        <div className="bg-gray-200 rounded-md overflow-hidden mb-4 w-full">
+                            <ReactPlayer
+                                playing
+                                muted
+                                height="500px" // Adjust height as needed
+                                width="700px" // Adjust width as needed
+                                url={remoteStream}
+                            />
+                            <div className="absolute bottom-5 left-5 right-0 p-2">
+                                <div className="flex justify-start">
+                                    <button className={`bg-${isCameraOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleCamera}>
+                                        {isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}
+                                    </button>
+                                    <button className={`bg-${isMicrophoneOn ? 'red' : 'green'}-500 text-white px-4 py-2 rounded-md mr-4`} onClick={toggleMicrophone}>
+                                        {isMicrophoneOn ? 'Mute' : 'Unmute'}
+                                    </button>
+                                    {!isCallEnded && !isCreator && <button className="bg-red-500 text-white px-4 py-2 rounded-md mr-4" onClick={handleEndCall}>End Call</button>}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                
+                {/* Pending Member Feed */}
+                {pending && (
+                    <div className="bg-white rounded-none shadow-md p-4 mb-4" style={{ flex: '0 0 30%' }}>
+                        {users && users.map((user) => (
+                            <PendingMemberFeed key={user.sid} user={user} />
+                        ))}
                     </div>
-
-                </>
-            }
-
-            {/* Add a gap between Leave Room button and remote stream window */}
-            {remoteStream && <div className="mt-4"></div>}
-
-            {remoteStream && !isCallEnded &&
-                <>
-                    <div className="bg-gray-200 rounded-md overflow-hidden mb-4 mx-auto">
-                        <ReactPlayer
-                            playing
-                            muted
-                            height="300px" // Adjust height as needed
-                            width="400px" // Adjust width as needed
-                            url={remoteStream}
-                        />
-                    </div>
-                </>
-            }
+                )}
+            </div>
         </div>
     );
+    
 };
 
 export default InterviewRoom;
+
+    
+
+
 
     
 
