@@ -129,6 +129,11 @@ const Navbar = () => {
         ]
       }
     }
+    else if (designation === "Pending"){
+      extra = [
+        { label: 'Interview', path: '/Interview' },
+      ]
+    }
 
 
     else{
@@ -182,7 +187,7 @@ const Navbar = () => {
     }
     else{
       return [
-        { label: 'Home', path: '/' },
+      { label: 'Home', path: '/' },
       { label: 'Dashboard', path: '/UserDashboard' },
       { label: 'Post', path: '/UserPost' },
       { label: 'Event', path: '/UserEvent' },
