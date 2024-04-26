@@ -92,7 +92,10 @@ const InterviewRoom = () => {
             throw new Error('Failed to update interview session');
         }
         socket.emit('call:ended', { to: remoteSocketId });
+        
+        //setIsAccepted(false);
         navigate(`/Interview`);
+        
 
     }, []);
 
