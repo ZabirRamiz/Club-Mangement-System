@@ -177,7 +177,18 @@ const Navbar = () => {
     
 
     const totalNavBar = [...all, ...extra, ... typeWise]
-    return totalNavBar
+    if (loginId !== "0"){
+      return totalNavBar
+    }
+    else{
+      return [
+        { label: 'Home', path: '/' },
+      { label: 'Dashboard', path: '/UserDashboard' },
+      { label: 'Post', path: '/UserPost' },
+      { label: 'Event', path: '/UserEvent' },
+      { label: 'Login', path: '/Login', onClick: handleLogin },
+    ]
+    }
 
   };
 

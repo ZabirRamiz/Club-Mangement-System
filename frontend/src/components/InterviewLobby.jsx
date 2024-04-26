@@ -7,6 +7,7 @@ const LobbyScreen = () =>{
     const [studentID, setStudentID] = useState(parseInt(localStorage.getItem('Id')))
     const [board, setBoard] = useState(1)
     const [boardStatus, setBoardStatus] = useState(true)
+    const [participant, setParticipant] = useState(0)
     const [creator, setCreator] = useState(null)
     const socket = useSocket()
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ const LobbyScreen = () =>{
                 setBoardStatus(true)
                 console.log("This board exists", board, boardStatus)
                 setCreator(json.creator)
+                setParticipant(json.participants)
                 
             }
             else{
@@ -155,10 +157,12 @@ const LobbyScreen = () =>{
                 
                 <button 
                     onClick={handleJoin} 
-                    className="w-full py-2 px-4 mt-4 bg-blue-500 text-white rounded-md focus:outline-none focus:bg-blue-600"
+                    className={`w-full py-2 px-4 mt-4 bg-blue-500 text-white rounded-md focus:outline-none ${boardStatus ? 'focus:bg-blue-600' : ''}`}
+                    disabled={boardStatus && participant !== 0}
                 >
-                    {boardStatus ? 'Join' : 'Create'}
+                    {boardStatus ? (participant === 0 ? 'Join' : 'Please wait, board is full.') : 'Create'}
                 </button>
+
                 {boardStatus && 
                 <>
                 <b>Created By: </b>{creator}
