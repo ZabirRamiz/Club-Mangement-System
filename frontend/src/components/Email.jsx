@@ -131,7 +131,7 @@ const EmailForm = () => {
                   onChange={handleToChange}
                 >
                   <option value="EM">EM</option>
-                  <option value="PR">PR</option>
+                  <option value="Finance">Finance </option>
                   <option value="HR">HR</option>
                   <option value="ALL">All</option>
                   <option value="Sponsor">Sponsor</option>

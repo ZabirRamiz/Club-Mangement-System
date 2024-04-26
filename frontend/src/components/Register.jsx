@@ -150,7 +150,7 @@ const Register = () => {
                   <option value="" className="text-gray-200">Select department</option>
                   <option value="EM" className="text-gray-700">EM</option>
                   <option value="HR" className="text-gray-700">HR</option>
-                  <option value="PR" className="text-gray-700">PR</option>
+                  <option value="Finance" className="text-gray-700">Finance</option>
                 </select>
                 {error && <p className="text-red-500">{error}</p>}
                 <button
