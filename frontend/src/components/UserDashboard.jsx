@@ -55,7 +55,7 @@ const Userdasboard = () => {
       <div className="flex flex-col items-right mt-4 ml-4">
         
         {/* First Card */}
-        <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4">
+        <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-4 mt-20 "  style={{ marginRight: '300px'}}>
           <div className="flex justify-end px-4 pt-4"></div>
           <div className="flex flex-col items-center pb-10">
             <img
