@@ -4,7 +4,7 @@ const express = require("express");
 const UserModel = require("../models/UserModel")
 const SponsorModel = require("../models/SponsorModel")
 
-async function sendMail({ to, name = 'None', subject, body, cc = [], bcc = [] }) {
+async function sendMail({ to, name = 'None', subject, body, cc = [], bcc = []}) {
   const { SMTP_EMAIL, SMTP_PASSWORD } = process.env;
   const transport = nodemailer.createTransport({
     service: "gmail",
@@ -53,7 +53,44 @@ const send = async (req, res) => {
   res.status(200).json({ message: "email sent successfully" });
 };
 
-// const sendAll = async(req, res) =>{
+// // const sendAll = async(req, res) =>{
+//   try {
+//     let users;
+//     let {department,subject,message} = req.body
+//     if (department === "All") {
+//         // Retrieve all users' email ids
+//         users = await UserModel.find({}, 'email');
+//     } else if (department === "Sponsor"){
+//       users = await SponsorModel.find({}, 'email')
+//     } 
+//     else {
+//         // Retrieve users' email ids based on department
+//         users = await UserModel.find({ department: department }, 'email');
+//     }
+//     console.log(users)
+
+//     // Extract email ids from users
+//     const emailIds = users.map(user => user.email);
+//     console.log(emailIds)
+//     // Send email to the extracted email ids
+//     await sendMail({
+//         to: emailIds,
+//         name: "something",
+//         subject: subject,
+//         body: message,
+//     });
+
+//     console.log('Emails sent successfully.');
+//     res.status(200).json({ message: "email sent successfully" });
+// } catch (error) {
+//     // Handle error
+//     console.error('Error sending emails:', error);
+//     res.status(400).json({ message: "email sending failed" });
+// }
+// }
+
+
+// const sendAll = async (req, res) => {
 //   try {
 //     let users;
 //     let {department,subject,message} = req.body
@@ -93,7 +130,8 @@ const send = async (req, res) => {
 const sendAll = async (req, res) => {
   try {
     let users;
-    let { department, subject, message } = req.body;
+    let {  department,  subject,  message  } = req.body;
+;
 
     if (department === "All") {
       // Retrieve all users' email ids
@@ -103,7 +141,10 @@ const sendAll = async (req, res) => {
     } else {
       // Retrieve users' email ids based on department
       users = await UserModel.find({ department: department }, 'email designation');
-    }
+      // Retrieve all users' email ids
+      users = await UserModel.find({}, 'email designation');
+    } 
+    console.log(users);
     console.log(users);
 
     // Extract email ids from users
@@ -145,7 +186,10 @@ const sendAll = async (req, res) => {
 };
 
 
+
 module.exports = {
   send,
   sendAll
-};
+}
+
+

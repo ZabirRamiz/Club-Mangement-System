@@ -16,6 +16,7 @@ const SponsorRoutes = require("./routes/SponsorRoute");
 const WorkRoutes = require("./routes/WorkRoute");
 const InterviewRoutes = require("./routes/InterviewRoute");
 const EmailRoutes = require("./routes/EmailRoute");
+const MiscRoutes = require("./routes/MiscRoute");
 
 //express app
 const app = express();
@@ -108,3 +109,4 @@ app.use("/api/works", WorkRoutes);
 app.use("/api/interview", InterviewRoutes);
 app.use("/api/email", EmailRoutes);
 app.use("/api/sponsor", SponsorRoutes);
+app.use("/api/misc", MiscRoutes);

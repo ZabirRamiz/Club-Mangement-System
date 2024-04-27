@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 
-const feed = ({post}) =>{
+const Feed = ({post}) =>{
     const [name, setName] = useState("")
     const [userID, setUserID] = useState(parseInt(localStorage.getItem('Id')))
     const [upVote, setUpVote] = useState(0)
     const [downVote, setDownVote] = useState(0)
-    const [upVoteColor, setUpVoteColor] = useState('blue-500')
-    const [downVoteColor, setDownVoteColor] = useState('red-500')
+    const [upVoteColor, setUpVoteColor] = useState("bg-blue-500 text-white rounded-full p-2 mr-2")
+    const [downVoteColor, setDownVoteColor] = useState("bg-red-500 text-white rounded-full p-2 mr-2")
 
     useEffect(() =>{
         const fetchData = async() =>{
@@ -19,30 +19,34 @@ const feed = ({post}) =>{
             }
             console.log(`${post.postUserId}, upvote: ${post.upvote}, downvote: ${post.downvote}`)
             if(post.upvote.includes(userID)){
-              setUpVoteColor('blue-800')
+              setUpVoteColor("bg-blue-800 text-white rounded-full p-2 mr-2")
             }
             else if(post.downvote.includes(userID)){
-              setDownVoteColor('red-800')
+              setDownVoteColor("bg-red-500 text-white rounded-full p-2 mr-2")
             }
         }
 
         fetchData()
-    }, [])
+    }, [post.downvote, post.postUserId, post.upvote, userID])
 
     useEffect(() =>{
       const setVoteColor = async() =>{
           const upVoteArray = post.upvote
           const downVoteArray = post.downvote
           if (upVoteArray.includes(userID)){
-            setUpVoteColor('blue-800')
+            setUpVoteColor("bg-blue-800 text-white rounded-full p-2 mr-2")
           }
           if (downVoteArray.includes(userID)){
-            setDownVoteColor('red-800')
+            setDownVoteColor("bg-red-500 text-white rounded-full p-2 mr-2")
           }
       }
 
       setVoteColor()
-  }, [])
+  }, [post.downvote, post.upvote, userID])
+
+  useEffect(() =>{
+    console.log(upVoteColor)
+}, [upVoteColor])
 
 
   const handleUpVote= async(e) => {
@@ -52,15 +56,16 @@ const feed = ({post}) =>{
     const downVoterArray = post.downvote
     if (upVoterArray.includes(userID)){
       upVoterArray.splice(upVoterArray.indexOf(userID), 1)            //remove upvote
-      setUpVoteColor("blue-500")
+      setUpVoteColor("bg-blue-500 text-white rounded-full p-2 mr-2")
       
     }
     else{
       upVoterArray.splice(upVoterArray.indexOf(userID), 0, userID)    // add upvote
-      setUpVoteColor("blue-800")
+      setUpVoteColor("bg-blue-800 text-white rounded-full p-2 mr-2")
+      console.log(upVoteColor)
       if (downVoterArray.indexOf(userID) !== -1){
         downVoterArray.splice(downVoterArray.indexOf(userID), 1)      //remove downvote
-        setDownVoteColor("red-500")
+        setDownVoteColor("bg-red-500 text-white rounded-full p-2 mr-2")
         
       }
       
@@ -93,16 +98,16 @@ const feed = ({post}) =>{
     const downVoterArray = post.downvote
     if (downVoterArray.includes(userID)){
       downVoterArray.splice(downVoterArray.indexOf(userID), 1)            // remove downvote
-      setDownVoteColor("red-500")
+      setDownVoteColor("bg-red-500 text-white rounded-full p-2 mr-2")
     }
     else{
       
       if (upVoterArray.indexOf(userID) !== -1){
         upVoterArray.splice(upVoterArray.indexOf(userID), 1)              // remove upvote
-        setUpVoteColor("blue-500")
+        setUpVoteColor("bg-blue-500 text-white rounded-full p-2 mr-2")
       }
       downVoterArray.splice(downVoterArray.indexOf(userID), 0, userID)    // add downvote
-      setDownVoteColor("red-800")
+      setDownVoteColor("bg-red-800 text-white rounded-full p-2 mr-2")
     }
     const response = await fetch(`/api/posts/updatePost/${post._id}`,{
         method: "PATCH",
@@ -165,8 +170,8 @@ const feed = ({post}) =>{
         </div>
         {/* Up and down arrows inside the card */}
         <div className="absolute right-4 bottom-4">
-          <button onClick={handleUpVote} className= {`bg-${upVoteColor} text-white rounded-full p-2 mr-2`}>↑ {upVote}</button>
-          <button onClick={handleDownVote} className={`bg-${downVoteColor} text-white rounded-full p-2`}>↓ {downVote}</button>
+          <button onClick={handleUpVote} className= {`${upVoteColor}`}>↑ {upVote}</button>
+          <button onClick={handleDownVote} className={`${downVoteColor}`}>↓ {downVote}</button>
         {post.postUserId == userID && (
             
           <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring focus:border-blue-300">
@@ -181,4 +186,4 @@ const feed = ({post}) =>{
     )
 }
 
-export default feed
+export default Feed

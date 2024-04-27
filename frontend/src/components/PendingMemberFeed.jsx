@@ -108,7 +108,7 @@ const PendingMembersFeed = ({user}) =>{
                 >
                 <option value="EM">EM</option>
                 <option value="HR">HR</option>
-                <option value="PR">PR</option>
+                <option value="Finance">Finance</option>
             </select>
         </div>
 

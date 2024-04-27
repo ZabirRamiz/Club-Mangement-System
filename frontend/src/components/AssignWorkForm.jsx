@@ -121,7 +121,7 @@ const AssignWorkForm = () => {
             <option value={to}>{to}</option>
             <option value="HR">HR</option>
             <option value="EM">EM</option>
-            <option value="PR">PR</option>
+            <option value="PR">Finance</option>
           </select>
         </div>
       </div>

@@ -79,6 +79,7 @@ const EventPost = () => {
           <h2 className="text-xl font-semibold ml-7">Event Title</h2>
           <h2 className="text-xl font-semibold ml-5">Event Post</h2>
           <h2 className="text-xl font-semibold mr-7">Pending Work</h2>
+          <h2 className="text-xl font-semibold mr-7">Edit</h2>
           
         </div>
         
