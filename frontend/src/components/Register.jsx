@@ -40,7 +40,28 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showLoadingPopup, setShowLoadingPopup] = useState(false); // New state to show loading popup
-  
+  const [register, setRegister] = useState(false)
+
+
+  useEffect( () => {
+    const fetchRegister = async () => {
+    
+
+          const response = await fetch(`api/misc/getAllMisc`);
+          
+          const json = await response.json();
+          //console.log(response.json())
+
+          if (json != null) {
+            setRegister(json[0].registration)
+          }
+
+      }
+    fetchRegister();
+
+  }, [])
+
+
   const handleEditSubmit = async (e) => {
     e.preventDefault();
 
@@ -110,15 +131,28 @@ const Register = () => {
         </div>
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
           <div className=" flex flex-col items-center">
-            <div className="text-center">
-              <h1 className="text-2xl xl:text-4xl font-extrabold text-blue-900">
-                Student Registration Form
-              </h1>
-              <p className="text-[12px] text-gray-500">
-                Hey enter your details to create your account
-              </p>
-            </div>
-            <div className="w-full flex-1 mt-8">
+            {register && (
+              <div className="text-center">
+                <h1 className="text-2xl xl:text-4xl font-extrabold text-blue-900">
+                  Student Registration Form
+                </h1>
+                <p className="text-[12px] text-gray-500">
+                  Hey enter your details to create your account
+                </p>
+              </div>
+            )}
+            {!register && (
+              <div className="text-center">
+                <h1 className="text-2xl xl:text-4xl font-extrabold text-blue-900">
+                  Registration has not started
+                </h1>
+                <p className="text-[12px] text-gray-500">
+                  Please keep an eye out for our registration notice
+                </p>
+              </div>
+            )}
+            {register && (
+              <div className="w-full flex-1 mt-8">
               <div className="mx-auto max-w-xs flex flex-col gap-4">
                 <input
                   className="w-96 px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
@@ -168,6 +202,7 @@ const Register = () => {
                 </p>
               </div>
             </div>
+            )}
           </div>
         </div>
       </div>

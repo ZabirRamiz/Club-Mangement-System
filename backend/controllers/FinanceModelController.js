@@ -36,10 +36,10 @@ const getSingleFinance = async (req, res) =>{
 
 // create new finance
 const createFinance = async (req, res) =>{
-    const {budget, pl, received, dateReceived, sponsor } = req.body
+    const {budget, pl, received, dateReceived, sponsor, event } = req.body
     // add finance to db
     try {
-        const newFinance = await FinanceModel.create({budget, pl, received, dateReceived, sponsor})   //create new finance with given params
+        const newFinance = await FinanceModel.create({budget, pl, received, dateReceived, sponsor, event})   //create new finance with given params
         res.status(200).json(newFinance)
     } catch (error) {
         res.status(400).json({error: error.message})

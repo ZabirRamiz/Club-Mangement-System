@@ -12,39 +12,23 @@ const EventSchema = new Schema({
   },
   time: {
     type: String, // or Date if you want to store time as a date object
-    default: null, // or ''
+    default: "", // or ''
   },
   venue: {
     type: String,
-    default: null, // or ''
+    default: "", // or ''
   },
   guests: {
     type: String,
-    default: null, // or ''
+    default: "", // or ''
   },
   type: {
     type: String,
-    default: null, // or ''
+    default: "", // or ''
   },
-  // budget: {
-  //   type: Number,
-  //   default: 0,
-  //   min: 0, // Example: Minimum budget value of 0
-  // },
-  // sponsor: {
-  //   // Example of defining a specific schema for nested objects
-  //   name: String,
-  //   amount: Number,
-  //   // Add more fields as needed
-  // },
-  // budget_status:{
-  //   type: Boolean,
-  //   default: false
-  // },
-
   pr: {
     type: String,
-    default: null, // or ''
+    default: "", // or ''
   },
 });
 

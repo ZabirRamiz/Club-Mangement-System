@@ -26,6 +26,19 @@ const getSingleSponsor = async (req, res) =>{
 
 }
 
+const getActiveSponsor = async (req, res) =>{
+
+    const sponsor = await SponsorModel.find({sponsor_status: "Active"})
+
+    if(!sponsor){
+        return res.status(404).json({
+            error: "No such Sponsor"
+        })
+    }
+    res.status(200).json(sponsor)
+
+}
+
 const createSponsor = async (req, res) =>{
     const {name, type, more_info, phone, email, sponsor_status} = req.body
     try{
@@ -64,6 +77,7 @@ const deleteSponsor = async (req, res) =>{
 
 const updateSponsor = async (req, res) =>{
     const { id } = req.params
+    console.log(req.body)
     if(!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).json({
             error: "Invalid Id format"
@@ -86,5 +100,6 @@ module.exports = {
     getSingleSponsor,
     createSponsor,
     deleteSponsor,
-    updateSponsor
+    updateSponsor,
+    getActiveSponsor
 }

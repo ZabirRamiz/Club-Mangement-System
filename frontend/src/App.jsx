@@ -38,7 +38,7 @@ function App() {
         <Route path='/UserPost' element={<div><Navbar/><UserPost/></div>}/> 
         <Route path='/UserEvent' element={<div><Navbar/><UserEvent/></div>}/>
         <Route path='/EventPost' element={<div><Navbar/><EventPost/></div>}/>
-        <Route path='/EventEdit' element={<div><Navbar/><EventEdit/></div>}/>
+        <Route path='/EventEdit/:event_id' element={<div><Navbar/><EventEdit/></div>}/>
         <Route path='/UserAssignWork' element={<div><Navbar/><UserAssignWork/></div>}/> 
         <Route path='/ManageMembers' element={<div><Navbar/><ManageMembers/></div>}/> 
         <Route path='/PendingMembers' element={<div><Navbar/><PendingMembers/></div>}/> 

@@ -1,5 +1,6 @@
 
 import{ useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router';
 
 const EventEdit = () => {
   const [title, setTitle] = useState('');
@@ -9,24 +10,47 @@ const EventEdit = () => {
   const [guest, setGuest] = useState('');
   const [type, setType] = useState('');
   const [pr, setPr] = useState('');
+  const { event_id }= useParams()
   const [error, setError] = useState("");
+
+  const navigate = useNavigate()
+  useEffect(() =>{
+    const fetchData = async() =>{
+        const response = await fetch(`/api/events/getSingleEvent/${event_id}`)
+        const json = await response.json()
+        if(response.ok){
+          setTitle(json.title)
+          setDate(json.date)
+          setTime(json.time)
+          setVenue(json.venue)
+          setGuest(json.guests)
+          setType(json.type)
+          setPr(json.pr)
+        }
+
+        
+        
+    }
+
+    fetchData()
+}, [])
 
   const handleSubmit = async(e) => {
     e.preventDefault();
     // Handle form submission here
     const EventData={
-      title,
-      date,
-      time,
-      venue,
-      guest,
-      type,
-      pr
+      title: title,
+      date: date,
+      time:time,
+      venue:venue,
+      guest:guest,
+      type:type,
+      pr: pr
 
     };
     console.log(EventData);
-    const response = await fetch ("api/events/createEvent",{
-      method: 'POST',
+    const response = await fetch (`/api/events/updateEvent/${event_id}`,{
+      method: 'PATCH',
       body: JSON.stringify(EventData),
       headers: {
         'Content-type': 'application/json'
@@ -35,7 +59,7 @@ const EventEdit = () => {
     });
     const json = await response.json();
     if (response.ok){
-      window.location.reload();
+      navigate('/EventPost')
     } else{
       setError(json.message);
     }
@@ -61,7 +85,7 @@ const EventEdit = () => {
               type="text" 
               id="title" 
               className="mt-1 p-2 w-full border rounded-md" 
-              value={title}
+              placeholder={title}
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
@@ -71,7 +95,7 @@ const EventEdit = () => {
               type="date" 
               id="date" 
               className="mt-1 p-2 w-full border rounded-md" 
-              value={date}
+              value={ date ? new Date(date).toISOString().split('T')[0] : '' }
               onChange={(e) => setDate(e.target.value)}
             />
           </div>
@@ -91,7 +115,7 @@ const EventEdit = () => {
               type="text" 
               id="venue" 
               className="mt-1 p-2 w-full border rounded-md" 
-              value={venue}
+              placeholder={venue}
               onChange={(e) => setVenue(e.target.value)}
             />
           </div>
@@ -101,7 +125,7 @@ const EventEdit = () => {
               type="text" 
               id="guest" 
               className="mt-1 p-2 w-full border rounded-md" 
-              value={guest}
+              placeholder={guest}
               onChange={(e) => setGuest(e.target.value)}
             />
           </div>
@@ -111,7 +135,7 @@ const EventEdit = () => {
               type="text" 
               id="type" 
               className="mt-1 p-2 w-full border rounded-md" 
-              value={type}
+              placeholder={type}
               onChange={(e) => setType(e.target.value)}
             />
           </div>
@@ -122,9 +146,9 @@ const EventEdit = () => {
                   id="body"
                   rows="10"
                   className="w-full p-2 border rounded-md"
-                  value={pr}
+                  placeholder={pr}
                   style={{ maxHeight: '120px', minHeight: "120px" }}
-              onChange={(e) => setPr(e.target.value)}
+                  onChange={(e) => setPr(e.target.value)}
             />
           </div>
           <button 

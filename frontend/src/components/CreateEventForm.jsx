@@ -1,5 +1,5 @@
 
-import{ useState, useEffect } from 'react';
+import{ useState } from 'react';
 
 const EventForm = () => {
   const [title, setTitle] = useState('');
@@ -8,42 +8,24 @@ const EventForm = () => {
   const [venue, setVenue] = useState('');
   const [guest, setGuest] = useState('');
   const [type, setType] = useState('');
-  const [budget, setBudget] = useState(0);
-  const [sponsorList, setSponsorList] = useState([]);
-  const [selectedSponsor, setSelectedSponsor] = useState('');
-  const [budgetStatus, setBudgetStatus] = useState('');
-  const [pr, setPr] = useState('');
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    // Fetch sponsors from the API
-    fetch('api/sponsor/getSponsors')
-      .then(response => response.json())
-      .then(data => {
-        setSponsorList(data);
-      })
-      .catch(error => {
-        console.error('Error fetching sponsors:', error);
-      });
-  }, []);
 
-  const handleSubmit = async(e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission here
+
     const EventData={
-      title,
-      date,
-      time,
-      venue,
-      guest,
-      type,
-      budget,
-      selectedSponsor,
-      budgetStatus,
-      pr
+      title: title,
+      date: date,
+      time: time,
+      venue: venue,
+      guest: guest,
+      type: type,
 
     };
-    console.log(EventData);
+    console.log(EventData)
+    var eventId = 0
     const response = await fetch ("api/events/createEvent",{
       method: 'POST',
       body: JSON.stringify(EventData),
@@ -54,16 +36,45 @@ const EventForm = () => {
     });
     const json = await response.json();
     if (response.ok){
-      window.location.reload();
+      eventId = json._id
+
+      const financeResponse = await fetch("/api/finances/createFinance", {
+        method: 'POST',
+        body: JSON.stringify({
+          budget: 0,
+          pl: false,
+          recieved: 0,
+          dateReceived: "",
+          sponsor: "661abf66de55a9b6325f39b0",  //oca
+          event: eventId
+        }),
+        headers: {
+          'Content-type': 'application/json'
+        }
+      })
+
+      const financeJson = await financeResponse.json()
+      if (financeResponse.ok){
+        console.log(financeJson)
+        window.location.reload();
+      }
+      else{
+        console.log("Error")
+      }
+
+
+
+
+      
     } else{
-      setError(json.message);
+      console.log("Error")
     }
     };
-  
+
 
   return (
     <div className="ml-10 flex flex-col items-center  justify-center min-h-screen bg-gray-100">
-      <div className="mt-4 mb-4 bg-white p-4 rounded-lg shadow-md w-3/4">
+      <div className="mt-2 mb-4 bg-white p-4 rounded-lg shadow-md w-3/4">
         <h2 className="text-2xl mb-4"><b>Event Form</b></h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -126,53 +137,7 @@ const EventForm = () => {
               onChange={(e) => setType(e.target.value)}
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="budget" className="block text-sm font-medium text-gray-600"><b>Budget:</b></label>
-            <input 
-              type="number" 
-              id="budget" 
-              className="mt-1 p-2 w-full border rounded-md" 
-              value={budget}
-              onChange={(e) => setBudget(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="sponsor" className="block text-sm font-medium text-gray-600"><b>Sponsor:</b></label>
-            <select 
-              id="sponsor" 
-              className="mt-1 p-2 w-full border rounded-md" 
-              value={selectedSponsor}
-              onChange={(e) => setSelectedSponsor(e.target.value)}
-            >
-              {sponsorList.map(sponsor => (
-                <option key={sponsor.id} value={sponsor.name}>
-                  {sponsor.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="mb-4">
-            <label htmlFor="budgetStatus" className="block text-sm font-medium text-gray-600"><b>Budget Status:</b></label>
-            <select 
-              id="budgetStatus" 
-              className="mt-1 p-2 w-full border rounded-md" 
-              value={budgetStatus}
-              onChange={(e) => setBudgetStatus(e.target.value)}
-            >
-              <option value="true">True</option>
-              <option value="false">False</option>
-            </select>
-          </div>
-          <div className="mb-4">
-            <label htmlFor="budget" className="block text-sm font-medium text-gray-600"><b>Pr:</b></label>
-            <input 
-              type="text" 
-              id="pr" 
-              className="mt-1 p-2 w-full border rounded-md" 
-              value={pr}
-              onChange={(e) => setPr(e.target.value)}
-            />
-          </div>
+          
           <button 
             type="submit" 
             className="mt-6 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm py-2 px-6 text-center"
