@@ -74,7 +74,7 @@ const EventForm = () => {
 
   return (
     <div className="ml-10 flex flex-col items-center  justify-center min-h-screen bg-gray-100">
-      <div className="mt-2 mb-4 bg-white p-4 rounded-lg shadow-md w-3/4">
+      <div className=" mb-4 bg-white p-4 rounded-lg shadow-md w-3/4">
         <h2 className="text-2xl mb-4"><b>Event Form</b></h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
