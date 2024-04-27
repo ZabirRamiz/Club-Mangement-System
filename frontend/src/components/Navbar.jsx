@@ -1,11 +1,39 @@
-import  { useState} from 'react';
+import  { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true');
-  const [userType, setUserType] = useState(localStorage.getItem('userType') || 'user');
+  const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem('State') === 'true');
+  const [userType, setUserType] = useState();
+  const [designation, setDesignation] = useState("")
+  const [department, setDepartment] = useState("")
+  const [user, setUser] = useState(null)
+  const loginId = localStorage.getItem("Id")
   const navigate = useNavigate();
+
+  useEffect(() =>{
+    const fetchData = async() =>{
+      if(loginId !=0){
+        const response = await fetch(`/api/user/getSpecificUser/${loginId}`)
+        const json = await response.json()
+        if(response.ok){
+          setUser(json)
+          setDesignation(json.designation)
+          setDepartment(json.department)
+          console.log(`User name is ${json.name}`)
+
+        }
+        else {
+          console.log("Something is wrong")
+        }
+      }
+        
+
+        
+    }
+
+    fetchData()
+}, [])
 
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
@@ -14,43 +42,157 @@ const Navbar = () => {
   const handleLogout = () => {
     setLoggedIn(false);
     setUserType('default');
-    localStorage.setItem('isLoggedIn', 'false');
-    localStorage.removeItem('userType');
+    localStorage.setItem('State', 'false');
+    localStorage.setItem("Id", "0")
+    //localStorage.removeItem('userType');
     navigate("/");
   };
   const handleLogin = () => {
         
-    setLoggedIn(true);
-    localStorage.setItem('isLoggedIn', 'true');
+    //setLoggedIn(true);
+    //localStorage.setItem('isLoggedIn', 'true');
     navigate("/Login")
     
   };
 
+      // const navItems = {
+    //   default: [
+    //     { label: 'Home', path: '/' },
+    //     { label: 'Login', path: '/Login', onClick: handleLogin },
+    //   ],
+    //   user: [
+    //     { label: 'Home', path: '/' },
+    //     { label: 'Dashboard', path: '/UserDashboard' },
+    //     { label: 'Post', path: '/UserPost' },
+    //     { label: 'Event', path: '/UserEvent' },
+    //     { label: 'EM', path: '/EventPost' },
+    //     { label: 'Work', path: '/UserAssignWork'},
+    //     { label: 'Members', path: '/ManageMembers' },
+    //     { label: 'Pending', path: '/PendingMembers' },
+    //     { label: 'Interview', path: '/Interview' },
+    //     { label: 'Finance', path: '/Finance'},
+    //     { label: 'Sponsor' , path: '/Sponsor'},
+    //     { label: 'Email' , path: '/Email'},
+    //     { label: 'Logout', path: '/', onClick: handleLogout },
+    //   ],
+    //   admin: [
+    //     // Add admin-specific links
+    //     { label: 'Home', path: '/' },
+    //     { label: 'Admin Dashboard', path: '/AdminDashboard' },
+    //     { label: 'Admin Post', path: '/AdminPost' },
+    //     { label: 'Admin Event', path: '/AdminEvent' },
+    //     { label: 'Members', path: '/ManageMembers' },
+    //     { label: 'Logout', path: '/', onClick: handleLogout },
+    //   ],
+    //   // Add other user types as needed
+    // };
+
+    // return isLoggedIn ? navItems[userType] || navItems.default : navItems.default;
+
+
   const getNavItems = () => {
-    const navItems = {
-      default: [
-        { label: 'Home', path: '/' },
-        { label: 'Login', path: '/Login', onClick: handleLogin },
-      ],
-      user: [
+    
+
+    const all = [
+          { label: 'Home', path: '/' },
+          { label: 'Dashboard', path: '/UserDashboard' },
+          { label: 'Post', path: '/UserPost' },
+          { label: 'Event', path: '/UserEvent' }
+        ]
+    let typeWise = []
+    let extra = []
+    if (designation === "Executive Body" || designation === "Governing Body"){
+      return [
         { label: 'Home', path: '/' },
         { label: 'Dashboard', path: '/UserDashboard' },
         { label: 'Post', path: '/UserPost' },
         { label: 'Event', path: '/UserEvent' },
+        { label: 'EM', path: '/EventPost' },
+        { label: 'Work', path: '/UserAssignWork'},
+        { label: 'Members', path: '/ManageMembers' },
+        { label: 'Pending', path: '/PendingMembers' },
+        { label: 'Interview', path: '/Interview' },
+        { label: 'Finance', path: '/Finance'},
+        { label: 'Sponsor' , path: '/Sponsor'},
+        { label: 'Email' , path: '/Email'},
         { label: 'Logout', path: '/', onClick: handleLogout },
-      ],
-      admin: [
-        // Add admin-specific links
-        { label: 'Home', path: '/' },
-        { label: 'Admin Dashboard', path: '/AdminDashboard' },
-        { label: 'Admin Post', path: '/AdminPost' },
-        { label: 'Admin Event', path: '/AdminEvent' },
-        { label: 'Logout', path: '/', onClick: handleLogout },
-      ],
-      // Add other user types as needed
-    };
+      ]
+  }
 
-    return isLoggedIn ? navItems[userType] || navItems.default : navItems.default;
+    if (designation === "General Member"){
+      if (department === "EM"){
+         typeWise = [
+          { label: 'EM', path: '/EventPost' },
+          { label: 'Logout', path: '/', onClick: handleLogout },
+        ]
+      }
+      else if (department === "HR"){
+        typeWise = [
+          { label: 'Email' , path: '/Email'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+        ]
+      }
+      else if (department === "Finance"){
+        typeWise = [  
+          { label: 'Finance', path: '/Finance'},
+          { label: 'Sponsor' , path: '/Sponsor'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+        ]
+      }
+    }
+    else if (designation === "Pending"){
+      extra = [
+        { label: 'Interview', path: '/Interview' },
+      ]
+      typeWise =[
+        { label: 'Logout', path: '/', onClick: handleLogout },
+      ]
+    }
+
+
+    else{
+      console.log(`Designation: ${designation}`)
+      if (department === "EM"){
+        typeWise = [
+        { label: 'EM', path: '/EventPost' },
+        { label: 'Work', path: '/UserAssignWork'},
+        { label: 'Logout', path: '/', onClick: handleLogout },
+       ]
+     }
+     else if (department === "HR"){
+       typeWise = [
+          { label: 'Work', path: '/UserAssignWork'},
+          { label: 'Members', path: '/ManageMembers' },
+          { label: 'Email' , path: '/Email'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+       ]
+     }
+     else if (department === "Finance"){
+       typeWise = [  
+          { label: 'Work', path: '/UserAssignWork'},
+          { label: 'Finance', path: '/Finance'},
+          { label: 'Sponsor' , path: '/Sponsor'},
+          { label: 'Email' , path: '/Email'},
+          { label: 'Logout', path: '/', onClick: handleLogout },
+       ]
+     }
+    }
+
+
+    const totalNavBar = [...all, ...extra, ... typeWise]
+    if (loginId !== "0"){
+      return totalNavBar
+    }
+    else{
+      return [
+      { label: 'Home', path: '/' },
+      { label: 'Dashboard', path: '/UserDashboard' },
+      { label: 'Post', path: '/UserPost' },
+      { label: 'Event', path: '/UserEvent' },
+      { label: 'Login', path: '/Login', onClick: handleLogin },
+    ]
+    }
+
   };
 
   const navItems = getNavItems();
@@ -59,6 +201,7 @@ const Navbar = () => {
     <nav className="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
+        {/* <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" /> */}
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Club-Management-System</span>
         </a>
         <button
@@ -74,14 +217,27 @@ const Navbar = () => {
           </svg>
         </button>
         <div className={`w-full md:block md:w-auto ${isMenuOpen ? '' : 'hidden'}`} id="navbar-solid-bg">
+        
           <ul className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
+            
+            {user != null && (
+              <li className="nav-item" key={null}>
+              <a href="#" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+                {user.name}
+              </a>
+            </li>
+
+            )}
+            
             {navItems.map((item, index) => (
               <li className="nav-item" key={index}>
-                <a href={item.path} className="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent" onClick={item.onClick}>
+                <a href={item.path} className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" onClick={item.onClick}>
                   {item.label}
                 </a>
               </li>
             ))}
+          
+
           </ul>
         </div>
       </div>
