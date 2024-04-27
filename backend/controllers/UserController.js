@@ -11,8 +11,8 @@ const getSpecificUser = async (req, res) => {
   const { studentId } = req.params;
 
   const specific_user = await userModel.findOne({ sid: studentId });
-
   res.status(200).json(specific_user);
+  
 };
 
 // const editUser = async (req, res) => {
