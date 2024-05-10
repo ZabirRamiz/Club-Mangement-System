@@ -282,7 +282,20 @@ const InterviewRoom = () => {
     };
 
     return (
-        <div className="max-w-5xl mx-auto my-8 relative">
+        <>
+        {remoteSocketId && !isAccepted && isCreator && (
+            <button className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4 absolute left-0" onClick={handleCallUser} style ={{ marginTop:"10px", marginLeft:"10px"}}>
+                Accept
+            </button>
+        )}
+        {isCreator && (
+            <div>
+                <button className="bg-red-500 text-white px-4 py-2 rounded-md absolute left-20" onClick={handleDeleteRoom} style ={{ marginTop:"10px", marginLeft:"10px" }}>
+                    Delete Room
+                </button>
+            </div>
+        )}
+        <div className="max-w-5xl mx-auto my-8 relative" style ={{ marginTop:"100px" }}>
             <h1 className="text-3xl font-bold mb-4">Room Page {isCreator && ("Creator")}</h1>
             <h4 className="text-lg mb-4">
                 {isCreator
@@ -297,23 +310,13 @@ const InterviewRoom = () => {
             <div className="flex justify-between items-start">
                 {/* Stream Section */}
                 <div className="flex flex-col items-end" style={{ flex: '0 0 65%' }}>
-                    {isCreator && (
-                        <div>
-                            <button className="bg-red-500 text-white px-4 py-2 rounded-md mb-4" onClick={handleDeleteRoom}>
-                                Delete Room
-                            </button>
-                        </div>
-                    )}
                     
-                    {remoteSocketId && !isAccepted && isCreator && (
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4" onClick={handleCallUser}>
-                            Accept
-                        </button>
-                    )}
+                    
+                    
     
                     {/* My Stream */}
                     {myStream && (
-                        <div className="bg-gray-200 rounded-md overflow-hidden mb-4 absolute bottom-0">
+                        <div className="bg-gray-200 rounded-md overflow-hidden mb-4 absolute bottom-0" >
                             <ReactPlayer
                                 playing
                                 muted
@@ -348,6 +351,13 @@ const InterviewRoom = () => {
                         </div>
                     )}
                 </div>
+
+                <div className="absolute bottom-5 left-5 right-0 p-2">
+
+                
+                    
+                </div>
+
                 
                 {/* Pending Member Feed */}
                 {pending && (
@@ -359,6 +369,7 @@ const InterviewRoom = () => {
                 )}
             </div>
         </div>
+        </>
     );
     
 };

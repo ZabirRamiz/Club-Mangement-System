@@ -153,7 +153,7 @@ function EventsPage() {
         {/* Past Events */}
         <div className="relative">
           <div className="bg-white text-gray-800 py-3 px-4 rounded-t-md cursor-pointer flex justify-between shadow-md" onClick={() => setShowPastEvents(!showPastEvents)}>
-            <h1 className="text-2xl font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>Past Events</h1>
+            <h1 className="text-2xl font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>Previous Events</h1>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={showPastEvents ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
             </svg>
